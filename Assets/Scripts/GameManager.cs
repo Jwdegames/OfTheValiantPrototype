@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Priority_Queue;
 using System.Linq;
-using UnityEngine.Networking.NetworkSystem;
+//using UnityEngine.Networking.NetworkSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
 
         //If instance already exists and it's not this:
         else if (instance != this)
-
+           
             //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
             Destroy(gameObject);
 
