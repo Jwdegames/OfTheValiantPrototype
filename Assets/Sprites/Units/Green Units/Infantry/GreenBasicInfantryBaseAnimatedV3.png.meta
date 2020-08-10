@@ -1,0 +1,1208 @@
+fileFormatVersion: 2
+guid: 73fc29ba160c15a46b264242ab4d5a9d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3141932882389561852
+    second: GreenBasicInfantryBaseAnimatedV3_0
+  - first:
+      213: -368678620767399594
+    second: GreenBasicInfantryBaseAnimatedV3_1
+  - first:
+      213: 5059590668341306196
+    second: GreenBasicInfantryBaseAnimatedV3_2
+  - first:
+      213: 7667219059745564462
+    second: GreenBasicInfantryBaseAnimatedV3_3
+  - first:
+      213: -8589992669687052009
+    second: GreenBasicInfantryBaseAnimatedV3_4
+  - first:
+      213: 6716762665309591566
+    second: GreenBasicInfantryBaseAnimatedV3_5
+  - first:
+      213: 1352223733191117946
+    second: GreenBasicInfantryBaseAnimatedV3_6
+  - first:
+      213: 6193733427994066457
+    second: GreenBasicInfantryBaseAnimatedV3_7
+  - first:
+      213: -859605998578941907
+    second: GreenBasicInfantryBaseAnimatedV3_8
+  - first:
+      213: -4471525014828459357
+    second: GreenBasicInfantryBaseAnimatedV3_9
+  - first:
+      213: -230334643592798877
+    second: GreenBasicInfantryBaseAnimatedV3_10
+  - first:
+      213: 2819162195513758097
+    second: GreenBasicInfantryBaseAnimatedV3_11
+  - first:
+      213: 8998437995759442321
+    second: GreenBasicInfantryBaseAnimatedV3_12
+  - first:
+      213: 8061498892794103403
+    second: GreenBasicInfantryBaseAnimatedV3_13
+  - first:
+      213: -8598966906615330080
+    second: GreenBasicInfantryBaseAnimatedV3_14
+  - first:
+      213: -5843999203779785517
+    second: GreenBasicInfantryBaseAnimatedV3_15
+  - first:
+      213: 5488133958091892522
+    second: GreenBasicInfantryBaseAnimatedV3_16
+  - first:
+      213: 7070934218864955887
+    second: GreenBasicInfantryBaseAnimatedV3_17
+  - first:
+      213: -2191616807136794736
+    second: GreenBasicInfantryBaseAnimatedV3_18
+  - first:
+      213: -675393160145373717
+    second: GreenBasicInfantryBaseAnimatedV3_19
+  - first:
+      213: -8383327213424489093
+    second: GreenBasicInfantryBaseAnimatedV3_20
+  - first:
+      213: -4880328909127132654
+    second: GreenBasicInfantryBaseAnimatedV3_21
+  - first:
+      213: -6651059152971715616
+    second: GreenBasicInfantryBaseAnimatedV3_22
+  - first:
+      213: -5598851825003938265
+    second: GreenBasicInfantryBaseAnimatedV3_23
+  - first:
+      213: 7687102369414335674
+    second: GreenBasicInfantryBaseAnimatedV3_24
+  - first:
+      213: -3792316501211807453
+    second: GreenBasicInfantryBaseAnimatedV3_25
+  - first:
+      213: -4016631046789024071
+    second: GreenBasicInfantryBaseAnimatedV3_26
+  - first:
+      213: 3448472651942518849
+    second: GreenBasicInfantryBaseAnimatedV3_27
+  - first:
+      213: -369750954786916218
+    second: GreenBasicInfantryBaseAnimatedV3_28
+  - first:
+      213: 1710001716043598294
+    second: GreenBasicInfantryBaseAnimatedV3_29
+  - first:
+      213: 8212875269755482135
+    second: GreenBasicInfantryBaseAnimatedV3_30
+  - first:
+      213: 9211431338124571429
+    second: GreenBasicInfantryBaseAnimatedV3_31
+  - first:
+      213: -4888850072745339477
+    second: GreenBasicInfantryBaseAnimatedV3_32
+  - first:
+      213: -1824037073377143205
+    second: GreenBasicInfantryBaseAnimatedV3_33
+  - first:
+      213: -9004412920824100538
+    second: GreenBasicInfantryBaseAnimatedV3_34
+  - first:
+      213: 7552804974960567434
+    second: GreenBasicInfantryBaseAnimatedV3_35
+  - first:
+      213: -7240553658687372013
+    second: GreenBasicInfantryBaseAnimatedV3_36
+  - first:
+      213: -1105466246360620413
+    second: GreenBasicInfantryBaseAnimatedV3_37
+  - first:
+      213: 8535845687659835113
+    second: GreenBasicInfantryBaseAnimatedV3_38
+  - first:
+      213: -133712082378626936
+    second: GreenBasicInfantryBaseAnimatedV3_39
+  - first:
+      213: -3819389763749325286
+    second: GreenBasicInfantryBaseAnimatedV3_40
+  - first:
+      213: -6546988011327810416
+    second: GreenBasicInfantryBaseAnimatedV3_41
+  - first:
+      213: 1773780926896061881
+    second: GreenBasicInfantryBaseAnimatedV3_42
+  - first:
+      213: 7957465308376701555
+    second: GreenBasicInfantryBaseAnimatedV3_43
+  - first:
+      213: -5126256486122241396
+    second: GreenBasicInfantryBaseAnimatedV3_44
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_0
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 1195
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf1f2f25f436a9b20800000000000000
+      internalID: 3141932882389561852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_1
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 1196
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 651d0ec6fb032eaf0800000000000000
+      internalID: -368678620767399594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_2
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 1197
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4536d5fe7e6473640800000000000000
+      internalID: 5059590668341306196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_3
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 1196
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e272d37bc1f676a60800000000000000
+      internalID: 7667219059745564462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_4
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 1196
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 719081cbd273ac880800000000000000
+      internalID: -8589992669687052009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_5
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 1045
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e085262ae0cb63d50800000000000000
+      internalID: 6716762665309591566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_6
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 1045
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7c85b9225014c210800000000000000
+      internalID: 1352223733191117946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_7
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 1045
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91e7c09acbf84f550800000000000000
+      internalID: 6193733427994066457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_8
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 1046
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2048ef06e01214f0800000000000000
+      internalID: -859605998578941907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_9
+      rect:
+        serializedVersion: 2
+        x: 539
+        y: 1046
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3aa50eea0b3f1f1c0800000000000000
+      internalID: -4471525014828459357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_10
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 894
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36d5f2dacdfadccf0800000000000000
+      internalID: -230334643592798877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_11
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 894
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 191decb841daf1720800000000000000
+      internalID: 2819162195513758097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_12
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 894
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1999e9e6eafd0ec70800000000000000
+      internalID: 8998437995759442321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_13
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 894
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b668236088230ef60800000000000000
+      internalID: 8061498892794103403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_14
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 894
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ea8adf58255aa880800000000000000
+      internalID: -8598966906615330080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_15
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 745
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3dc4a0fdfa1f5eea0800000000000000
+      internalID: -5843999203779785517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_16
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 745
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2763dbe1c4c92c40800000000000000
+      internalID: 5488133958091892522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_17
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 745
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe199996531012260800000000000000
+      internalID: 7070934218864955887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_18
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 745
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 097e5d62020d591e0800000000000000
+      internalID: -2191616807136794736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_19
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 745
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be57ecdcf7580a6f0800000000000000
+      internalID: -675393160145373717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_20
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 594
+        width: 64
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7dc7ffe05078ab80800000000000000
+      internalID: -8383327213424489093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_21
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 595
+        width: 64
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21a5868d6b6954cb0800000000000000
+      internalID: -4880328909127132654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_22
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 594
+        width: 64
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0eba20f60f0b2b3a0800000000000000
+      internalID: -6651059152971715616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_23
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 595
+        width: 64
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72eb79cdde1ec42b0800000000000000
+      internalID: -5598851825003938265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_24
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 594
+        width: 64
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abc410180e21eaa60800000000000000
+      internalID: 7687102369414335674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_25
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 445
+        width: 60
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3210b651c3cfe5bc0800000000000000
+      internalID: -3792316501211807453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_26
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 444
+        width: 60
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b6b55e085f0248c0800000000000000
+      internalID: -4016631046789024071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_27
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 444
+        width: 60
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 140eeac2b9f6bdf20800000000000000
+      internalID: 3448472651942518849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_28
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 444
+        width: 60
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 688709437716edaf0800000000000000
+      internalID: -369750954786916218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_29
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 444
+        width: 60
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d9461230852bb710800000000000000
+      internalID: 1710001716043598294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_30
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 295
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 710bd5e4b8ef9f170800000000000000
+      internalID: 8212875269755482135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_31
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 295
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 523f0dd6ff395df70800000000000000
+      internalID: 9211431338124571429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_32
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 295
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba51fd5d2c0572cb0800000000000000
+      internalID: -4888850072745339477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_33
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 295
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b56563822f7bfa6e0800000000000000
+      internalID: -1824037073377143205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_34
+      rect:
+        serializedVersion: 2
+        x: 539
+        y: 295
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 649875be726e90380800000000000000
+      internalID: -9004412920824100538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_35
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 144
+        width: 57
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a84e356bb14f0d860800000000000000
+      internalID: 7552804974960567434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_36
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 144
+        width: 57
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 315c8cc3fc2648b90800000000000000
+      internalID: -7240553658687372013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_37
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 144
+        width: 57
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 382ad725e4898a0f0800000000000000
+      internalID: -1105466246360620413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_38
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 144
+        width: 57
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9eea3869d6a657670800000000000000
+      internalID: 8535845687659835113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_39
+      rect:
+        serializedVersion: 2
+        x: 549
+        y: 144
+        width: 57
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 888e4abc195f42ef0800000000000000
+      internalID: -133712082378626936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_40
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 0
+        width: 62
+        height: 148
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44256756}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1655f0fe3dcefac0800000000000000
+      internalID: -3819389763749325286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_41
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 0
+        width: 62
+        height: 148
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44256756}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0949014571d6425a0800000000000000
+      internalID: -6546988011327810416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_42
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 0
+        width: 62
+        height: 148
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44256756}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bdb009ea5cbd9810800000000000000
+      internalID: 1773780926896061881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_43
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 0
+        width: 62
+        height: 148
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44256756}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37a994a99889e6e60800000000000000
+      internalID: 7957465308376701555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenBasicInfantryBaseAnimatedV3_44
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 0
+        width: 62
+        height: 148
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44256756}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c82442dc2e0ebd8b0800000000000000
+      internalID: -5126256486122241396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

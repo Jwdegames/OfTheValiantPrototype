@@ -1,0 +1,848 @@
+fileFormatVersion: 2
+guid: 782255c4190109448a9bc9ee6fe75609
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7392842828512330004
+    second: Red Vehicles Animated 1_0
+  - first:
+      213: -9077530921611713827
+    second: Red Vehicles Animated 1_1
+  - first:
+      213: 2496835772277357568
+    second: Red Vehicles Animated 1_2
+  - first:
+      213: 5515842811131389473
+    second: Red Vehicles Animated 1_3
+  - first:
+      213: -6022649643765111177
+    second: Red Vehicles Animated 1_4
+  - first:
+      213: -2555164656561812737
+    second: Red Vehicles Animated 1_5
+  - first:
+      213: 617865597428564600
+    second: Red Vehicles Animated 1_6
+  - first:
+      213: -3174398561236191331
+    second: Red Vehicles Animated 1_7
+  - first:
+      213: -4968248914735771138
+    second: Red Vehicles Animated 1_8
+  - first:
+      213: -2794720706742216052
+    second: Red Vehicles Animated 1_9
+  - first:
+      213: 3053075182261891331
+    second: Red Vehicles Animated 1_10
+  - first:
+      213: -1110180627682528365
+    second: Red Vehicles Animated 1_11
+  - first:
+      213: -6002299294408397322
+    second: Red Vehicles Animated 1_12
+  - first:
+      213: -9045292852979057676
+    second: Red Vehicles Animated 1_13
+  - first:
+      213: -6646046732087832389
+    second: Red Vehicles Animated 1_14
+  - first:
+      213: -1552924871845763095
+    second: Red Vehicles Animated 1_15
+  - first:
+      213: 7038377509223303665
+    second: Red Vehicles Animated 1_16
+  - first:
+      213: 7534831655341143638
+    second: Red Vehicles Animated 1_17
+  - first:
+      213: 5149811737249104542
+    second: Red Vehicles Animated 1_18
+  - first:
+      213: 6183362922742623037
+    second: Red Vehicles Animated 1_19
+  - first:
+      213: 8998239410371973314
+    second: Red Vehicles Animated 1_20
+  - first:
+      213: 6156454786386174527
+    second: Red Vehicles Animated 1_21
+  - first:
+      213: -4833759083468897337
+    second: Red Vehicles Animated 1_22
+  - first:
+      213: -4414908668428369939
+    second: Red Vehicles Animated 1_23
+  - first:
+      213: 4061178605633946925
+    second: Red Vehicles Animated 1_24
+  - first:
+      213: 2271095692004613488
+    second: Red Vehicles Animated 1_25
+  - first:
+      213: -7814688719001095712
+    second: Red Vehicles Animated 1_26
+  - first:
+      213: -9037953536398337829
+    second: Red Vehicles Animated 1_27
+  - first:
+      213: 4341061033886429117
+    second: Red Vehicles Animated 1_28
+  - first:
+      213: 1546975207987792085
+    second: Red Vehicles Animated 1_29
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 742
+        width: 114
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cee7a3ecd98576990800000000000000
+      internalID: -7392842828512330004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_1
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 742
+        width: 114
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd2a5bbb8b1260280800000000000000
+      internalID: -9077530921611713827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_2
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 742
+        width: 114
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00c7415f7ea86a220800000000000000
+      internalID: 2496835772277357568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_3
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 742
+        width: 114
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 126e06200d53c8c40800000000000000
+      internalID: 5515842811131389473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_4
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 742
+        width: 114
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7766fb0fe004b6ca0800000000000000
+      internalID: -6022649643765111177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_5
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 594
+        width: 124
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffa000f584b3a8cd0800000000000000
+      internalID: -2555164656561812737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_6
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 593
+        width: 124
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8720aadbc79139800800000000000000
+      internalID: 617865597428564600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_7
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 593
+        width: 124
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d977106c35542f3d0800000000000000
+      internalID: -3174398561236191331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_8
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 593
+        width: 124
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef154795feb3d0bb0800000000000000
+      internalID: -4968248914735771138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_9
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 593
+        width: 124
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8a933403582739d0800000000000000
+      internalID: -2794720706742216052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_10
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 442
+        width: 94
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 301f74fc3b3be5a20800000000000000
+      internalID: 3053075182261891331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_11
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 442
+        width: 94
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3937672e998d790f0800000000000000
+      internalID: -1110180627682528365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_12
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 442
+        width: 94
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6fda531e79c83bca0800000000000000
+      internalID: -6002299294408397322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_13
+      rect:
+        serializedVersion: 2
+        x: 405
+        y: 442
+        width: 94
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fbbdc0031aa87280800000000000000
+      internalID: -9045292852979057676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_14
+      rect:
+        serializedVersion: 2
+        x: 533
+        y: 442
+        width: 94
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb0524d95bf74c3a0800000000000000
+      internalID: -6646046732087832389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 292
+        width: 112
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e7a3ca8e07e27ae0800000000000000
+      internalID: -1552924871845763095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_16
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 292
+        width: 112
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f98a50cd075da160800000000000000
+      internalID: 7038377509223303665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_17
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 292
+        width: 112
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6563af22879119860800000000000000
+      internalID: 7534831655341143638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_18
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 292
+        width: 112
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e92ceda7d7ec77740800000000000000
+      internalID: 5149811737249104542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_19
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 292
+        width: 112
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3b256f31d7bfc550800000000000000
+      internalID: 6183362922742623037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_20
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 142
+        width: 94
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c0542ba11b20ec70800000000000000
+      internalID: 8998239410371973314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_21
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 142
+        width: 94
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f322d4a820f107550800000000000000
+      internalID: 6156454786386174527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_22
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 142
+        width: 94
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c3c40459b90becb0800000000000000
+      internalID: -4833759083468897337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_23
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 142
+        width: 94
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: defb88e05f71bb2c0800000000000000
+      internalID: -4414908668428369939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_24
+      rect:
+        serializedVersion: 2
+        x: 533
+        y: 142
+        width: 94
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d254a3ebc643c5830800000000000000
+      internalID: 4061178605633946925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_25
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 1
+        width: 94
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4390244}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07ddad4cf7d848f10800000000000000
+      internalID: 2271095692004613488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_26
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 0
+        width: 94
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4390244}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e1ffa99306ac8390800000000000000
+      internalID: -7814688719001095712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_27
+      rect:
+        serializedVersion: 2
+        x: 279
+        y: 0
+        width: 94
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4390244}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd8dd7ec42db29280800000000000000
+      internalID: -9037953536398337829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_28
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 0
+        width: 94
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4390244}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbf2719a20c8e3c30800000000000000
+      internalID: 4341061033886429117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Vehicles Animated 1_29
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 1
+        width: 94
+        height: 82
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4390244}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d8c27461c5f77510800000000000000
+      internalID: 1546975207987792085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

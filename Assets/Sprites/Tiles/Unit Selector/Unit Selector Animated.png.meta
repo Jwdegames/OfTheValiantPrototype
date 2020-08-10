@@ -1,0 +1,554 @@
+fileFormatVersion: 2
+guid: cfd5c049bd3297346b10bcca0d7c222b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4653540314578912824
+    second: Unit Selector Animated_0
+  - first:
+      213: -9175042436465022543
+    second: Unit Selector Animated_1
+  - first:
+      213: -6873986768199288762
+    second: Unit Selector Animated_2
+  - first:
+      213: 3245804481649748640
+    second: Unit Selector Animated_3
+  - first:
+      213: -6569686844372370315
+    second: Unit Selector Animated_4
+  - first:
+      213: 7920783822460018392
+    second: Unit Selector Animated_5
+  - first:
+      213: -1493591217696381438
+    second: Unit Selector Animated_6
+  - first:
+      213: 8394515984147054212
+    second: Unit Selector Animated_7
+  - first:
+      213: 8751532246255208013
+    second: Unit Selector Animated_8
+  - first:
+      213: 8758999719225225640
+    second: Unit Selector Animated_9
+  - first:
+      213: -5831680022662291479
+    second: Unit Selector Animated_10
+  - first:
+      213: 7770862875689858403
+    second: Unit Selector Animated_11
+  - first:
+      213: 7194511909130001702
+    second: Unit Selector Animated_12
+  - first:
+      213: 4603097213074516074
+    second: Unit Selector Animated_13
+  - first:
+      213: -7468577124391482192
+    second: Unit Selector Animated_14
+  - first:
+      213: -2261859436714055446
+    second: Unit Selector Animated_15
+  - first:
+      213: 2071643667696897731
+    second: Unit Selector Animated_16
+  - first:
+      213: -7022394748467743837
+    second: Unit Selector Animated_17
+  - first:
+      213: 6468573817940295905
+    second: Unit Selector Animated_18
+  - first:
+      213: 6832519082238200091
+    second: Unit Selector Animated_19
+  - first:
+      213: -6631549010036532515
+    second: Unit Selector Animated_20
+  - first:
+      213: 6224912083522054788
+    second: Unit Selector Animated_21
+  - first:
+      213: -6901759851578608666
+    second: Unit Selector Animated_22
+  - first:
+      213: -5179781948179047191
+    second: Unit Selector Animated_23
+  - first:
+      213: -6316734232987235024
+    second: Unit Selector Animated_24
+  - first:
+      213: -974280502766653352
+    second: Unit Selector Animated_25
+  - first:
+      213: 316032207712093004
+    second: Unit Selector Animated_26
+  - first:
+      213: -751392509689565365
+    second: Unit Selector Animated_27
+  - first:
+      213: 8083223112613110273
+    second: Unit Selector Animated_28
+  - first:
+      213: -1512148638693016516
+    second: Unit Selector Animated_29
+  - first:
+      213: -3342882413947992151
+    second: Unit Selector Animated_30
+  - first:
+      213: 2285063318243624211
+    second: Unit Selector Animated_31
+  - first:
+      213: 6595107919762065035
+    second: Unit Selector Animated_32
+  - first:
+      213: -614342818532698418
+    second: Unit Selector Animated_33
+  - first:
+      213: 8721242340537105889
+    second: Unit Selector Animated_34
+  - first:
+      213: -8641084074501161789
+    second: Unit Selector Animated_35
+  - first:
+      213: -1380829830052254151
+    second: Unit Selector Animated_36
+  - first:
+      213: 6669827038517851527
+    second: Unit Selector Animated_37
+  - first:
+      213: 9220202566011172885
+    second: Unit Selector Animated_38
+  - first:
+      213: -6830082514018835385
+    second: Unit Selector Animated_39
+  - first:
+      213: 4184718810386837430
+    second: Unit Selector Animated_40
+  - first:
+      213: 8560752902176990975
+    second: Unit Selector Animated_41
+  - first:
+      213: -5082479269472724020
+    second: Unit Selector Animated_42
+  - first:
+      213: -5853688731554395788
+    second: Unit Selector Animated_43
+  - first:
+      213: 2046786800483858552
+    second: Unit Selector Animated_44
+  - first:
+      213: -5579322390752293631
+    second: Unit Selector Animated_45
+  - first:
+      213: 5976977408786158100
+    second: Unit Selector Animated_46
+  - first:
+      213: 1836000247138039761
+    second: Unit Selector Animated_47
+  - first:
+      213: -5375302038415670049
+    second: Unit Selector Animated_48
+  - first:
+      213: -2197742089638126853
+    second: Unit Selector Animated_49
+  - first:
+      213: 3862458885082192842
+    second: Unit Selector Animated_50
+  - first:
+      213: 3424439455776479266
+    second: Unit Selector Animated_51
+  - first:
+      213: -2447225577995970203
+    second: Unit Selector Animated_52
+  - first:
+      213: -5151279388456894874
+    second: Unit Selector Animated_53
+  - first:
+      213: 2321967051911683392
+    second: Unit Selector Animated_54
+  - first:
+      213: 3620497679972787166
+    second: Unit Selector Animated_55
+  - first:
+      213: -1755694335462034023
+    second: Unit Selector Animated_56
+  - first:
+      213: 5428821520191443682
+    second: Unit Selector Animated_57
+  - first:
+      213: 3465590618811059074
+    second: Unit Selector Animated_58
+  - first:
+      213: 2918499074962909134
+    second: Unit Selector Animated_59
+  - first:
+      213: 4449044763216493498
+    second: Unit Selector Animated_60
+  - first:
+      213: 3467813270030252980
+    second: Unit Selector Animated_61
+  - first:
+      213: 5748748114191687889
+    second: Unit Selector Animated_62
+  - first:
+      213: 4592607354367467970
+    second: Unit Selector Animated_63
+  - first:
+      213: 8825831320522923579
+    second: Unit Selector Animated_64
+  - first:
+      213: -734100923662006080
+    second: Unit Selector Animated_65
+  - first:
+      213: 8830862356880473070
+    second: Unit Selector Animated_66
+  - first:
+      213: -6150748672354363695
+    second: Unit Selector Animated_67
+  - first:
+      213: 4567252775170868613
+    second: Unit Selector Animated_68
+  - first:
+      213: 8905735864758245404
+    second: Unit Selector Animated_69
+  - first:
+      213: 6445192385334069016
+    second: Unit Selector Animated_70
+  - first:
+      213: -6000761153111561992
+    second: Unit Selector Animated_71
+  - first:
+      213: -1894235104835381572
+    second: Unit Selector Animated_72
+  - first:
+      213: -5728740999256683171
+    second: Unit Selector Animated_73
+  - first:
+      213: -7023147917593721504
+    second: Unit Selector Animated_74
+  - first:
+      213: -3716665144570909270
+    second: Unit Selector Animated_75
+  - first:
+      213: -8939414246978234280
+    second: Unit Selector Animated_76
+  - first:
+      213: -7169743121954056337
+    second: Unit Selector Animated_77
+  - first:
+      213: -2360697604879716090
+    second: Unit Selector Animated_78
+  - first:
+      213: 8534984483415848489
+    second: Unit Selector Animated_79
+  - first:
+      213: 5330872618622647625
+    second: Unit Selector Animated_80
+  - first:
+      213: 6098137784174865570
+    second: Unit Selector Animated_81
+  - first:
+      213: -4072681880192886201
+    second: Unit Selector Animated_82
+  - first:
+      213: -8241526805633548546
+    second: Unit Selector Animated_83
+  - first:
+      213: 2865872083228645517
+    second: Unit Selector Animated_84
+  - first:
+      213: 1082549275842529297
+    second: Unit Selector Animated_85
+  - first:
+      213: 2363141764519410773
+    second: Unit Selector Animated_86
+  - first:
+      213: 8559494848599291089
+    second: Unit Selector Animated_87
+  - first:
+      213: -9169697114268215546
+    second: Unit Selector Animated_88
+  - first:
+      213: 4730214657613120331
+    second: Unit Selector Animated_89
+  - first:
+      213: -9100362921090796379
+    second: Unit Selector Animated_90
+  - first:
+      213: -600579011587331260
+    second: Unit Selector Animated_91
+  - first:
+      213: -1024630620378800328
+    second: Unit Selector Animated_92
+  - first:
+      213: -508621990854713998
+    second: Unit Selector Animated_93
+  - first:
+      213: -3635003277499215035
+    second: Unit Selector Animated_94
+  - first:
+      213: 2359408860959047567
+    second: Unit Selector Animated_95
+  - first:
+      213: 7367784120254888144
+    second: Unit Selector Animated_96
+  - first:
+      213: 5559442326280857588
+    second: Unit Selector Animated_97
+  - first:
+      213: -1386609732892940410
+    second: Unit Selector Animated_98
+  - first:
+      213: 3723308477322402270
+    second: Unit Selector Animated_99
+  - first:
+      213: 4443113264159717452
+    second: Unit Selector Animated_100
+  - first:
+      213: 1861494857332066706
+    second: Unit Selector Animated_101
+  - first:
+      213: 7295499881377013008
+    second: Unit Selector Animated_102
+  - first:
+      213: 4996241478061306440
+    second: Unit Selector Animated_103
+  - first:
+      213: 7589951980349773696
+    second: Unit Selector Animated_104
+  - first:
+      213: -483306271208079907
+    second: Unit Selector Animated_105
+  - first:
+      213: 1019987911910971266
+    second: Unit Selector Animated_106
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Unit Selector Animated_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 2
+        width: 96
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8368f66b242b49040800000000000000
+      internalID: 4653540314578912824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit Selector Animated_1
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 2
+        width: 96
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 1}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b92e57f383bba080800000000000000
+      internalID: -9175042436465022543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit Selector Animated_2
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 2
+        width: 96
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 648feba4471ba90a0800000000000000
+      internalID: -6873986768199288762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit Selector Animated_4
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 2
+        width: 96
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57cb0ab6f98c3d4a0800000000000000
+      internalID: -6569686844372370315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit Selector Animated_6
+      rect:
+        serializedVersion: 2
+        x: 514
+        y: 2
+        width: 96
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 206609d63b2b54be0800000000000000
+      internalID: -1493591217696381438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

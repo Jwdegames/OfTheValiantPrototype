@@ -1,0 +1,1088 @@
+fileFormatVersion: 2
+guid: df12c566563e07e43a04062a79ba63e4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3088574403174377053
+    second: Green Vehicles Animated_0
+  - first:
+      213: -7632433042294997246
+    second: Green Vehicles Animated_1
+  - first:
+      213: -4859434795291882717
+    second: Green Vehicles Animated_2
+  - first:
+      213: -3852840492342650665
+    second: Green Vehicles Animated_3
+  - first:
+      213: -8079684512052872354
+    second: Green Vehicles Animated_4
+  - first:
+      213: 7533379444049833627
+    second: Green Vehicles Animated_5
+  - first:
+      213: -5220298463352255196
+    second: Green Vehicles Animated_6
+  - first:
+      213: -2540145962757293926
+    second: Green Vehicles Animated_7
+  - first:
+      213: 4793453124211171393
+    second: Green Vehicles Animated_8
+  - first:
+      213: 2279588838406865226
+    second: Green Vehicles Animated_9
+  - first:
+      213: 2647675056826444731
+    second: Green Vehicles Animated_10
+  - first:
+      213: 1755370793667912034
+    second: Green Vehicles Animated_11
+  - first:
+      213: 6514774579447327680
+    second: Green Vehicles Animated_12
+  - first:
+      213: 115546426700756320
+    second: Green Vehicles Animated_13
+  - first:
+      213: -3641364853792441332
+    second: Green Vehicles Animated_14
+  - first:
+      213: -2310008169955358012
+    second: Green Vehicles Animated_15
+  - first:
+      213: -7210817592390502867
+    second: Green Vehicles Animated_16
+  - first:
+      213: 4374643024538386344
+    second: Green Vehicles Animated_17
+  - first:
+      213: -2347313195118219582
+    second: Green Vehicles Animated_18
+  - first:
+      213: -217819968679696939
+    second: Green Vehicles Animated_19
+  - first:
+      213: 6015712171432407084
+    second: Green Vehicles Animated_20
+  - first:
+      213: 4202552955468188905
+    second: Green Vehicles Animated_21
+  - first:
+      213: 8738218959279072192
+    second: Green Vehicles Animated_22
+  - first:
+      213: -4343674240702844769
+    second: Green Vehicles Animated_23
+  - first:
+      213: -8786384427156883690
+    second: Green Vehicles Animated_24
+  - first:
+      213: 3200787400048202777
+    second: Green Vehicles Animated_25
+  - first:
+      213: -4866192345876506756
+    second: Green Vehicles Animated_26
+  - first:
+      213: 906880367058177562
+    second: Green Vehicles Animated_27
+  - first:
+      213: -6265539965504291791
+    second: Green Vehicles Animated_28
+  - first:
+      213: 2227970635207388573
+    second: Green Vehicles Animated_29
+  - first:
+      213: 3234088382481603657
+    second: Green Vehicles Animated_30
+  - first:
+      213: 723950762600836528
+    second: Green Vehicles Animated_31
+  - first:
+      213: -4311540348761172938
+    second: Green Vehicles Animated_32
+  - first:
+      213: 3557018091524023247
+    second: Green Vehicles Animated_33
+  - first:
+      213: -3789486923664356013
+    second: Green Vehicles Animated_34
+  - first:
+      213: -6129668702953467915
+    second: Green Vehicles Animated_35
+  - first:
+      213: -6597052160392204455
+    second: Green Vehicles Animated_36
+  - first:
+      213: 7133886613664765078
+    second: Green Vehicles Animated_37
+  - first:
+      213: 3472211344370457512
+    second: Green Vehicles Animated_38
+  - first:
+      213: -1615139783386827761
+    second: Green Vehicles Animated_39
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Green Vehicles Animated_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 1242
+        width: 114
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d56a2934e02dcda20800000000000000
+      internalID: 3088574403174377053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_1
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 1242
+        width: 114
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20f7d0e1696241690800000000000000
+      internalID: -7632433042294997246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_2
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 1242
+        width: 114
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32b4471dcc1df8cb0800000000000000
+      internalID: -4859434795291882717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_3
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 1242
+        width: 114
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d8dca54cf5f78ac0800000000000000
+      internalID: -3852840492342650665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_4
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 1242
+        width: 114
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5bfcd98eb13fdf80800000000000000
+      internalID: -8079684512052872354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_5
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 1093
+        width: 124
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9ee1d8d0b0fb8860800000000000000
+      internalID: 7533379444049833627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_6
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 1093
+        width: 124
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42d0f56b436cd87b0800000000000000
+      internalID: -5220298463352255196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_7
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 1093
+        width: 124
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a98753484b69fbcd0800000000000000
+      internalID: -2540145962757293926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_8
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 1094
+        width: 124
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 140e71c3834c58240800000000000000
+      internalID: 4793453124211171393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_9
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 1093
+        width: 124
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a41cf2388f9b2af10800000000000000
+      internalID: 2279588838406865226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_10
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 944
+        width: 94
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbb6dcaaf6e6eb420800000000000000
+      internalID: 2647675056826444731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_11
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 943
+        width: 94
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 261ebadbf645c5810800000000000000
+      internalID: 1755370793667912034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_12
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 943
+        width: 94
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0cbe3b796f0296a50800000000000000
+      internalID: 6514774579447327680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_13
+      rect:
+        serializedVersion: 2
+        x: 405
+        y: 943
+        width: 94
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0657096ecd08a9100800000000000000
+      internalID: 115546426700756320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_14
+      rect:
+        serializedVersion: 2
+        x: 533
+        y: 942
+        width: 94
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0cfb1055f5477dc0800000000000000
+      internalID: -3641364853792441332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 792
+        width: 84
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ca8f81fec331ffd0800000000000000
+      internalID: -2310008169955358012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_16
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 792
+        width: 84
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d263d61ba970eeb90800000000000000
+      internalID: -7210817592390502867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_17
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 792
+        width: 84
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8af30c827aad5bc30800000000000000
+      internalID: 4374643024538386344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_18
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 792
+        width: 84
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ce246ce51bac6fd0800000000000000
+      internalID: -2347313195118219582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_19
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 792
+        width: 84
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d52cdd74e52afcf0800000000000000
+      internalID: -217819968679696939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_20
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 642
+        width: 94
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c20f839e85a1c7350800000000000000
+      internalID: 6015712171432407084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_21
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 642
+        width: 94
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ec037c95a7725a30800000000000000
+      internalID: 4202552955468188905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_22
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 642
+        width: 94
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c3a96da8d3644970800000000000000
+      internalID: 8738218959279072192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_23
+      rect:
+        serializedVersion: 2
+        x: 405
+        y: 642
+        width: 94
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9074e6ba4b28b3c0800000000000000
+      internalID: -4343674240702844769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_24
+      rect:
+        serializedVersion: 2
+        x: 533
+        y: 642
+        width: 94
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6173a4f6aed701680800000000000000
+      internalID: -8786384427156883690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_25
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 492
+        width: 106
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9145b6d8e2b7b6c20800000000000000
+      internalID: 3200787400048202777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_26
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 492
+        width: 106
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c775e47f7dfc77cb0800000000000000
+      internalID: -4866192345876506756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_27
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 492
+        width: 106
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1e474493e2e59c00800000000000000
+      internalID: 906880367058177562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_28
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 492
+        width: 106
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13c7a1ef8945c09a0800000000000000
+      internalID: -6265539965504291791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_29
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 492
+        width: 106
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9da9890d775bee10800000000000000
+      internalID: 2227970635207388573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_30
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 342
+        width: 95
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94c980abf3ac1ec20800000000000000
+      internalID: 3234088382481603657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_31
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 342
+        width: 95
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0bd22b7026dfb0a00800000000000000
+      internalID: 723950762600836528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_32
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 342
+        width: 95
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 634935575e45a24c0800000000000000
+      internalID: -4311540348761172938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_33
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 342
+        width: 95
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc36decbb111d5130800000000000000
+      internalID: 3557018091524023247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_34
+      rect:
+        serializedVersion: 2
+        x: 534
+        y: 342
+        width: 95
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35d8ff178b9096bc0800000000000000
+      internalID: -3789486923664356013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_35
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 192
+        width: 130
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ff01a18aca0feaa0800000000000000
+      internalID: -6129668702953467915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_36
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 192
+        width: 130
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95f691743009274a0800000000000000
+      internalID: -6597052160392204455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_37
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 192
+        width: 130
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69417630418a00360800000000000000
+      internalID: 7133886613664765078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_38
+      rect:
+        serializedVersion: 2
+        x: 394
+        y: 192
+        width: 130
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ab584632d5cf2030800000000000000
+      internalID: 3472211344370457512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Green Vehicles Animated_39
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 192
+        width: 130
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0470a4aceed599e0800000000000000
+      internalID: -1615139783386827761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

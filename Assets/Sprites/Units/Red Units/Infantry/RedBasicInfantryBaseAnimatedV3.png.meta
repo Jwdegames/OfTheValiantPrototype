@@ -1,0 +1,1235 @@
+fileFormatVersion: 2
+guid: c675c14581d91364182c0bfe1fda2d0f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3626947701394209151
+    second: RedBasicInfantryBaseAnimatedV3_0
+  - first:
+      213: 3229121200326423242
+    second: RedBasicInfantryBaseAnimatedV3_1
+  - first:
+      213: 847156917628382932
+    second: RedBasicInfantryBaseAnimatedV3_2
+  - first:
+      213: -4039817960001004674
+    second: RedBasicInfantryBaseAnimatedV3_3
+  - first:
+      213: 6313960315457022527
+    second: RedBasicInfantryBaseAnimatedV3_4
+  - first:
+      213: 714904009205280569
+    second: RedBasicInfantryBaseAnimatedV3_5
+  - first:
+      213: -4665532809124950780
+    second: RedBasicInfantryBaseAnimatedV3_6
+  - first:
+      213: 6161826048639466044
+    second: RedBasicInfantryBaseAnimatedV3_7
+  - first:
+      213: 8584362682444439336
+    second: RedBasicInfantryBaseAnimatedV3_8
+  - first:
+      213: -4207266723956863134
+    second: RedBasicInfantryBaseAnimatedV3_9
+  - first:
+      213: 6358528252723787928
+    second: RedBasicInfantryBaseAnimatedV3_10
+  - first:
+      213: -824377410421335767
+    second: RedBasicInfantryBaseAnimatedV3_11
+  - first:
+      213: 4339202656269017284
+    second: RedBasicInfantryBaseAnimatedV3_12
+  - first:
+      213: 1546118522246459142
+    second: RedBasicInfantryBaseAnimatedV3_13
+  - first:
+      213: 4021488924027182597
+    second: RedBasicInfantryBaseAnimatedV3_14
+  - first:
+      213: 5602552577566263921
+    second: RedBasicInfantryBaseAnimatedV3_15
+  - first:
+      213: -2636208413145541334
+    second: RedBasicInfantryBaseAnimatedV3_16
+  - first:
+      213: 6239214245813321447
+    second: RedBasicInfantryBaseAnimatedV3_17
+  - first:
+      213: 1569004438650387060
+    second: RedBasicInfantryBaseAnimatedV3_18
+  - first:
+      213: 2485750408612233611
+    second: RedBasicInfantryBaseAnimatedV3_19
+  - first:
+      213: -2571942807984449504
+    second: RedBasicInfantryBaseAnimatedV3_20
+  - first:
+      213: -1569983358343500561
+    second: RedBasicInfantryBaseAnimatedV3_21
+  - first:
+      213: 7260501497482092760
+    second: RedBasicInfantryBaseAnimatedV3_22
+  - first:
+      213: -5253035143155316515
+    second: RedBasicInfantryBaseAnimatedV3_23
+  - first:
+      213: -2543060084968200501
+    second: RedBasicInfantryBaseAnimatedV3_24
+  - first:
+      213: -5217039930537876578
+    second: RedBasicInfantryBaseAnimatedV3_25
+  - first:
+      213: 5706385429227474730
+    second: RedBasicInfantryBaseAnimatedV3_26
+  - first:
+      213: 1424529861985920140
+    second: RedBasicInfantryBaseAnimatedV3_27
+  - first:
+      213: -2043142078575369951
+    second: RedBasicInfantryBaseAnimatedV3_28
+  - first:
+      213: 1936077458176543796
+    second: RedBasicInfantryBaseAnimatedV3_29
+  - first:
+      213: 6727092118104980059
+    second: RedBasicInfantryBaseAnimatedV3_30
+  - first:
+      213: -8826050986462752604
+    second: RedBasicInfantryBaseAnimatedV3_31
+  - first:
+      213: -8620903421022156756
+    second: RedBasicInfantryBaseAnimatedV3_32
+  - first:
+      213: -2316342899417834117
+    second: RedBasicInfantryBaseAnimatedV3_33
+  - first:
+      213: 9137987479929437165
+    second: RedBasicInfantryBaseAnimatedV3_34
+  - first:
+      213: -4389752138840381920
+    second: RedBasicInfantryBaseAnimatedV3_35
+  - first:
+      213: -5926444219071840937
+    second: RedBasicInfantryBaseAnimatedV3_36
+  - first:
+      213: -2701891194509489508
+    second: RedBasicInfantryBaseAnimatedV3_37
+  - first:
+      213: -8726627354488072546
+    second: RedBasicInfantryBaseAnimatedV3_38
+  - first:
+      213: -8123822805254010330
+    second: RedBasicInfantryBaseAnimatedV3_39
+  - first:
+      213: 2267308167953578153
+    second: RedBasicInfantryBaseAnimatedV3_40
+  - first:
+      213: 1167730978621331965
+    second: RedBasicInfantryBaseAnimatedV3_41
+  - first:
+      213: -6519430332454065262
+    second: RedBasicInfantryBaseAnimatedV3_42
+  - first:
+      213: 1485441825395180974
+    second: RedBasicInfantryBaseAnimatedV3_43
+  - first:
+      213: 1939739605028194114
+    second: RedBasicInfantryBaseAnimatedV3_44
+  - first:
+      213: 8002593503356343315
+    second: RedBasicInfantryBaseAnimatedV3_45
+  - first:
+      213: 3026619100667347457
+    second: RedBasicInfantryBaseAnimatedV3_46
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_0
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 1045
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f797580d7b1855230800000000000000
+      internalID: 3626947701394209151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_1
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 1044
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac2b3228f9420dc20800000000000000
+      internalID: 3229121200326423242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_2
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 1044
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4de21486ab4b1cb00800000000000000
+      internalID: 847156917628382932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_3
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 1044
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7b95e028feafe7c0800000000000000
+      internalID: -4039817960001004674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_4
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 1044
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3aaab04471bf9750800000000000000
+      internalID: 6313960315457022527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_5
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 893
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93fee2d9869dbe900800000000000000
+      internalID: 714904009205280569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_6
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 893
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40d4d2011a2b04fb0800000000000000
+      internalID: -4665532809124950780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_7
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 893
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3a77ecf424338550800000000000000
+      internalID: 6161826048639466044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_8
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 893
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82f5836b068c12770800000000000000
+      internalID: 8584362682444439336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_9
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 893
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26fca33a439cc95c0800000000000000
+      internalID: -4207266723956863134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_10
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 740
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 898f2e5c1c70e3850800000000000000
+      internalID: 6358528252723787928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_11
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 742
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 929dafaec193f84f0800000000000000
+      internalID: -824377410421335767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_12
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 742
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c0a85763d1f73c30800000000000000
+      internalID: 4339202656269017284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_13
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 742
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60fe623ba9ae47510800000000000000
+      internalID: 1546118522246459142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_14
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 743
+        width: 57
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50edec0aed23fc730800000000000000
+      internalID: 4021488924027182597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_15
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 594
+        width: 65
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17a494db2e340cd40800000000000000
+      internalID: 5602552577566263921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_16
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 593
+        width: 65
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a25509c5a6e4a6bd0800000000000000
+      internalID: -2636208413145541334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_17
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 593
+        width: 65
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ee724fbc44269650800000000000000
+      internalID: 6239214245813321447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_18
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 593
+        width: 65
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47a74c8593936c510800000000000000
+      internalID: 1569004438650387060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_19
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 597
+        width: 65
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b814d9993d82f7220800000000000000
+      internalID: 2485750408612233611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_20
+      rect:
+        serializedVersion: 2
+        x: 664
+        y: 593
+        width: 72
+        height: 145
+      alignment: 9
+      pivot: {x: 0.5040566, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 028577394af9e4cd0800000000000000
+      internalID: -2571942807984449504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_21
+      rect:
+        serializedVersion: 2
+        x: 794
+        y: 593
+        width: 70
+        height: 145
+      alignment: 9
+      pivot: {x: 0.4778818, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fec29a6247c463ae0800000000000000
+      internalID: -1569983358343500561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_22
+      rect:
+        serializedVersion: 2
+        x: 923
+        y: 593
+        width: 69
+        height: 145
+      alignment: 9
+      pivot: {x: 0.4669788, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d0ac98e4ab72c460800000000000000
+      internalID: 7260501497482092760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_23
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 442
+        width: 70
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd8859b7e587917b0800000000000000
+      internalID: -5253035143155316515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_24
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 442
+        width: 70
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc6eef0935c35bcd0800000000000000
+      internalID: -2543060084968200501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_25
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 442
+        width: 70
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e93e24103d95997b0800000000000000
+      internalID: -5217039930537876578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_26
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 442
+        width: 70
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2f819c6057213f40800000000000000
+      internalID: 5706385429227474730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_27
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 442
+        width: 70
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c846b9bac52f4c310800000000000000
+      internalID: 1424529861985920140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_28
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 292
+        width: 73
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 121acd4ca1d45a3e0800000000000000
+      internalID: -2043142078575369951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_29
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 292
+        width: 73
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43c0140c0345eda10800000000000000
+      internalID: 1936077458176543796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_30
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 292
+        width: 73
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5a3af6c3ae6b5d50800000000000000
+      internalID: 6727092118104980059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_31
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 292
+        width: 73
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a0d666e361938580800000000000000
+      internalID: -8826050986462752604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_32
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 292
+        width: 73
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c28460b93066c5880800000000000000
+      internalID: -8620903421022156756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_33
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 143
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7d933ec762badfd0800000000000000
+      internalID: -2316342899417834117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_34
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 143
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: deb3927a237a0de70800000000000000
+      internalID: 9137987479929437165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_35
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 143
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 026686800b77413c0800000000000000
+      internalID: -4389752138840381920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_36
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 143
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75d3e05e16a01cda0800000000000000
+      internalID: -5926444219071840937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_37
+      rect:
+        serializedVersion: 2
+        x: 537
+        y: 143
+        width: 80
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9a81891644f08ad0800000000000000
+      internalID: -2701891194509489508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_38
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 0
+        width: 65
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4652778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e96188028aac4e680800000000000000
+      internalID: -8726627354488072546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_39
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 0
+        width: 65
+        height: 145
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46206897}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62a0e925332624f80800000000000000
+      internalID: -8123822805254010330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_40
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 0
+        width: 65
+        height: 145
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46206897}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a8f63b14c8177f10800000000000000
+      internalID: 2267308167953578153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_41
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 0
+        width: 65
+        height: 145
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46206897}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df991fd532d943010800000000000000
+      internalID: 1167730978621331965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_42
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 1
+        width: 65
+        height: 145
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46206897}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29b2b2077a45685a0800000000000000
+      internalID: -6519430332454065262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_43
+      rect:
+        serializedVersion: 2
+        x: 664
+        y: 0
+        width: 72
+        height: 145
+      alignment: 9
+      pivot: {x: 0.5040566, y: 0.46206897}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea5003158795d9410800000000000000
+      internalID: 1485441825395180974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_44
+      rect:
+        serializedVersion: 2
+        x: 794
+        y: 1
+        width: 70
+        height: 145
+      alignment: 9
+      pivot: {x: 0.4778818, y: 0.46206897}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2474672c4e65bea10800000000000000
+      internalID: 1939739605028194114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedBasicInfantryBaseAnimatedV3_45
+      rect:
+        serializedVersion: 2
+        x: 923
+        y: 0
+        width: 69
+        height: 145
+      alignment: 9
+      pivot: {x: 0.4669788, y: 0.46206897}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3145769446cee0f60800000000000000
+      internalID: 8002593503356343315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
