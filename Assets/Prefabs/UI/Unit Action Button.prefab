@@ -243,6 +243,7 @@ MonoBehaviour:
   loadUnits: {fileID: 21300000, guid: 49d44e4838b0699489fb78ec9e5b5385, type: 3}
   deployUnits: {fileID: 21300000, guid: a678c8931d0a65144bdd4a8c61922871, type: 3}
   deployDrones: {fileID: 21300000, guid: 19750f2ab9f8cca4caa68fbce98e8aae, type: 3}
+  toggleJetpack: {fileID: 21300000, guid: 53fe14e5a404c3b41a215d6e3221969b, type: 3}
   unit: {fileID: 0}
   image: {fileID: 0}
   buttonImage: {fileID: 0}

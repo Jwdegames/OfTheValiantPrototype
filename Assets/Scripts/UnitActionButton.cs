@@ -27,6 +27,7 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
     public Sprite loadUnits;
     public Sprite deployUnits;
     public Sprite deployDrones;
+    public Sprite toggleJetpack;
     public Unit unit;
     public Image image;
     public Image buttonImage;
@@ -109,6 +110,9 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
                 break;
             case "Fire Turret 5":
                 image.sprite = fireTurret5;
+                break;
+            case "Toggle Jetpack":
+                image.sprite = toggleJetpack;
                 break;
             default:
                 image.sprite = move;
@@ -305,8 +309,8 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
     }*/
 
 
-
     //Do the unit action when we are clicked
+    //NOTICE: We can only keep running coroutines if the script that calls the coroutine isn't destroyed, therefore, use starter methods
     public void doAction()
     {
         if (buttonImage.sprite.Equals(deactivated)) return;
@@ -321,13 +325,17 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
                 getAttackables();
                 break;
             case "Fortify":
-                StartCoroutine(unit.actuallyGuard());
+                unit.startActuallyGuard();
+                
+                gM.clearAvailableTiles();
                 break;
             case "Sentry":
-                StartCoroutine(unit.actuallySentry());
+                unit.startActuallySentry();
+                gM.clearAvailableTiles();
                 break;
             case "Capture":
-                StartCoroutine(unit.actuallyCapture());
+                unit.startActuallyCapture();
+                gM.clearAvailableTiles();
                 break;
             case "Heal":
                 getHealables();
@@ -359,6 +367,9 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
                 break;
             case "Fire Turret 5":
                 getTurretAttackables(4);
+                break;
+            case "Toggle Jetpack":
+                unit.startToggleJetpack();
                 break;
             default:
                 break;

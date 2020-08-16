@@ -211,7 +211,7 @@ public class UnitActionMenu : MonoBehaviour
                     if (unit.getCurrentAP() <= 0f)
                     tempButton.disable();
                     //Prevent capturing if there is no building we can capture
-                    if (currentAction == "Capture" && (unit.getTile().getBuilding() == null || unit.getTile().getBuilding().side == unit.getSide()))
+                    if (currentAction == "Capture" && (unit.getTile().getBuilding() == null || unit.getTile().getBuilding().side == unit.getSide() && !unit.flying))
                     {
                         tempButton.disable();
                     }

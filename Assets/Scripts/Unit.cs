@@ -93,7 +93,7 @@ public class Unit : Controllable
     public bool repairing = false;
 
     //Flying variables - Control in prefabs
-    public bool flying = false;
+    public bool flying = false, canLand = false;
     public Vector3 displacementVector = Vector3.zero;
 
     public bool hasShadow = false;
@@ -179,6 +179,8 @@ public class Unit : Controllable
         transportTypes = new List<string>() { mainTransportType, secondaryTransportType, tertiaryTransportType };
         //matchWeapon();
         rMaterial = GetComponent<SpriteRenderer>().material;
+        GetComponent<Animator>().SetBool("Flying", flying);
+
 
     }
 
@@ -466,6 +468,11 @@ public class Unit : Controllable
         Destroy(effectTXT);
     }
 
+    public void startActuallySentry()
+    {
+        StartCoroutine(actuallySentry());
+    }
+
     public IEnumerator actuallySentry()
     {
 
@@ -482,6 +489,11 @@ public class Unit : Controllable
     public void setGuard(bool g)
     {
         guard = g; 
+    }
+
+    public void startActuallyGuard()
+    {
+        StartCoroutine(actuallyGuard());
     }
 
     public IEnumerator actuallyGuard()
@@ -2512,6 +2524,11 @@ public class Unit : Controllable
         return false;
     }
 
+    public void startActuallyCapture()
+    {
+        StartCoroutine(actuallyCapture());
+
+    }
     public IEnumerator actuallyCapture()
     {
         //Debug.Log("Actually capturing");
@@ -2776,6 +2793,61 @@ public class Unit : Controllable
             }
         }
         return false;
+    }
+
+    public void startToggleJetpack()
+    {
+        StartCoroutine(toggleJetpack());
+    }
+
+    public IEnumerator toggleJetpack()
+    {
+        if (canLand)
+        {
+            //Debug.Log("Toggling Jetpack");
+            Vector3 startPos = transform.position;
+            Vector3 endPos = transform.position + (flying ? -displacementVector : displacementVector);
+            float elaspedTime = 0f;
+            float animTime = 1f;
+            
+            if (flying)
+            {
+
+                Vector3 shadowStartPos = shadow.transform.position;
+                while(elaspedTime < animTime)
+                {
+                    transform.position = Vector3.Lerp(startPos,endPos,elaspedTime / animTime);
+                    shadow.transform.position = Vector3.Lerp(shadowStartPos, endPos, elaspedTime / animTime / 5);
+                    elaspedTime += Time.deltaTime;
+                    //Debug.Log("Lerping");
+                    yield return null;
+                    //if (elaspedTime < animTime) Debug.Log("Log");
+
+                }
+                transform.position = endPos;
+                //Debug.Log("Test");
+                Destroy(shadow.gameObject);
+                GetComponent<Animator>().SetBool("Flying", false);
+                flying = false;
+
+            }
+            else
+            {
+                makeShadow();
+                GetComponent<Animator>().SetBool("Flying", true);
+                while (elaspedTime < 1)
+                {
+                    transform.position = Vector3.Lerp(startPos, endPos, elaspedTime/ animTime);
+                    elaspedTime += Time.deltaTime;
+                    yield return null;
+
+                }
+                transform.position = endPos;
+
+                flying = true;
+            }
+        }
+        useAP(1);
     }
 
     public void setPPLCost(int c)

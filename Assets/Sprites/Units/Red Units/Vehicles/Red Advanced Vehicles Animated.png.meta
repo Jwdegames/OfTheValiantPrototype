@@ -1,0 +1,1040 @@
+fileFormatVersion: 2
+guid: e05be6b42a2a78641b898dca34f0ab94
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5237274177257214470
+    second: Red Advanced Vehicles Animated_0
+  - first:
+      213: 7179540398013633581
+    second: Red Advanced Vehicles Animated_1
+  - first:
+      213: -8565513399267313412
+    second: Red Advanced Vehicles Animated_2
+  - first:
+      213: 8252242683212811392
+    second: Red Advanced Vehicles Animated_3
+  - first:
+      213: -8828210809525950056
+    second: Red Advanced Vehicles Animated_4
+  - first:
+      213: -2186273148106371658
+    second: Red Advanced Vehicles Animated_5
+  - first:
+      213: 4806589481382644859
+    second: Red Advanced Vehicles Animated_6
+  - first:
+      213: -839497883762092839
+    second: Red Advanced Vehicles Animated_7
+  - first:
+      213: -7980213956955059475
+    second: Red Advanced Vehicles Animated_8
+  - first:
+      213: -3921807918742354780
+    second: Red Advanced Vehicles Animated_9
+  - first:
+      213: -1000564962496002634
+    second: Red Advanced Vehicles Animated_10
+  - first:
+      213: 4764766092159763666
+    second: Red Advanced Vehicles Animated_11
+  - first:
+      213: 3519443072964230504
+    second: Red Advanced Vehicles Animated_12
+  - first:
+      213: 3616802811673626575
+    second: Red Advanced Vehicles Animated_13
+  - first:
+      213: 6740165448702598098
+    second: Red Advanced Vehicles Animated_14
+  - first:
+      213: 4706923194697110929
+    second: Red Advanced Vehicles Animated_15
+  - first:
+      213: -1629717851329453067
+    second: Red Advanced Vehicles Animated_16
+  - first:
+      213: -712362627885413947
+    second: Red Advanced Vehicles Animated_17
+  - first:
+      213: 4678877443125647449
+    second: Red Advanced Vehicles Animated_18
+  - first:
+      213: -2389445961646216145
+    second: Red Advanced Vehicles Animated_19
+  - first:
+      213: 6568074943189558099
+    second: Red Advanced Vehicles Animated_20
+  - first:
+      213: 943810875901928053
+    second: Red Advanced Vehicles Animated_21
+  - first:
+      213: 7325028415418112046
+    second: Red Advanced Vehicles Animated_22
+  - first:
+      213: -8392529623446254962
+    second: Red Advanced Vehicles Animated_23
+  - first:
+      213: -8882817037833872974
+    second: Red Advanced Vehicles Animated_24
+  - first:
+      213: -3856840797730131839
+    second: Red Advanced Vehicles Animated_25
+  - first:
+      213: 286357092475267974
+    second: Red Advanced Vehicles Animated_26
+  - first:
+      213: 3258816327583681309
+    second: Red Advanced Vehicles Animated_27
+  - first:
+      213: 2776360884440849296
+    second: Red Advanced Vehicles Animated_28
+  - first:
+      213: 8547428313649829460
+    second: Red Advanced Vehicles Animated_29
+  - first:
+      213: 1459215307161194253
+    second: Red Advanced Vehicles Animated_30
+  - first:
+      213: -2341707413409245888
+    second: Red Advanced Vehicles Animated_31
+  - first:
+      213: -6210931629656091768
+    second: Red Advanced Vehicles Animated_32
+  - first:
+      213: -5749867251690490922
+    second: Red Advanced Vehicles Animated_33
+  - first:
+      213: 7448049597036200245
+    second: Red Advanced Vehicles Animated_34
+  - first:
+      213: 8033785522329748521
+    second: Red Advanced Vehicles Animated_35
+  - first:
+      213: 4240147522267310445
+    second: Red Advanced Vehicles Animated_36
+  - first:
+      213: -4820080423640968206
+    second: Red Advanced Vehicles Animated_37
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_0
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 1051
+        width: 96
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: afde14152e67157b0800000000000000
+      internalID: -5237274177257214470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_1
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 1051
+        width: 96
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d245b2204f9d2a360800000000000000
+      internalID: 7179540398013633581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_2
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 1051
+        width: 96
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf8b2d502fe212980800000000000000
+      internalID: -8565513399267313412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_3
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 1051
+        width: 96
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08c47358ffad58270800000000000000
+      internalID: 8252242683212811392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_4
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 1051
+        width: 96
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89921f7ea05eb7580800000000000000
+      internalID: -8828210809525950056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_5
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 902
+        width: 106
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bd0529b72cc8a1e0800000000000000
+      internalID: -2186273148106371658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_6
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 902
+        width: 106
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7c01fabaaf64b240800000000000000
+      internalID: 4806589481382644859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_7
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 901
+        width: 106
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d41ba06f118954f0800000000000000
+      internalID: -839497883762092839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_8
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 901
+        width: 106
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dea4418efa5904190800000000000000
+      internalID: -7980213956955059475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_9
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 901
+        width: 106
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a44c0ef970f299c0800000000000000
+      internalID: -3921807918742354780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_10
+      rect:
+        serializedVersion: 2
+        x: 684
+        y: 901
+        width: 106
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b549b3c7774d12f0800000000000000
+      internalID: -1000564962496002634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_11
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 751
+        width: 76
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d442091489df1240800000000000000
+      internalID: 4764766092159763666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_12
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 751
+        width: 76
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86dfd3bf3d297d030800000000000000
+      internalID: 3519443072964230504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_13
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 751
+        width: 76
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc7c07c9ef6713230800000000000000
+      internalID: 3616802811673626575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_14
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 751
+        width: 76
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2db9741c3c0e98d50800000000000000
+      internalID: 6740165448702598098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_15
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 751
+        width: 76
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 195d7fc05b9525140800000000000000
+      internalID: 4706923194697110929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_16
+      rect:
+        serializedVersion: 2
+        x: 670
+        y: 751
+        width: 76
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f32563bf341269e0800000000000000
+      internalID: -1629717851329453067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_17
+      rect:
+        serializedVersion: 2
+        x: 798
+        y: 751
+        width: 76
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c940a5d6fd2d16f0800000000000000
+      internalID: -712362627885413947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_18
+      rect:
+        serializedVersion: 2
+        x: 926
+        y: 751
+        width: 76
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9589719ae36bee040800000000000000
+      internalID: 4678877443125647449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_19
+      rect:
+        serializedVersion: 2
+        x: 1054
+        y: 751
+        width: 76
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2ce516ce8bf6ded0800000000000000
+      internalID: -2389445961646216145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_20
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 601
+        width: 100
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35325f69c5d762b50800000000000000
+      internalID: 6568074943189558099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_21
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 601
+        width: 100
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 572e849bdf6191d00800000000000000
+      internalID: 943810875901928053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_22
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 601
+        width: 100
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2893aeb88ab7a560800000000000000
+      internalID: 7325028415418112046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_23
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 601
+        width: 100
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8a0b83e5ceb78b80800000000000000
+      internalID: -8392529623446254962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_24
+      rect:
+        serializedVersion: 2
+        x: 568
+        y: 601
+        width: 100
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b9df1f97f4e9b480800000000000000
+      internalID: -8882817037833872974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_25
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 601
+        width: 100
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 180bf089abfb97ac0800000000000000
+      internalID: -3856840797730131839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_26
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 459
+        width: 76
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68be6e7224859f300800000000000000
+      internalID: 286357092475267974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_27
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 459
+        width: 76
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1b4ed91f24a93d20800000000000000
+      internalID: 3258816327583681309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_28
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 458
+        width: 76
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09bd26db38d978620800000000000000
+      internalID: 2776360884440849296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_29
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 458
+        width: 76
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 456d63ad3c09e9670800000000000000
+      internalID: 8547428313649829460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_30
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 458
+        width: 76
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0fc722379c204410800000000000000
+      internalID: 1459215307161194253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_31
+      rect:
+        serializedVersion: 2
+        x: 694
+        y: 458
+        width: 76
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 045d7dfa385908fd0800000000000000
+      internalID: -2341707413409245888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_32
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 251
+        width: 106
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8835c1af6965ec9a0800000000000000
+      internalID: -6210931629656091768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_33
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 251
+        width: 106
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d3365dd23e5430b0800000000000000
+      internalID: -5749867251690490922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_34
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 250
+        width: 106
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53185d4a5a9cc5760800000000000000
+      internalID: 7448049597036200245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_35
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 250
+        width: 106
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92404242e5dbd7f60800000000000000
+      internalID: 8033785522329748521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_36
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 250
+        width: 106
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d69eefbc4b708da30800000000000000
+      internalID: 4240147522267310445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Red Advanced Vehicles Animated_37
+      rect:
+        serializedVersion: 2
+        x: 692
+        y: 250
+        width: 106
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f3d0108462ab1db0800000000000000
+      internalID: -4820080423640968206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 7a288bd1ef996d84e84c0e496c68e245
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

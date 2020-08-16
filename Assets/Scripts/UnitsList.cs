@@ -7,8 +7,8 @@ public class UnitsList
 {
     //List to store weapons
     public List<UnitTemplate> unitsList = new List<UnitTemplate>();
-    public Dictionary<string,Dictionary<string,List<UnitTemplate>>> unitTypes = new Dictionary<string, Dictionary<string, List<UnitTemplate>>>();
-    public Dictionary<string, UnitTemplate> templateDictionary = new Dictionary<string, UnitTemplate>(); 
+    public Dictionary<string, Dictionary<string, List<UnitTemplate>>> unitTypes = new Dictionary<string, Dictionary<string, List<UnitTemplate>>>();
+    public Dictionary<string, UnitTemplate> templateDictionary = new Dictionary<string, UnitTemplate>();
     public Dictionary<UnitTemplate, GameObject> unitPrefabs = new Dictionary<UnitTemplate, GameObject>();
     private WeaponsList weapons = new WeaponsList();
     public UnitsList()
@@ -47,8 +47,8 @@ public class UnitsList
 
         //Side is irrelevant
         //Infantry
-        setBasicUnit("Infantry",(new UnitTemplate(200, 5, 1, 6, 200, 1, 6, 1, 7, "Trooper", "Infantry that's good against lightly armored targets.", "Red", "Light", "Legged",
-            new List<string>() {"Move","Attack","Fortify","Sentry", "Capture"}, weapons.getWeaponCopy(0), null,null,new List<Weapon>() { weapons.getWeaponCopy(0) },null, null)));
+        setBasicUnit("Infantry", (new UnitTemplate(200, 5, 1, 6, 200, 1, 6, 1, 7, "Trooper", "Infantry that's good against lightly armored targets.", "Red", "Light", "Legged",
+            new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(0), null, null, new List<Weapon>() { weapons.getWeaponCopy(0) }, null, null)));
         setBasicUnit("Infantry", (new UnitTemplate(200, 5, 1, 5, 200, 1, 5, 1, 10, "Rocketeer", "Infantry that's good against heavily armored units.", "Red", "Light", "Legged",
             new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(1), null, null, new List<Weapon>() { weapons.getWeaponCopy(1) }, null, null)));
         setBasicUnit("Infantry", (new UnitTemplate(100, 5, 1, 5, 100, 1, 5, 1, 30, "Sniper", "Low health infantry that excels at fighting light armored targets.", "Red", "Light", "Legged",
@@ -56,7 +56,7 @@ public class UnitsList
         setBasicUnit("Infantry", (new UnitTemplate(175, 5, 1, 4.5f, 175, 1, 4.5f, 1, 25, "Mortarman", "Infantry that excels at fighting groups of non-aerial light armored units.", "Red", "Light", "Legged",
             new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(3), null, null, new List<Weapon>() { weapons.getWeaponCopy(3) }, null, null)));
         setBasicUnit("Infantry", (new UnitTemplate(200, 5, 1, 5, 200, 1, 5, 1, 15, "Shielded Trooper", "Frontline anti-light infantry that can take a lot of damage.", "Red", "Light", "Legged",
-            new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(4), weapons.getWeaponCopy(5), null, 
+            new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(4), weapons.getWeaponCopy(5), null,
             new List<Weapon>() { weapons.getWeaponCopy(4), weapons.getWeaponCopy(5) }, null, null)));
 
         //Vehicles
@@ -67,7 +67,7 @@ public class UnitsList
             "Red", "Heavy", "Tracked", new List<string>() { "Move", "Attack", "Fortify", "Sentry" }, weapons.getWeaponCopy(15), null, null,
             new List<Weapon>() { weapons.getWeaponCopy(15) }, null, null)));
         setBasicUnit("Vehicles", (new UnitTemplate(180, 7f, 4, 11, 180, 4, 11, 1, 20, "Transporter", "Vehicle that can transport up to 4 units across the map.", "Red", "Medium",
-            "Wheeled", true, "Adjacent", "Adjacent", new List<string>() {"Infantry" }, null, 4, 0, new List<string>() { "Move", "Fortify", "Load Units", "Unload Units" }, null, null, null,
+            "Wheeled", true, "Adjacent", "Adjacent", new List<string>() { "Infantry" }, null, 4, 0, new List<string>() { "Move", "Fortify", "Load Units", "Unload Units" }, null, null, null,
             null, null, null)));
         setBasicUnit("Vehicles", (new UnitTemplate(125, 7f, 1, 12, 125, 1, 12, 2, 40, "Rocket Truck", "Mid Range vehicle that is great at taking out heavily armored units.",
             "Red", "Heavy", "Wheeled", new List<string>() { "Move", "Attack", "Fortify", "Sentry" }, weapons.getWeaponCopy(17), null, null,
@@ -76,12 +76,12 @@ public class UnitsList
 
         //Handle Ignis Infantry
         setUnitForFaction("Ignis", "Infantry", new UnitTemplate(210, 5, 2, 4.2f, 210, 2, 4.2f, 1, 35, "Gattler", "Anti-light infantry that can attack twice.", "Red", "Light", "Legged",
-            new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(6), null, null, new List<Weapon>() { weapons.getWeaponCopy(6) }, null, 
+            new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(6), null, null, new List<Weapon>() { weapons.getWeaponCopy(6) }, null,
             null));
-        setUnitForFaction("Ignis", "Infantry", new UnitTemplate(210, 5, 1, 5, 210, 1, 5, 1, 21, "Shielded Rocketeer", "Frontline anti-heavy infantry.", 
-            "Red", "Light", "Legged", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(1), weapons.getWeaponCopy(5), null, 
+        setUnitForFaction("Ignis", "Infantry", new UnitTemplate(210, 5, 1, 5, 210, 1, 5, 1, 21, "Shielded Rocketeer", "Frontline anti-heavy infantry.",
+            "Red", "Light", "Legged", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(1), weapons.getWeaponCopy(5), null,
             new List<Weapon>() { weapons.getWeaponCopy(1), weapons.getWeaponCopy(5) }, null, null));
-        setUnitForFaction("Ignis","Infantry", (new UnitTemplate(190, 5, 1, 5, 200, 1, 5, 1, 15, "Field Medic", "Infantry that can heal biological units and defend itself.",
+        setUnitForFaction("Ignis", "Infantry", (new UnitTemplate(190, 5, 1, 5, 200, 1, 5, 1, 15, "Field Medic", "Infantry that can heal biological units and defend itself.",
             "Red", "Light", "Legged", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture", "Heal" }, weapons.getWeaponCopy(4), weapons.getWeaponCopy(7), null,
             new List<Weapon>() { weapons.getWeaponCopy(4), weapons.getWeaponCopy(7) }, null, null)));
         setUnitForFaction("Ignis", "Infantry", (new UnitTemplate(190, 5, 1, 5, 200, 1, 5, 1, 15, "Field Engineer", "Infantry that can heal mechanical units and defend itself.",
@@ -109,21 +109,21 @@ public class UnitsList
 
 
         //Handle Ignis Advanced Infantry
-        setUnitForFaction("Ignis", "Advanced Infantry", (new UnitTemplate(205, 5, 1, 6, 205, 1, 6, 1, 14, "Jet Trooper", "Flying infantry that's good against lightly armored targets.", 
-            "Red", "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(0), null, null, 
+        setUnitForFaction("Ignis", "Advanced Infantry", (new UnitTemplate(205, 5, 2, 6, 205, 2, 6, 1, 14, "Jet Trooper", "Flying infantry that's good against lightly armored targets.",
+            "Red", "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture", "Toggle Jetpack" }, weapons.getWeaponCopy(0), null, null,
             new List<Weapon>() { weapons.getWeaponCopy(0) }, null, null)));
-        setUnitForFaction("Ignis", "Advanced Infantry", (new UnitTemplate(205, 5, 1, 6, 205, 1, 6, 1, 17, "Jet Rocketeer", "Flying infantry that's good against heavily armored units.",
-            "Red", "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(0), null, null,
+        setUnitForFaction("Ignis", "Advanced Infantry", (new UnitTemplate(205, 5, 2, 6, 205, 2, 5, 1, 17, "Jet Rocketeer", "Flying infantry that's good against heavily armored units.",
+            "Red", "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture", "Toggle Jetpack" }, weapons.getWeaponCopy(0), null, null,
             new List<Weapon>() { weapons.getWeaponCopy(0) }, null, null)));
-        setUnitForFaction("Ignis","Advanced Infantry", (new UnitTemplate(200, 5, 1, 5, 200, 1, 5, 1, 22, "S-Jet Trooper", "Flying frontline anti-light infantry that can take a lot of damage.", "Red", "Light", "Legged",
-            new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(4), weapons.getWeaponCopy(5), null, 
+        setUnitForFaction("Ignis", "Advanced Infantry", (new UnitTemplate(200, 5, 2, 5, 200, 2, 5, 1, 22, "S-Jet Trooper", "Flying frontline anti-light infantry that can take a lot of damage.", "Red", 
+            "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture", "Toggle Jetpack" }, weapons.getWeaponCopy(4), weapons.getWeaponCopy(5), null, 
             new List<Weapon>() { weapons.getWeaponCopy(4), weapons.getWeaponCopy(5) }, null, null)));
 
-        setUnitForFaction("Ignis","Advanced Infantry", (new UnitTemplate(220, 5, 1, 7, 220, 1, 7, 0, 17, "Droid Trooper", "Infantry that's good against lightly armored targets " +
-            "and is immune to poison.", "Red", "Light", "Legged", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(9), 
+        setUnitForFaction("Ignis", "Advanced Infantry", (new UnitTemplate(220, 5, 1, 7, 220, 1, 7, 0, 17, "Droid Trooper", "Infantry that's good against lightly armored targets " +
+            "and is immune to poison.", "Red", "Light", "Legged", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(9),
             null, null, new List<Weapon>() { weapons.getWeaponCopy(9) }, null, null)));
         setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(220, 5, 1, 6, 220, 1, 6, 0, 25, "Shielded Droid", "Frontline infantry that is immune to poison." +
-            "and is immune to poison.", "Red", "Light", "Legged", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(10), 
+            "and is immune to poison.", "Red", "Light", "Legged", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(10),
             weapons.getWeaponCopy(5), null, new List<Weapon>() { weapons.getWeaponCopy(10), weapons.getWeaponCopy(5) }, null, null));
         setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(231, 5, 1, 6, 231, 1, 6, 0, 33, "S-Droid Rocketeer", "Frontline anti-heavy infantry that is immune to poison.",
             "Red", "Light", "Legged", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(11), weapons.getWeaponCopy(5), null,
@@ -132,18 +132,18 @@ public class UnitsList
             "is immune to poison.", "Red", "Light", "Legged", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(12),
             null, null, new List<Weapon>() { weapons.getWeaponCopy(12) }, null, null));
 
-        setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(225.5f, 5, 1, 7f, 225.5f, 1, 7f, 0, 22, "Jet Droid", "Flying infantry that's good against lightly armored " +
-            "targets and is immune to poison.", "Red", "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(9),
+        setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(225.5f, 5, 2, 7f, 225.5f, 2, 7f, 0, 22, "Jet Droid", "Flying infantry that's good against lightly armored " +
+            "targets and is immune to poison.", "Red", "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture", "Toggle Jetpack" }, weapons.getWeaponCopy(9),
             null, null, new List<Weapon>() { weapons.getWeaponCopy(9) }, null, null));
-        setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(225.5f, 5, 1, 7f, 225.5f, 1, 7f, 0, 25, "Jet Droid Rocketeer", "Flying infantry that's good against heavily " +
-            "armored units is immune to poison.", "Red", "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(11),
+        setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(225.5f, 5, 2, 6f, 225.5f, 2, 6f, 0, 25, "Jet Droid Rocketeer", "Flying infantry that's good against heavily " +
+            "armored units is immune to poison.", "Red", "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture", "Toggle Jetpack" }, weapons.getWeaponCopy(11),
             null, null, new List<Weapon>() { weapons.getWeaponCopy(11) }, null, null));
 
         Dictionary<string, float> temp = new Dictionary<string, float>();
         //temp.Add("");
-        setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(225.5f, 5, 1, 7f, 225.5f, 1, 7f, 0, 33, "Jet Droid UAV Carrier", "Flying infantry that deploy drones to all " +
-            "adjacent tiles once and immune to poison.", "Red", "Light", "Flying", true, true, "Adjacent", new List<string>() {"Drone"},0, 0, 0, 0, 0, 1, 0, 0, 
-            new List<string>() { "Move", "Deploy Drones", "Fortify", "Capture" }, null,
+        setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(225.5f, 5, 2, 7f, 225.5f, 2, 7f, 0, 33, "Jet Droid UAV Carrier", "Flying infantry that deploy drones to all " +
+            "adjacent tiles once and immune to poison.", "Red", "Light", "Flying", true, true, "Adjacent", new List<string>() { "Drone" }, 0, 0, 0, 0, 0, 1, 0, 0,
+            new List<string>() { "Move", "Deploy Drones", "Fortify", "Capture", "Toggle Jetpack" }, null,
             null, null, new List<Weapon>(), null, null));
 
         //Handle Vita Advanced Infantry
@@ -151,26 +151,26 @@ public class UnitsList
             "Green", "Light", "Legged", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" },
             weapons.getWeaponCopy(23), null, null, new List<Weapon>() { weapons.getWeaponCopy(23) }, null, null));
         setUnitForFaction("Vita", "Advanced Infantry", new UnitTemplate(550, 5.5f, 5, 10, 550, 5, 10, 2, 15, "Brewer", "High health infantry that emits poison gas.",
-            "Green", "Light", "Legged", false, 0, 0 ,0, "", true, 0, 0, null, new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" },
+            "Green", "Light", "Legged", false, 0, 0, 0, "", true, 0, 0, null, new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" },
             weapons.getWeaponCopy(24), null, null, new List<Weapon>() { weapons.getWeaponCopy(24) }, null, null));
         setUnitForFaction("Vita", "Advanced Infantry", new UnitTemplate(675, 5.75f, 1, 12, 675, 1, 12, 3, 0, "Eyesore", "The eyesore does adequate damage and deals an impressive poisonous " +
             "explosion on death.", "Green", "Light", "Legged", true, 100, 0, 0, "Explosion", true, 1, 0, null, new List<string>() { "Move", "Attack", "Fortify", "Sentry" },
             weapons.getWeaponCopy(25), null, null, new List<Weapon>() { weapons.getWeaponCopy(25) }, null, null));
 
         //Handle Ignis Vehicles
-        setUnitForFaction("Ignis","Vehicles", (new UnitTemplate(215, 7f, 7, 10, 215, 7, 10, 2, 33, "Assault Transporter", "Vehicle that can transport up to 6 units across the map" +
-            " and can defend itself.", "Red", "Medium", "Wheeled", true, "Adjacent", "Adjacent", new List<string>() { "Infantry" }, null, 6, 0, 
+        setUnitForFaction("Ignis", "Vehicles", (new UnitTemplate(215, 7f, 7, 10, 215, 7, 10, 2, 33, "Assault Transporter", "Vehicle that can transport up to 6 units across the map" +
+            " and can defend itself.", "Red", "Medium", "Wheeled", true, "Adjacent", "Adjacent", new List<string>() { "Infantry" }, null, 6, 0,
             new List<string>() { "Move", "Fortify", "Load Units", "Unload Units", "Fire Turret 1" }, null, null, null, null, new List<Weapon>() { weapons.getWeaponCopy(17) }, null)));
         setBasicUnit("Vehicles", (new UnitTemplate(125, 7f, 1, 12, 125, 1, 12, 2, 55, "Artillery Truck", "Long ranged vehicle that can devastate closely packed heavily armored units.",
             "Red", "Medium", "Wheeled", new List<string>() { "Move", "Attack", "Fortify", "Sentry" }, weapons.getWeaponCopy(18), null, null,
             new List<Weapon>() { weapons.getWeaponCopy(18) }, null, null)));
-        setBasicUnit("Vehicles", (new UnitTemplate(300, 6, 2, 9, 300, 2, 9, 2, 50, "Assault Tank", "Heavily armored vehicle that does a lot of damage and has a small turret.",
+        setBasicUnit("Vehicles", (new UnitTemplate(300, 6, 2, 9, 300, 2, 9, 3, 50, "Assault Tank", "Heavily armored vehicle that does a lot of damage and has a small turret.",
             "Red", "Heavy", "Tracked", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Fire Turret 1" }, weapons.getWeaponCopy(14), null, null,
             new List<Weapon>() { weapons.getWeaponCopy(14) }, new List<Weapon>() { weapons.getWeaponCopy(17) }, null)));
-        setBasicUnit("Vehicles", (new UnitTemplate(400, 6.5f, 3, 8, 400, 3, 8, 2, 75, "Assault Heavy Tank", "Extremely heavily armored vehicle that does an extreme amount of damage" +
-            "and has two turrets.", "Red", "Heavy", "Tracked", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Fire Turret 1", "Fire Turret 2" }, 
-            weapons.getWeaponCopy(15), null, null, new List<Weapon>() { weapons.getWeaponCopy(15) }, 
-            new List<Weapon>() { weapons.getWeaponCopy(17) , weapons.getWeaponCopy(17) }, null)));
+        setBasicUnit("Vehicles", (new UnitTemplate(400, 6.5f, 3, 8, 400, 3, 8, 4, 75, "Assault Heavy Tank", "Extremely heavily armored vehicle that does an extreme amount of damage" +
+            "and has two turrets.", "Red", "Heavy", "Tracked", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Fire Turret 1", "Fire Turret 2" },
+            weapons.getWeaponCopy(15), null, null, new List<Weapon>() { weapons.getWeaponCopy(15) },
+            new List<Weapon>() { weapons.getWeaponCopy(17), weapons.getWeaponCopy(17) }, null)));
         //Handle Vita Vehicles
 
         //Handle Ignis Advanced Vechicles
@@ -207,7 +207,7 @@ public class UnitsList
 
     public void setBasicUnit(string type, UnitTemplate template)
     {
-        foreach(string faction in unitTypes.Keys)
+        foreach (string faction in unitTypes.Keys)
         {
             unitTypes[faction][type].Add(template);
 
@@ -230,7 +230,7 @@ public class UnitsList
         //Debug.Log(template);
         //Debug.Log("Faction:" +faction);
         //Debug.Log("Template:"+unitTypes["Ignis"]["Advanced Gunships"][0]);
-        foreach(string type in unitTypes[faction].Keys)
+        foreach (string type in unitTypes[faction].Keys)
         {
             //Debug.Log(type);
 
@@ -296,7 +296,8 @@ public class UnitsList
                             case "Advanced Gunships":
                                 //Debug.Log(template);
                                 //Debug.Log(template.name == "Drone");
-                                if (template.name == "Drone") {
+                                if (template.name == "Drone")
+                                {
                                     return bM.unitPrefabs[7];
                                 }
                                 return null;
@@ -304,7 +305,7 @@ public class UnitsList
                         }
                         break;
                     case "Vita":
-                        switch(type)
+                        switch (type)
                         {
                             case "Infantry":
                                 if (template.name == "Masked Trooper" || template.name == "Grenadier")
@@ -345,7 +346,7 @@ public class UnitsList
         }
         //We couldn't find a prefab
         return null;
-        
+
 
     }
 

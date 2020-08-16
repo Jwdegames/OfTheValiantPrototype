@@ -244,12 +244,19 @@ public class BoardManager : MonoBehaviour
         //Get rid of all children
         if (unit.getCWObject() != null) Destroy(unit.getCWObject().gameObject);
         if (unit.cw2Object != null) Destroy(unit.cw2Object.gameObject);
+        if (unit.turretObjects != null)
+        {
+            foreach (GameObject turretObject in unit.turretObjects)
+            {
+                Destroy(turretObject);
+            }
+        }
+        Destroy(unit.shadow.gameObject);
         unit.useTemplate(unitsList.templateDictionary[unitName]);
 
         //setUnitStats(unit, tile, variant);
         gM.unitDictionary[player.side].Add(unit);
         unit.setSide(player.side);
-        unit.makeShadow();
         unit.setTile(tile);
         tile.setUnit(unit.gameObject);
         
@@ -289,6 +296,7 @@ public class BoardManager : MonoBehaviour
                 Destroy(turretObject);
             }
         }
+        Destroy(u.shadow.gameObject);
         u.turretObjects = new List<GameObject>();
         u.turretObjectScripts = new List<WeaponObject>();
         u.setSide(player.side);
