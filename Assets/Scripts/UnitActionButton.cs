@@ -315,6 +315,7 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
     {
         if (buttonImage.sprite.Equals(deactivated)) return;
         ui.destroyBattleMenu();
+        ui.updateStats(null, null, null);
         ui.selectingAction = false;
         switch (type)
         {
@@ -326,16 +327,16 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
                 break;
             case "Fortify":
                 unit.startActuallyGuard();
-                
-                gM.clearAvailableTiles();
+
+                gM.selectedTile.deleteSelector();
                 break;
             case "Sentry":
                 unit.startActuallySentry();
-                gM.clearAvailableTiles();
+                gM.selectedTile.deleteSelector();
                 break;
             case "Capture":
                 unit.startActuallyCapture();
-                gM.clearAvailableTiles();
+                gM.selectedTile.deleteSelector();
                 break;
             case "Heal":
                 getHealables();
@@ -370,6 +371,7 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
                 break;
             case "Toggle Jetpack":
                 unit.startToggleJetpack();
+                gM.selectedTile.deleteSelector();
                 break;
             default:
                 break;

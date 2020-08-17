@@ -93,8 +93,11 @@ public class Unit : Controllable
     public bool repairing = false;
 
     //Flying variables - Control in prefabs
-    public bool flying = false, canLand = false;
+    public bool flying = false, canLand = false, hasJetpack = false;
     public Vector3 displacementVector = Vector3.zero;
+
+    public int maxJetToggles = 1, currentJetToggles = 0;
+    
 
     public bool hasShadow = false;
     public GameObject shadowPrefab;
@@ -647,7 +650,11 @@ public class Unit : Controllable
                     float lostHP = damageOnDeath;
                     if (u.getGuard())
                     {
-                        lostHP -= damageOnDeath * (1 - u.guardCover);
+                        lostHP *= (1 - u.guardCover);
+                    }
+                    if (u.armor == "Slime")
+                    {
+                        lostHP *= 0.8f;
                     }
                     StartCoroutine(u.loseHP(lostHP));
                 }
@@ -2318,7 +2325,9 @@ public class Unit : Controllable
         sentry = false;
         guard = false;
         whiteScale();
-        
+
+        currentJetToggles = 0;
+
         //Debug.Log("Starting turn for: " + name);
         if (currentWeapon2 != null)
         {
@@ -2802,7 +2811,7 @@ public class Unit : Controllable
 
     public IEnumerator toggleJetpack()
     {
-        if (canLand)
+        if (canLand && currentJetToggles < maxJetToggles)
         {
             //Debug.Log("Toggling Jetpack");
             Vector3 startPos = transform.position;
@@ -2847,7 +2856,7 @@ public class Unit : Controllable
                 flying = true;
             }
         }
-        useAP(1);
+        currentJetToggles++;
     }
 
     public void setPPLCost(int c)

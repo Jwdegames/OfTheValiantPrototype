@@ -558,6 +558,7 @@ public class UIManager : MonoBehaviour
                     break;
 
             }
+            
             tempAttributeScript.updateToolTipTXT(temp);
             tempAttributeScript.updateToolTipDuration("Attribute Lifetime: Forever");
 
@@ -610,7 +611,19 @@ public class UIManager : MonoBehaviour
             if (bpUnit.leavesPoisonGasOnDeath)
             {
                 temp = "This unit leaves a poisonous gas cloud on death with an AOE of "+bpUnit.poisonGasOnDeathAOE+".";
-                makeUnitAttribute("Poisonous Death", temp, "Attribute Lifetime: Forever","D",5,"Unit");
+                makeUnitAttribute("Poisonous Death", temp, "Attribute Lifetime: Forever","D",6,"Unit");
+            }
+            if (bpUnit.doesDamageOnDeath)
+            {
+                temp = "This unit deals " + bpUnit.damageOnDeath + " damage to adjacent units on death with an AOE of " + (bpUnit.damageOnDeathAOE + 1) + " tiles.";
+                makeUnitAttribute("Explosive Death", temp, "Attribute Lifetime: Forever", "D", 8, "Unit");
+
+            }
+            if (bpUnit.hasJetpack)
+            {
+                temp = "This unit has a jetpack that can be toggled on and off. While flying, this unit cannot capture buildings. This jetpack has used "+bpUnit.currentJetToggles+"/"+bpUnit.maxJetToggles+
+                    " toggles left this turn.";
+                makeUnitAttribute("Jetpack", temp, "Attribute Lifetime: Forever", "", 7, "Unit");
             }
 
 
@@ -856,18 +869,28 @@ public class UIManager : MonoBehaviour
                 tempAttributeScript.updateSprite(attributeSprites[2]);
                 offsetToolTip(tempAttributeScript);
 
+                if (weapon.canTargetAir)
+                {
+                    temp = "This weapon can target air units.";
+                    makeUnitAttribute("Targets Air Units", temp, "Attribute Lifetime: Forever", "A", 2, "Unit");
+                }
+                if (weapon.canTargetSub)
+                {
+                    temp = "This weapon can target submerged units.";
+                    makeUnitAttribute("Targets Air Units", temp, "Attribute Lifetime: Forever", "S", 2, "Unit");
+                }
                 //Handle anti-armor bonuses
                 if (weapon.extraAttributes != null)
                 {
                     foreach (string attribute in weapon.extraAttributes.Keys)
                     {
-                        tempAttribute = Instantiate(attributePrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+                        /*tempAttribute = Instantiate(attributePrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
                         tempAttributeScript = tempAttribute.GetComponent<AttributeIcon>();
                         tempAttribute.transform.SetParent(unitAttributesTXT.gameObject.transform);
                         tempAttribute.transform.localPosition = getNextAttributePosition();
                         tempAttribute.transform.localScale = new Vector3(1, 1, 1);
                         attributeIcons.Add(tempAttribute);
-                        offsetToolTip(tempAttributeScript);
+                        offsetToolTip(tempAttributeScript);*/
                         float value = weapon.extraAttributes[attribute];
                         Debug.Log(attribute);
                         switch (attribute)
@@ -877,61 +900,45 @@ public class UIManager : MonoBehaviour
                                 temp = "This weapon does " + weapon.extraAttributes[attribute] + " times as much damage against light armored targets.";
                                 if (value > 1)
                                 {
-                                    tempAttributeScript.updateToolTipTitle("Bonus Multiplier (L)");
-                                    tempAttributeScript.updateText("▲L");
+                                    makeUnitAttribute("Bonus Multiplier (L)", temp, "Attribute Lifetime: Forever", "▲L", 2, "Unit");
                                 }
                                 else
                                 {
-                                    tempAttributeScript.updateToolTipTitle("Drawback Multiplier (L)");
-                                    tempAttributeScript.updateText("▼L");
+                                    makeUnitAttribute("Drawback Multiplier (L)", temp, "Attribute Lifetime: Forever", "▼L", 2, "Unit");
                                 }
-                                tempAttributeScript.updateToolTipDuration("Attribute Lifetime: Forever");
-                                tempAttributeScript.updateSprite(attributeSprites[2]);
                                 break;
                             case "Anti-Medium Multi-Bonus":
                                 temp = "This weapon does " + weapon.extraAttributes[attribute] + " times as much damage against medium armored targets.";
                                 if (value > 1)
                                 {
-                                    tempAttributeScript.updateToolTipTitle("Bonus Multiplier (M)");
-                                    tempAttributeScript.updateText("▲M");
+                                    makeUnitAttribute("Bonus Multiplier (M)", temp, "Attribute Lifetime: Forever", "▲M", 2, "Unit");
                                 }
                                 else
                                 {
-                                    tempAttributeScript.updateToolTipTitle("Drawback Multiplier (M)");
-                                    tempAttributeScript.updateText("▼M");
+                                    makeUnitAttribute("Drawback Multiplier (M)", temp, "Attribute Lifetime: Forever", "▼M", 2, "Unit");
                                 }
-                                tempAttributeScript.updateToolTipDuration("Attribute Lifetime: Forever");
-                                tempAttributeScript.updateSprite(attributeSprites[2]);
                                 break;
                             case "Anti-Heavy Multi-Bonus":
                                 temp = "This weapon does " + weapon.extraAttributes[attribute] + " times as much damage against heavy armored targets.";
                                 if (value > 1)
                                 {
-                                    tempAttributeScript.updateToolTipTitle("Bonus Multiplier (H)");
-                                    tempAttributeScript.updateText("▲H");
+                                    makeUnitAttribute("Bonus Multiplier (H)", temp, "Attribute Lifetime: Forever", "▲H", 2, "Unit");
                                 }
                                 else
                                 {
-                                    tempAttributeScript.updateToolTipTitle("Drawback Multiplier (H)");
-                                    tempAttributeScript.updateText("▼H");
+                                    makeUnitAttribute("Drawback Multiplier (H)", temp, "Attribute Lifetime: Forever", "▼H", 2, "Unit");
                                 }
-                                tempAttributeScript.updateToolTipDuration("Attribute Lifetime: Forever");
-                                tempAttributeScript.updateSprite(attributeSprites[2]);
                                 break;
                             case "Anti-Slime Multi-Bonus":
                                 temp = "This weapon does " + weapon.extraAttributes[attribute] + " times as much damage against slimes.";
                                 if (value > 1)
                                 {
-                                    tempAttributeScript.updateToolTipTitle("Bonus Multiplier (S)");
-                                    tempAttributeScript.updateText("▲S");
+                                    makeUnitAttribute("Bonus Multiplier (S)", temp, "Attribute Lifetime: Forever", "▲S", 2, "Unit");
                                 }
                                 else
                                 {
-                                    tempAttributeScript.updateToolTipTitle("Drawback Multiplier (S)");
-                                    tempAttributeScript.updateText("▼S");
+                                    makeUnitAttribute("Drawback Multiplier (S)", temp, "Attribute Lifetime: Forever", "▼S", 2, "Unit");
                                 }
-                                tempAttributeScript.updateToolTipDuration("Attribute Lifetime: Forever");
-                                tempAttributeScript.updateSprite(attributeSprites[2]);
                                 break;
                             case "Override To X Armor":
                                 temp = "This overrides the unit's armor to ";
@@ -940,62 +947,58 @@ public class UIManager : MonoBehaviour
                                     //0 is Light, 1 is Medium, 2 is Heavy, 3 is Slime
                                     case "0":
                                         temp += "light armor.";
-                                        tempAttributeScript.updateToolTipTitle("Override Armor (L)");
-                                        tempAttributeScript.updateText("OL");
+                                        makeUnitAttribute("Override Armor(L)", temp, "Attribute Lifetime: Forever", "OL", 3, "Unit");
                                         break;
                                     case "1":
                                         temp += "medium armor.";
-                                        tempAttributeScript.updateToolTipTitle("Override Armor (M)");
-                                        tempAttributeScript.updateText("OM");
+                                        makeUnitAttribute("Override Armor(M)", temp, "Attribute Lifetime: Forever", "OM", 3, "Unit");
                                         break;
                                     case "2":
                                         temp += "heavy armor.";
-                                        tempAttributeScript.updateToolTipTitle("Override Armor (H)");
-                                        tempAttributeScript.updateText("OH");
+                                        makeUnitAttribute("Override Armor(H)", temp, "Attribute Lifetime: Forever", "OH", 3, "Unit");
                                         break;
                                     case "3":
                                         temp += "slime armor.";
-                                        tempAttributeScript.updateToolTipTitle("Override Armor (S)");
-                                        tempAttributeScript.updateText("OS");
+                                        makeUnitAttribute("Override Armor(S)", temp, "Attribute Lifetime: Forever", "OS", 3, "Unit");
                                         break;
                                 }
-                                tempAttributeScript.updateToolTipDuration("Attribute Lifetime: Forever");
                                 //tempAttributeScript.updateSprite(attributeSprites[2]);
                                 break;
                             case "Guard Damage Reduction Percentage Override":
                                 temp = "This unit gets a "+value*100+"% damage reduction bonus instead of a 50% damage reduction bonus from guarding.";
                                 if (value > 0.5)
                                 {
-                                    tempAttributeScript.updateToolTipTitle("Guard Defense Boost");
-                                    tempAttributeScript.updateText("▲G");
+                                    makeUnitAttribute("Guard Defense Boost", temp, "Attribute Lifetime: Forever", "▲G", 3, "Unit");
                                 }
                                 else
                                 {
-                                    tempAttributeScript.updateToolTipTitle("Guard Defense Decrease");
-                                    tempAttributeScript.updateText("▼G");
+                                    makeUnitAttribute("Guard Defense Decrease", temp, "Attribute Lifetime: Forever", "▼G", 3, "Unit");
                                 }
-                                tempAttributeScript.updateToolTipDuration("Attribute Lifetime: Forever");
+                                
                                 break;
                             case "HP Bonus":
                                 if (value > 0)
                                 {
                                     temp = "This unit gets " + value + " extra HP.";
-                                    tempAttributeScript.updateToolTipTitle("HP Bonus");
-                                    tempAttributeScript.updateToolTipDuration("Attribute Lifetime: Forever");
-                                    tempAttributeScript.updateText("▲♥");
-                                    tempAttributeScript.updateSprite(attributeSprites[3]);
+                                    makeUnitAttribute("HP Bonus", temp, "Attribute Lifetime: Forever", "▲♥", 3, "Unit");
                                 }
                                 else
                                 {
                                     temp = "This unit loses " + value + " HP.";
-                                    tempAttributeScript.updateToolTipTitle("HP Debuff");
-                                    tempAttributeScript.updateToolTipDuration("Attribute Lifetime: Forever");
-                                    tempAttributeScript.updateText("▼♥");
-                                    tempAttributeScript.updateSprite(attributeSprites[3]);
+                                    makeUnitAttribute("HP Debuff", temp, "Attribute Lifetime: Forever", "▼♥", 3, "Unit");
+                                    
                                 }
                                 break;
+                            case "Poisons":
+                                temp = "This poisons humans that are not masked and vehicles that aren't sealed nor autonomous for 3 days.";
+                                makeUnitAttribute("Poisons", temp, "Attribute Lifetime: Forever", "", 5, "Unit");
+                                break;
+                            case "Makes Poison Gas":
+                                temp = "This unit creates poison gas on tiles it hits that lasts 5 days.";
+                                makeUnitAttribute("Makes Poison Gas", temp, "Attribute Lifetime: Forever", "", 6, "Unit");
+                                break;
                         }
-                        tempAttributeScript.updateToolTipTXT(temp);
+                        //tempAttributeScript.updateToolTipTXT(temp);
 
                     }
                 }

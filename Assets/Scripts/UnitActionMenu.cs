@@ -206,15 +206,25 @@ public class UnitActionMenu : MonoBehaviour
                         tempButton.disable();
                     }
                 }
+                else if (currentAction == "Capture")
+                {
+                    if (unit.getCurrentAP() < unit.getAP() || (unit.getTile().getBuilding() == null || unit.getTile().getBuilding().team == unit.getTeam() || unit.flying)) {
+                        tempButton.disable();
+                    }
+                }
+                else if (currentAction == "Toggle Jetpack")
+                {
+                    if (unit.currentJetToggles >= unit.maxJetToggles)
+                    {
+                        tempButton.disable();
+                    }
+                }
                 else
                 {
                     if (unit.getCurrentAP() <= 0f)
                     tempButton.disable();
                     //Prevent capturing if there is no building we can capture
-                    if (currentAction == "Capture" && (unit.getTile().getBuilding() == null || unit.getTile().getBuilding().side == unit.getSide() && !unit.flying))
-                    {
-                        tempButton.disable();
-                    }
+
                 }
             }
         }

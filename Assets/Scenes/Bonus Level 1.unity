@@ -10981,9 +10981,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 837fa196db18eef418266d754ad8b24e, type: 3}
   - {fileID: 21300000, guid: 6937225da0bd74d4ea682928898e4797, type: 3}
   - {fileID: 21300000, guid: e62aac378ee76264d87d7b2b7141075f, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: fd86fb4f47697354b9c8158167fdcbf8, type: 3}
+  - {fileID: 21300000, guid: 0e33565d9b795bd4180bbe1dfa01cbb7, type: 3}
+  - {fileID: 21300000, guid: b3de3d91dd283644a9aa23c4fdf3ec4e, type: 3}
   - {fileID: 0}
   effectFont: {fileID: 12800000, guid: 585188cdc4600544eb408bee749e4b3a, type: 3}
   pplCountTXT: {fileID: 273672060}

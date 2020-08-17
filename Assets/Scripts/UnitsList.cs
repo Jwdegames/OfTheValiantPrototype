@@ -109,13 +109,13 @@ public class UnitsList
 
 
         //Handle Ignis Advanced Infantry
-        setUnitForFaction("Ignis", "Advanced Infantry", (new UnitTemplate(205, 5, 2, 6, 205, 2, 6, 1, 14, "Jet Trooper", "Flying infantry that's good against lightly armored targets.",
+        setUnitForFaction("Ignis", "Advanced Infantry", (new UnitTemplate(205, 5, 1, 6, 205, 1, 6, 1, 14, "Jet Trooper", "Flying infantry that's good against lightly armored targets.",
             "Red", "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture", "Toggle Jetpack" }, weapons.getWeaponCopy(0), null, null,
             new List<Weapon>() { weapons.getWeaponCopy(0) }, null, null)));
-        setUnitForFaction("Ignis", "Advanced Infantry", (new UnitTemplate(205, 5, 2, 6, 205, 2, 5, 1, 17, "Jet Rocketeer", "Flying infantry that's good against heavily armored units.",
+        setUnitForFaction("Ignis", "Advanced Infantry", (new UnitTemplate(205, 5, 1, 5, 205, 1, 5, 1, 17, "Jet Rocketeer", "Flying infantry that's good against heavily armored units.",
             "Red", "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture", "Toggle Jetpack" }, weapons.getWeaponCopy(0), null, null,
             new List<Weapon>() { weapons.getWeaponCopy(0) }, null, null)));
-        setUnitForFaction("Ignis", "Advanced Infantry", (new UnitTemplate(200, 5, 2, 5, 200, 2, 5, 1, 22, "S-Jet Trooper", "Flying frontline anti-light infantry that can take a lot of damage.", "Red", 
+        setUnitForFaction("Ignis", "Advanced Infantry", (new UnitTemplate(200, 5, 1, 5, 200, 1, 5, 1, 22, "S-Jet Trooper", "Flying frontline anti-light infantry that can take a lot of damage.", "Red", 
             "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture", "Toggle Jetpack" }, weapons.getWeaponCopy(4), weapons.getWeaponCopy(5), null, 
             new List<Weapon>() { weapons.getWeaponCopy(4), weapons.getWeaponCopy(5) }, null, null)));
 
@@ -132,16 +132,16 @@ public class UnitsList
             "is immune to poison.", "Red", "Light", "Legged", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" }, weapons.getWeaponCopy(12),
             null, null, new List<Weapon>() { weapons.getWeaponCopy(12) }, null, null));
 
-        setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(225.5f, 5, 2, 7f, 225.5f, 2, 7f, 0, 22, "Jet Droid", "Flying infantry that's good against lightly armored " +
+        setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(225.5f, 5, 1, 7f, 225.5f, 1, 7f, 0, 22, "Jet Droid", "Flying infantry that's good against lightly armored " +
             "targets and is immune to poison.", "Red", "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture", "Toggle Jetpack" }, weapons.getWeaponCopy(9),
             null, null, new List<Weapon>() { weapons.getWeaponCopy(9) }, null, null));
-        setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(225.5f, 5, 2, 6f, 225.5f, 2, 6f, 0, 25, "Jet Droid Rocketeer", "Flying infantry that's good against heavily " +
+        setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(225.5f, 5, 1, 6f, 225.5f, 1, 6f, 0, 25, "Jet Droid Rocketeer", "Flying infantry that's good against heavily " +
             "armored units is immune to poison.", "Red", "Light", "Flying", new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture", "Toggle Jetpack" }, weapons.getWeaponCopy(11),
             null, null, new List<Weapon>() { weapons.getWeaponCopy(11) }, null, null));
 
         Dictionary<string, float> temp = new Dictionary<string, float>();
         //temp.Add("");
-        setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(225.5f, 5, 2, 7f, 225.5f, 2, 7f, 0, 33, "Jet Droid UAV Carrier", "Flying infantry that deploy drones to all " +
+        setUnitForFaction("Ignis", "Advanced Infantry", new UnitTemplate(225.5f, 5, 1, 7f, 225.5f, 1, 7f, 0, 33, "Jet Droid UAV Carrier", "Flying infantry that deploy drones to all " +
             "adjacent tiles once and immune to poison.", "Red", "Light", "Flying", true, true, "Adjacent", new List<string>() { "Drone" }, 0, 0, 0, 0, 0, 1, 0, 0,
             new List<string>() { "Move", "Deploy Drones", "Fortify", "Capture", "Toggle Jetpack" }, null,
             null, null, new List<Weapon>(), null, null));

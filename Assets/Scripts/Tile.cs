@@ -459,6 +459,10 @@ public class Tile : MonoBehaviour
                     outLineNum = 3;
                     selector.GetComponent<UnitSelector>().setColor(Color.cyan);
                 }
+                //if (!gM.availableTiles.Contains(this))
+                //{
+                    //gM.availableTiles.Add(this);
+                //}
             }
             ui.destroyBattleMenu();
             board.setSelectedTile(gameObject);

@@ -361,7 +361,10 @@ MonoBehaviour:
   repairing: 0
   flying: 1
   canLand: 1
+  hasJetpack: 1
   displacementVector: {x: 0, y: 1, z: 0}
+  maxJetToggles: 1
+  currentJetToggles: 0
   hasShadow: 1
   shadowPrefab: {fileID: 1720379409386452387, guid: c26ef37e1bbc10548bd7531a049f8271,
     type: 3}
