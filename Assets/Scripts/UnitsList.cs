@@ -21,6 +21,7 @@ public class UnitsList
         unitTypes["Vita"].Add("Infantry", new List<UnitTemplate>());
         unitTypes["Ignis"].Add("Advanced Infantry", new List<UnitTemplate>());
         unitTypes["Vita"].Add("Advanced Infantry", new List<UnitTemplate>());
+        unitTypes["Vita"].Add("Token Advanced Infantry", new List<UnitTemplate>());
         unitTypes["Ignis"].Add("Vehicles", new List<UnitTemplate>());
         unitTypes["Vita"].Add("Vehicles", new List<UnitTemplate>());
         unitTypes["Ignis"].Add("Advanced Vehicles", new List<UnitTemplate>());
@@ -153,9 +154,28 @@ public class UnitsList
         setUnitForFaction("Vita", "Advanced Infantry", new UnitTemplate(550, 5.5f, 5, 10, 550, 5, 10, 2, 15, "Brewer", "High health infantry that emits poison gas.",
             "Green", "Light", "Legged", false, 0, 0, 0, "", true, 0, 0, null, new List<string>() { "Move", "Attack", "Fortify", "Sentry", "Capture" },
             weapons.getWeaponCopy(24), null, null, new List<Weapon>() { weapons.getWeaponCopy(24) }, null, null));
-        setUnitForFaction("Vita", "Advanced Infantry", new UnitTemplate(675, 5.75f, 1, 12, 675, 1, 12, 3, 0, "Eyesore", "The eyesore does adequate damage and deals an impressive poisonous " +
-            "explosion on death.", "Green", "Light", "Legged", true, 100, 0, 0, "Explosion", true, 1, 0, null, new List<string>() { "Move", "Attack", "Fortify", "Sentry" },
+        setUnitForFaction("Vita", "Advanced Infantry", new UnitTemplate(675, 5.75f, 1, 12, 675, 1, 12, 4, 0, "Eyesore", "The eyesore does adequate damage and deals an impressive poisonous " +
+            "explosion on death. Additionally, its high health makes it hard to kill.", "Green", "Light", "Legged", true, 100, 0, 0, "Explosion", true, 1, 0, null, new List<string>() { "Move", "Attack", "Fortify", "Sentry" },
             weapons.getWeaponCopy(25), null, null, new List<Weapon>() { weapons.getWeaponCopy(25) }, null, null));
+
+        Dictionary<string, Vector3> unitsMadeOnDeath = new Dictionary<string, Vector3>();
+        unitsMadeOnDeath.Add("Small Slime", new Vector3(1,2,0));
+
+        setUnitForFaction("Vita", "Advanced Infantry", new UnitTemplate(400, 6f, 2, 5, 400, 2, 5, 7, 0, "Slime", "The slime's unique molecular structure helps to protect it from attacks." +
+            " Additionally, the slime produces two small slimes on death, which each spawn two mini slimes on death.",
+            "Green", "Slime", "Slime", false, 0, 0, 0, "", false, 0, 0, unitsMadeOnDeath, new List<string>() { "Move", "Attack", "Fortify", "Sentry" },
+            weapons.getWeaponCopy(25), null, null, new List<Weapon>() { weapons.getWeaponCopy(26) }, null, null));
+
+        unitsMadeOnDeath = new Dictionary<string, Vector3>();
+        unitsMadeOnDeath.Add("Mini Slime", new Vector3(1, 2, 0));
+        setUnitForFaction("Vita", "Token Advanced Infantry", new UnitTemplate(300, 5f, 2, 6f, 300, 2, 6f, 3, 0, "Small Slime", "The small slime's unique molecular structure helps to protect it from attacks." +
+            " Additionally, the slime produces two mini slimes on death. The small slime is a weaker version of the slime.",
+            "Green", "Slime", "Slime", false, 0, 0, 0, "", false, 0, 0, unitsMadeOnDeath, new List<string>() { "Move", "Attack", "Fortify", "Sentry" },
+            weapons.getWeaponCopy(27), null, null, new List<Weapon>() { weapons.getWeaponCopy(27) }, null, null));
+        setUnitForFaction("Vita", "Token Advanced Infantry", new UnitTemplate(225, 4f, 2, 7f, 225, 2, 7f, 1, 0, "Mini Slime", "The slime's unique molecular structure helps to protect it from attacks." +
+            " Additionally, the mini slime is a weaker version of the small slime.",
+            "Green", "Slime", "Slime", false, 0, 0, 0, "", false, 0, 0, null, new List<string>() { "Move", "Attack", "Fortify", "Sentry" },
+            weapons.getWeaponCopy(28), null, null, new List<Weapon>() { weapons.getWeaponCopy(28) }, null, null));
 
         //Handle Ignis Vehicles
         setUnitForFaction("Ignis", "Vehicles", (new UnitTemplate(215, 7f, 7, 10, 215, 7, 10, 2, 33, "Assault Transporter", "Vehicle that can transport up to 6 units across the map" +
@@ -337,6 +357,10 @@ public class UnitsList
                                 else if (template.name == "Eyesore")
                                 {
                                     return bM.unitPrefabs[20];
+                                }
+                                else if (template.name == "Slime")
+                                {
+                                    return bM.unitPrefabs[21];
                                 }
                                 return null;
                         }

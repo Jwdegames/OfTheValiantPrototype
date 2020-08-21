@@ -120,19 +120,19 @@ public class BoardManager : MonoBehaviour
                         gM.teams.Add(new List<string>() { "Green" });
                         gM.resetAllDictionaries();
 
-                        makeUnit("Droid Trooper", gM.playerDictionary["Red"], 1, 3);
-                        makeUnit("Shielded Droid", gM.playerDictionary["Red"], 2, 4);
-                        makeUnit("Droid Gattler", gM.playerDictionary["Red"], 2, 3);
-                        makeUnit("S-Jet Trooper", gM.playerDictionary["Red"], 1, 4);
+                        //makeUnit("Droid Trooper", gM.playerDictionary["Red"], 1, 3);
+                        //makeUnit("Shielded Droid", gM.playerDictionary["Red"], 2, 4);
+                        //makeUnit("Droid Gattler", gM.playerDictionary["Red"], 2, 3);
+                        //makeUnit("S-Jet Trooper", gM.playerDictionary["Red"], 1, 4);
 
-                        //makeUnit("Droid Gattler", gM.playerDictionary["Red"], 17, 3);
-                        //makeUnit("Droid Gattler", gM.playerDictionary["Red"], 17, 4);
-                        //makeUnit("Droid Gattler", gM.playerDictionary["Red"], 16, 3);
+                        makeUnit("Droid Gattler", gM.playerDictionary["Red"], 17, 3);
+                        makeUnit("Droid Gattler", gM.playerDictionary["Red"], 17, 4);
+                        makeUnit("Droid Gattler", gM.playerDictionary["Red"], 16, 3);
 
-                        makeUnit("Masked Trooper", gM.playerDictionary["Green"], 22, 3);
-                        makeUnit("Masked Trooper", gM.playerDictionary["Green"], 22, 4);
-                        makeUnit("Grenadier", gM.playerDictionary["Green"], 23, 4);
-                        makeUnit("Eyesore", gM.playerDictionary["Green"], 21, 3);
+                        makeUnit("Slime", gM.playerDictionary["Green"], 22, 3);
+                        //makeUnit("Masked Trooper", gM.playerDictionary["Green"], 22, 4);
+                        //makeUnit("Grenadier", gM.playerDictionary["Green"], 23, 4);
+                        //makeUnit("Eyesore", gM.playerDictionary["Green"], 21, 3);
                         //makeUnit(1, 3, gM.playerDictionary["Green"], 24, 5);
 
                         makeBuilding(0,"House", gM.playerDictionary["Red"], 7, 2);

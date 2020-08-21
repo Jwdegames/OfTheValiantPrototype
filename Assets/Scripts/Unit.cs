@@ -163,8 +163,14 @@ public class Unit : Controllable
     public int poisonGasOnDeathAOE = 0;
     public int poisonGasOnDeathAOEType = 0;
 
+    //For Vector
+    //X - Spawn Type  
+    //Y - Number of Units Spawned
+    //Z - Extra Type
 
-
+    //For X
+    //0 - On unit spot - Y will be overidden to 1
+    //1 - Randomly thrown to the closet tiles to the unit, and won't spawn anything if no more space
     public Dictionary<string, Vector3> unitsMadeOnDeathDict = new Dictionary<string, Vector3>();
 
     // Use this for initialization
@@ -956,6 +962,60 @@ public class Unit : Controllable
         }
 
         yield return null;
+    }
+
+    //Helper method to clean up space in match weapon method
+    public void genWeaponMatch(Weapon weapon, Sprite weaponSprite, GameObject weaponObject, Vector3 weaponPos, Vector2 weaponScale,Vector3 weaponPos2, string type, string type2)
+    {
+        switch(type)
+        {
+            case "Primary":
+                weapons.Add(weapon);
+                weapons[0].isPrimary = true;
+                weapons[0].uiSprite = weaponSprite;
+                setCurrentWeapon(0);
+                cwObject = Instantiate(weaponObject, genWeaponAboveCoords(weaponPos), Quaternion.identity) as GameObject;
+
+                setupCWObject();
+                offsetWeapon(cwObject, weaponPos);
+                cwScript.xSize = weaponScale.x;
+                cwScript.ySize = weaponScale.y;
+                cwScript.useWeapon(weapon, this);
+                weaponDictionary.Add(weapon, cwScript);
+                break;
+            //THERE SHOULD BE A PRIMARY WEAPON BEFORE A SECONDARY WEAPON IS ADDED
+            case "Secondary":
+                weapons.Add(weapon);
+                weapons[1].isSecondary = true;
+                weapons[1].uiSprite = weaponSprite;
+                cw2Object = Instantiate(weaponObject, genWeaponAboveCoords(weaponPos), Quaternion.identity) as GameObject;
+
+                setupCW2Object();
+                offsetWeapon(cw2Object, weaponPos);
+                cw2Script.xSize = weaponScale.x;
+                cw2Script.ySize = weaponScale.y;
+                cw2Script.useWeapon(weapon, this);
+                weaponDictionary.Add(weapon, cw2Script);
+                break;
+            case "Tertiary":
+                break;
+            case "Turret":
+                turrets.Add(weapon);
+                turrets[turrets.Count-1].isTurret = true;
+                turrets[turrets.Count - 1].uiSprite = weaponSprite;
+                //setCurrentWeapon(0);
+
+                GameObject turretObject = Instantiate(weaponObject, genWeaponAboveCoords(weaponPos), Quaternion.identity) as GameObject;
+                //setupCWObject();
+                setUpTurret(turretObject);
+                offsetWeapon(turretObject, weaponPos);
+                WeaponObject turretScript = turretObject.GetComponent<WeaponObject>();
+                turretScript.xSize = weaponScale.x;
+                turretScript.ySize = weaponScale.y;
+                turretScript.useWeapon(turrets[0], this);
+                weaponDictionary.Add(turrets[0], turretScript);
+                break;
+        }
     }
 
     //Generate the weapon associated with this troop
@@ -2063,6 +2123,9 @@ public class Unit : Controllable
                 cwScript.ySize = 1f;
                 cwScript.useWeapon(weapons[0], this);
                 weaponDictionary.Add(weapons[0], cwScript);
+                break;
+            case "Slime":
+                genWeaponMatch(weaponsList.getWeaponCopy(26), ui.uiWeaponSprites[26], gM.weaponPrefabs[26], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
                 break;
 
 

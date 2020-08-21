@@ -118,6 +118,24 @@ public class WeaponsList
         temp.Add("Poisons", 3);
         weaponList.Add(new Weapon("Blast Eye x3", "3 scary eyes that shoots out poisonous blasts.", "No, it does not shoot grease.", 1, 1, 0, 0, 3, 45, 0, 0, 0,
             "Medium", true, true, false, false, false, true, true, temp));
+
+        temp = new Dictionary<string, float>();
+        temp.Add("Poisons", 3);
+        temp.Add("Makes Poison Gas", 5);
+        weaponList.Add(new Weapon("Slime Ball", "A slime ball is a dangerous ball of condensed poisonous gas.", "", 2, 5, 0, 0, 1, 2, 0, 112, 0, 0, 0,
+            "Medium", true, true, false, false, false, false, true, temp));
+
+        temp = new Dictionary<string, float>();
+        temp.Add("Poisons", 3);
+        temp.Add("Makes Poison Gas", 5);
+        weaponList.Add(new Weapon("Small Slime Ball", "A slime ball is a dangerous ball of condensed poisonous gas.", "", 2, 5, 0, 0, 1, 2, 0, 84, 0, 0, 0,
+            "Medium", true, true, false, false, false, false, true, temp));
+
+        temp = new Dictionary<string, float>();
+        temp.Add("Poisons", 3);
+        temp.Add("Makes Poison Gas", 5);
+        weaponList.Add(new Weapon("Mini Slime Ball", "A slime ball is a dangerous ball of condensed poisonous gas.", "", 2, 5, 0, 0, 1, 2, 0, 63, 0, 0, 0,
+            "Medium", true, true, false, false, false, false, true, temp));
     }
 
     public Weapon getWeaponCopy(int index)

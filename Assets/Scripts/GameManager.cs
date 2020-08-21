@@ -440,6 +440,20 @@ public class GameManager : MonoBehaviour
         }
         return dCalc.findInRangePath(unit, attackerWeapons, absolute, hypothetical);
     }
+    
+    public int getAbsoluteDistance(Tile start, Tile target)
+    {
+        if (dCalc == null)
+        {
+            dCalc = new DijakstraCalculator(this, start, target);
+        }
+        else
+        {
+            dCalc.setValues(start, target);
+            dCalc.reset();
+        }
+        return dCalc.getAbsoluteDist();
+    }
 
     public List<Tile> getTilesInAbsoluteRange(Tile start, int minRange, int maxRange)
     {

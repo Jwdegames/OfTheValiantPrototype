@@ -21,6 +21,7 @@ public class WeaponObject : MonoBehaviour
     public GameObject explosionPrefab;
     public GameObject soundWavePrefab;
     public GameObject poisonGasPrefab;
+    public GameObject slimeballPrefab;
 
     public List<GameObject> missiles = new List<GameObject>();
     public GameObject currentMissile;
@@ -30,6 +31,9 @@ public class WeaponObject : MonoBehaviour
 
     public List<GameObject> poisonGasClouds = new List<GameObject>();
     public GameObject currentPoisonGasCloud;
+
+    public List<GameObject> slimeBalls = new List<GameObject>();
+    public GameObject currentSlimeBall;
 
     public List<Sprite> sprites;
 
@@ -296,6 +300,10 @@ public class WeaponObject : MonoBehaviour
     {
         float elapsedTime = 0;
         int shotCount = 0;
+        missiles = new List<GameObject>();
+        poisonGasClouds = new List<GameObject>();
+        soundWaves = new List<GameObject>();
+        slimeBalls = new List<GameObject>();
         switch (name)
         {
             case "Rifle":
@@ -545,7 +553,19 @@ public class WeaponObject : MonoBehaviour
                 defender.setTintColor(new Color(0, 0, 0, 0));
                 yield return new WaitForSeconds(0.05f);
                 break;
-                //Notice
+            //Notice
+            case "Slime Ball":
+                u.gameObject.GetComponent<Animator>().SetBool("Firing", true);
+                yield return new WaitForSeconds(0.5f);
+                currentSlimeBall = Instantiate(slimeballPrefab, transform.position, Quaternion.identity);
+                currentSlimeBall.transform.localScale *= 10;
+                currentSlimeBall.GetComponent<SpriteRenderer>().enabled = true;
+                slimeBalls.Add(currentSlimeBall);
+                StartCoroutine(launchSlimeBall(currentSlimeBall,defender.gameObject,gM.getAbsoluteDistance(u.getTile(),defender.getTile())));
+                yield return new WaitForSeconds(0.5f);
+                u.gameObject.GetComponent<Animator>().SetBool("Firing", false);
+                yield return StartCoroutine(waitForAllSlimeBalls());
+                break;
 
 
 
@@ -730,6 +750,8 @@ public class WeaponObject : MonoBehaviour
 
     }
 
+ 
+
     public IEnumerator reloadRPGProjectile(float delayBetweenFlashes, float initDelay, int flashes)
     {
         int flashesDone = 0;
@@ -798,13 +820,55 @@ public class WeaponObject : MonoBehaviour
         //rpgProjectile.transform.position = origPos;
         missiles.Remove(missile);
         Destroy(missile);
-        yield return makeExplosion(defender.transform.position, explosionPrefab.transform.localScale, -3);
+        yield return StartCoroutine(makeExplosion(defender.transform.position, explosionPrefab.transform.localScale, -3));
 
     }
 
     public IEnumerator waitForAllMissiles()
     {
         while (missiles.Count > 0)
+        {
+            yield return new WaitForSeconds(0.000001f);
+        }
+    }
+
+    public IEnumerator launchSlimeBall(GameObject slimeBall, GameObject target, int tileDist)
+    {
+        Vector3 initPos = slimeBall.transform.position;
+        Vector3 endPos = target.transform.position;
+
+        float time = tileDist * 0.4f;
+        float timeSquared = Mathf.Pow(time, 2);
+
+        float angle = 1f*Mathf.Atan((endPos.y - initPos.y + 20f*timeSquared) / (endPos.x - initPos.x));
+        /*if (angle < 0)
+        {
+            angle = Mathf.Abs(angle)+Mathf.PI/2;
+        }*/
+        float startVel = (endPos.x - initPos.x) / (time * Mathf.Cos(angle));
+
+        float horizVel = startVel * Mathf.Cos(angle);
+        float vertVel = startVel * Mathf.Sin(angle);
+
+        float elaspedTime = 0;
+
+        while (elaspedTime < time)
+        {
+            slimeBall.transform.position = new Vector3(horizVel * elaspedTime + initPos.x ,-20f*Mathf.Pow(elaspedTime, 2) + elaspedTime * vertVel + initPos.y, slimeBall.transform.position.z);
+            elaspedTime += Time.deltaTime;
+            yield return null;
+
+        }
+        slimeBall.transform.position = new Vector3(endPos.x, endPos.y, slimeBall.transform.position.z);
+        slimeBalls.Remove(slimeBall);
+        Destroy(slimeBall);
+        //yield return StartCoroutine(makeExplosion(target.transform.position, explosionPrefab.transform.localScale, -3));
+
+    }
+
+    public IEnumerator waitForAllSlimeBalls()
+    {
+        while (slimeBalls.Count > 0)
         {
             yield return new WaitForSeconds(0.000001f);
         }

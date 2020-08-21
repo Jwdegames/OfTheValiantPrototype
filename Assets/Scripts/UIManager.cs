@@ -1088,14 +1088,14 @@ public class UIManager : MonoBehaviour
 
         //Make a units list to grab templates from
         UnitsList unitsList = new UnitsList();
-
+        Player humanPlayer = gM.playerDictionary[gM.humanSide];
         //Determine which units we need to build
         if (bpBuilding.name == "Barracks")
         {
             //Produce infantry units
             string faction = gM.playerDictionary[gM.humanSide].faction;
             List<UnitTemplate> unitTemplates = new List<UnitTemplate>(unitsList.unitTypes[faction]["Infantry"]);
-
+            
             if (gM.playerDictionary[gM.humanSide].hasLab())
             {
                 //Debug.Log("Adding infantry!");
@@ -1113,6 +1113,11 @@ public class UIManager : MonoBehaviour
                 buildUnitButtonScript.bM = gM.boardScript;
                 buildUnitButtonScript.gM = gM;
                 buildUnitButtonScript.makeUnitTemplate(unitsList.getUnitPrefab(template,faction,gM.boardScript).GetComponent<Unit>(),template);
+                if (template.mtCost > humanPlayer.metal || template.pplCost > humanPlayer.people)
+                {
+                    Debug.Log("Failed cost check!");
+                    buildUnitButtonScript.makeInactive();
+                }
 
 
             }
@@ -1141,6 +1146,11 @@ public class UIManager : MonoBehaviour
                 buildUnitButtonScript.bM = gM.boardScript;
                 buildUnitButtonScript.gM = gM;
                 buildUnitButtonScript.makeUnitTemplate(unitsList.getUnitPrefab(template, faction, gM.boardScript).GetComponent<Unit>(), template);
+                if (template.mtCost > humanPlayer.metal || template.pplCost > humanPlayer.people)
+                {
+                    buildUnitButtonScript.makeInactive();
+                }
+
 
             }
         }

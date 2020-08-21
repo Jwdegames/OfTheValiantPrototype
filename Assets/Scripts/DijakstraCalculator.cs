@@ -878,12 +878,12 @@ public class DijakstraCalculator
                 if (currentUnit.getTeam() == team)
                 {
                     point++;
-                    mod = 1;
+                    mod = 3;
                 }
                 else
                 {
                     point--;
-                    mod = -1;
+                    mod = -3;
                 }
 
                 extraCalc.reset();
@@ -1007,6 +1007,58 @@ public class DijakstraCalculator
     {
         List<Weapon> weapons = new List<Weapon>() { weapon };
         return canAttackEnemyWithWeapons(attacker, weapons, defender);
+    }
+
+    public int getAbsoluteDist()
+    {
+        SimpleNode<Tile, float> temp, temp2;
+        //Debug.Log(start != null);
+        //Log(dest != null);
+
+            frontier.Enqueue(start, 0);
+            while (frontier.Count > 0)
+            {
+                current = frontier.DequeueNode();
+                Tile currentTile = current.Data;
+
+                currentTile.setAdjacent();
+                exploredT.Add(current.Data);
+
+                    if (currentTile == dest)
+                    {
+                        return (int)current.Priority;
+                }
+                //else if (current.Priority >= maxRange) continue;
+                List<Tile> adjacentNodes = currentTile.getAdjacent();
+                foreach (Tile t in adjacentNodes)
+                {
+                    if (t == null) continue;
+                    temp = new SimpleNode<Tile, float>(t);
+                    temp.Priority = current.Priority + 1;
+                    if (!exploredT.Contains(t) && !frontier.Contains(t))
+                    {
+                        //Add the node to the frontier if we didn't explore it already
+                        frontier.Enqueue(t, current.Priority + 1);
+                    }
+                    //If we have a move path that is shorter than what is in the frontier, replace it
+                    else if (frontier.Contains(t))
+                    {
+                        //Debug.Log(t);
+                        temp2 = frontier.RemoveNode(t);
+                        if (temp.Priority < temp2.Priority)
+                        {
+                            frontier.Enqueue(temp.Data, temp.Priority);
+                        }
+                        else
+                        {
+                            frontier.Enqueue(temp2.Data, temp2.Priority);
+                        }
+
+                    }
+                }
+            }
+            //Debug.Log(start.getPos() + " is not within " + minRange + "-" + maxRange + " tiles of " + dest.getPos());
+            return -1;
     }
 
     //Helper method to determine if a tile is within a certain distance of another tile

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.CodeDom;
+
 public class UnitActionButton : MonoBehaviour, IPointerClickHandler
 {
     public Sprite activated;
@@ -28,6 +30,7 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
     public Sprite deployUnits;
     public Sprite deployDrones;
     public Sprite toggleJetpack;
+    public float apCost;
     public Unit unit;
     public Image image;
     public Image buttonImage;
@@ -68,51 +71,67 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
         {
             case "Move":
                 image.sprite = move;
+                apCost = 0;
                 break;
             case "Attack":
                 image.sprite = attack;
+                apCost = 1;
                 break;
             case "Fortify":
                 image.sprite = fortify;
+                //apCost = unit.getAP();
                 break;
             case "Sentry":
                 image.sprite = sentry;
+                //apCost = unit.getAP();
                 break;
             case "Repair":
                 image.sprite = repair;
+                apCost = 1;
                 break;
             case "Heal":
                 image.sprite = heal;
+                apCost = 1;
                 break;
             case "Capture":
                 image.sprite = capture;
+                //apCost = unit.getAP();
                 break;
             case "Deploy Drones":
                 image.sprite = deployDrones;
+                apCost = 1;
                 break;
             case "Load Units":
                 image.sprite = loadUnits;
+                apCost = 1;
                 break;
             case "Unload Units":
                 image.sprite = deployUnits;
+                apCost = 1;
                 break;
             case "Fire Turret 1":
                 image.sprite = fireTurret1;
+                apCost = 1;
                 break;
             case "Fire Turret 2":
                 image.sprite = fireTurret2;
+                apCost = 1;
                 break;
             case "Fire Turret 3":
                 image.sprite = fireTurret3;
+                apCost = 1;
                 break;
             case "Fire Turret 4":
                 image.sprite = fireTurret4;
+                apCost = 1;
                 break;
             case "Fire Turret 5":
                 image.sprite = fireTurret5;
+                apCost = 1;
                 break;
             case "Toggle Jetpack":
                 image.sprite = toggleJetpack;
+                apCost = 1;
                 break;
             default:
                 image.sprite = move;
@@ -275,7 +294,28 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
         if (buttonImage.sprite.Equals(activated))
         {
             tooltipBox.SetActive(true);
-            tooltipText.text = type;
+            string temp = type;
+            if (type == "Move")
+            {
+                temp += "(Cost: MP Used After Tile Selected)";
+            }
+            else if (type == "Toggle Jetpack")
+            {
+                temp += "(Cost: 1 Jetpack Toggle)";
+            }
+            else if (type == "Fortify" || type == "Sentry" || type == "Capture")
+            {
+                temp += "(Cost: "+unit.getAP()+" AP)";
+            }
+            else if (type == "Attack" || type == "Fire Turret 1" || type == "Fire Turret 2" || type == "Fire Turret 3" || type == "Fire Turret 4" || type == "Fire Turret 5")
+            {
+                temp += "(Cost: 1 AP After Tile Selected)";
+            }
+            else
+            {
+                temp += "(Cost: 1 AP After Action Is Completed)";
+            }
+            tooltipText.text = temp;
             tooltipArrow.enabled = true;
         }
         //Debug.Log("Moused over");
