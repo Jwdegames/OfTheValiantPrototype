@@ -451,13 +451,45 @@ public class DijakstraCalculator
     public List<Tile> findInRangePath(Unit unit, List<Weapon> weapons, bool absolute, bool hypothetical)
     {
         //First get the tiles we want to move to and then reset the calculator
-        List<Tile> inRangeTiles = getInRangeTiles(weapons);
-        if (inRangeTiles == null)
+
+        DijakstraCalculator extraCalc = new DijakstraCalculator(gM, start, dest);
+        List<Tile> inRangeTiles = extraCalc.getInRangeTiles(weapons);
+        DijakstraCalculator extraCalc2 = new DijakstraCalculator(gM, start, dest);
+        if (unit.getTile() == null && !hypothetical)
+        {
+            Debug.LogError(unit + " does not have a tile!");
+        }
+        if (!hypothetical)
+        {
+            //gM.printPath(inRangeTiles);
+        }
+            //Debug.Log(extraCalc2.getAbsoluteDist());
+
+        if (inRangeTiles == null|| inRangeTiles.Count == 0)
         {
             Debug.Log("Couldn't find tile to attack " + dest);
         }
+
+        //
         //Debug.Log("Printing in range tiles!");
-        //printPath(inRangeTiles);
+        //Debug.Log(inRangeTiles.Count);
+        if (!hypothetical)
+        {
+            if (inRangeTiles.Contains(start))
+            {
+                //Debug.Log("We can fire");
+                return new List<Tile>() { start };
+            }
+            else
+            {
+                //NOTICE: apparently tile is null otherwise, debug statement would run
+                if (unit.getTile() != null)
+                {
+                    //Debug.Log(unit + " is not in range of " + dest);
+                }
+            }
+        }
+        //Debug.Log(start);
         reset();
 
         foundGoal = false;
@@ -480,7 +512,7 @@ public class DijakstraCalculator
             //Loop through all possible tiles we can move to
             foreach (Tile tile in inRangeTiles)
             {
-                if (current.Data.canMoveToAdjacent(tile, true))
+                if (current.Data.canMoveToAdjacent(tile, true) || tile == start)
                 {
                     tile.predecessor = current.Data;
                     currentT = tile;
@@ -500,6 +532,9 @@ public class DijakstraCalculator
                     continue;
                 }
                 if (hypothetical && !start.canMoveToWithUnit(unit, t, false))
+                {
+                    continue;
+                }
                 if (!absolute && !((float)Math.Round(currentTile.getMoveCost(unit) + current.Priority, 3) <= (float)Math.Round(start.getUnitScript().getCurrentMP(), 3)))
                 {
                     continue;
@@ -550,6 +585,66 @@ public class DijakstraCalculator
         }
     }
 
+    //Finds the closest empty tile
+    public Tile findClosestEmptyTile(bool includeStart)
+    {
+        SimpleNode<Tile, float> temp, temp2;
+        if (includeStart)
+        {
+            frontier.Enqueue(start, 0);
+        }
+        else
+        {
+            start.setAdjacent();
+            List<Tile> adjTiles = start.getAdjacent();
+            foreach(Tile adjTile in adjTiles)
+            {
+                frontier.Enqueue(start, 0);
+            }
+            exploredT.Add(start);
+        }
+        while (frontier.Count != 0)
+        {
+            current = frontier.DequeueNode();
+            Tile currentTile = current.Data;
+            currentTile.setAdjacent();
+            exploredT.Add(current.Data);
+            if (currentTile.getUnit() == null)
+            {
+                return currentTile;
+            }
+
+            List<Tile> adjacentNodes = currentTile.getAdjacent();
+            foreach (Tile t in adjacentNodes)
+            {
+                if (t == null) continue;
+                temp = new SimpleNode<Tile, float>(t);
+                temp.Priority = current.Priority + 1;
+
+                if (!exploredT.Contains(t) && !frontier.Contains(t))
+                {
+                    //Add the node to the frontier if we didn't explore it already
+                    frontier.Enqueue(t, current.Priority + 1);
+                }
+                //If we have a move path that is shorter than what is in the frontier, replace it
+                else if (frontier.Contains(t))
+                {
+                    //Debug.Log(t);
+                    temp2 = frontier.RemoveNode(t);
+                    if (temp.Priority < temp2.Priority)
+                    {
+                        frontier.Enqueue(temp.Data, temp.Priority);
+                    }
+                    else
+                    {
+                        frontier.Enqueue(temp2.Data, temp2.Priority);
+                    }
+
+                }
+            }
+        }
+        return null;
+    }
    
 
     //Finds all tiles that the unit at the start tile can move to

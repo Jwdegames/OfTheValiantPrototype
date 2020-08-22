@@ -171,6 +171,10 @@ public class Unit : Controllable
     //For X
     //0 - On unit spot - Y will be overidden to 1
     //1 - Randomly thrown to the closet tiles to the unit, and won't spawn anything if no more space
+
+    //For Z 
+    //0 - Default
+    //1 - Do slime animation
     public Dictionary<string, Vector3> unitsMadeOnDeathDict = new Dictionary<string, Vector3>();
 
     // Use this for initialization
@@ -608,12 +612,26 @@ public class Unit : Controllable
     {
         currentAP = a;
     }
+
+    //Does death animation
+    public IEnumerator doDeathAnimation()
+    {
+        switch (deathAEType)
+        {
+            case "Explosion":
+                GameObject explosion = Instantiate(gM.unitEffectPrefabs[0], new Vector3(transform.position.x, transform.position.y, transform.position.z - 4), Quaternion.identity);
+                yield return new WaitForSeconds(1f);
+                Destroy(explosion);
+                break;
+        }
+    }
+
     //Play death animation and then kill the unit
 
     public IEnumerator die()
     {
         if (healthBar != null) Destroy(healthBar);
-        if (dissolvesOnDeath)
+        if (dissolvesOnDeath && deathAEType == "")
         {
             float elaspedTime = 0f;
             while (elaspedTime < dissolveTime)
@@ -637,14 +655,7 @@ public class Unit : Controllable
                     break;
             }
         }
-        switch (deathAEType)
-        {
-            case "Explosion":
-                GameObject explosion = Instantiate(gM.unitEffectPrefabs[0], new Vector3(transform.position.x, transform.position.y, transform.position.z - 4), Quaternion.identity);
-                yield return new WaitForSeconds(1f);
-                Destroy(explosion);
-                break;
-        }
+        yield return StartCoroutine(doDeathAnimation());
         if (doesDamageOnDeath)
         {
             List<Tile> explosionTiles = gM.getTilesInAbsoluteRange(tile, 1, 1+damageOnDeathAOE);
@@ -664,6 +675,47 @@ public class Unit : Controllable
                     }
                     StartCoroutine(u.loseHP(lostHP));
                 }
+            }
+        }
+
+        //Make the units
+        UnitsList unitsList = new UnitsList();
+        Player player = gM.playerDictionary[side];
+        foreach(string unitName in unitsMadeOnDeathDict.Keys)
+        {
+            Vector3 parameters = unitsMadeOnDeathDict[unitName];
+            Debug.Log("Making " + unitName);
+            switch(parameters.z)
+            {
+                case 0:
+                    break;
+                case 1:
+                    for (int i = 0; i < parameters.y; i++)
+                    {
+                        Tile spawnTile = gM.findClosestEmptyTile(tile, false);
+                        GameObject unitObject = Instantiate(unitsList.getUnitPrefab(player.faction, gM.boardScript, unitName), Vector3.zero, Quaternion.identity) as GameObject;
+                        Unit unitObjectScript = unitObject.GetComponent<Unit>();
+                        unitObjectScript.matchWeapon("Build");
+                        UnitTemplate template = unitsList.templateDictionary[unitName];
+                        unitObjectScript.useTemplate(template);
+                        yield return StartCoroutine(cwScript.performSpecialAnimation(spawnTile, 0));
+                        Unit builtUnit = gM.boardScript.buildUnit(unitObject, player, spawnTile.mapX, spawnTile.mapY, false);
+                        //builtUnit.useTemplate(template);
+                        Destroy(unitObject);
+                        yield return new WaitForSeconds(0.001f);
+                    }
+                    break;
+            }
+        }
+
+        if (dissolvesOnDeath && deathAEType == "Dissolve After Make Unit")
+        {
+            float elaspedTime = 0f;
+            while (elaspedTime < dissolveTime)
+            {
+                rMaterial.SetFloat("_Fade", 1 - elaspedTime / dissolveTime);
+                elaspedTime += Time.deltaTime;
+                yield return null;
             }
         }
 
@@ -2127,6 +2179,12 @@ public class Unit : Controllable
             case "Slime":
                 genWeaponMatch(weaponsList.getWeaponCopy(26), ui.uiWeaponSprites[26], gM.weaponPrefabs[26], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
                 break;
+            case "Small Slime":
+                genWeaponMatch(weaponsList.getWeaponCopy(27), ui.uiWeaponSprites[26], gM.weaponPrefabs[26], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Mini Slime":
+                genWeaponMatch(weaponsList.getWeaponCopy(28), ui.uiWeaponSprites[26], gM.weaponPrefabs[26], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
 
 
         }
@@ -3071,6 +3129,23 @@ public class Unit : Controllable
         extraAttributes = unitData.extraAttributes;
     }
 
+    //Determines if this unit can attack with any of its weapons this turn
+    public bool canAttackThisTurn()
+    {
+        if (currentAP > 0)
+        {
+            List <Weapon> attackWeapons = getAllDamageActiveWeapons();
+            foreach(Weapon weapon in attackWeapons)
+            {
+                if (weapon.currentAttacks < weapon.maxAttacksPerTurn)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     //Determines if this unit has any attack capabilities regardless of AP/MP
     public bool canAttackAbsolute()
     {
@@ -3302,6 +3377,12 @@ public class Unit : Controllable
         }
         Debug.Log(temp);
     }
+
+    public string getName()
+    {
+        return name;
+    }
+
     override
     public string ToString()
     {

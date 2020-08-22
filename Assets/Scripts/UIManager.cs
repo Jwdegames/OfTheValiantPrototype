@@ -287,7 +287,7 @@ public class UIManager : MonoBehaviour
                 Dictionary<string, float> attributeDict = bpTile.extraAttributes;
                 if (attributeDict.ContainsKey("Poison Gas"))
                 {
-                    makeUnitAttribute("Poison Gas", "This tile poisons units.", attributeDict["Poison Gas"]+"", "", 5,"Tile");
+                    makeUnitAttribute("Poison Gas", "This tile poisons units.", "Attribute Lifetime: "+attributeDict["Poison Gas"]+" Days", "", 6,"Tile");
                 }
 
             }
@@ -556,6 +556,11 @@ public class UIManager : MonoBehaviour
                     tempAttributeScript.updateText("M");
                     tempAttributeScript.updateToolTipTitle("Medium Armor");
                     break;
+                case "Slime":
+                    temp = "This unit is a slime, meaning it takes 20% less damage from all attacks.";
+                    tempAttributeScript.updateText("S");
+                    tempAttributeScript.updateToolTipTitle("Slime Armor");
+                    break;
 
             }
             
@@ -598,11 +603,11 @@ public class UIManager : MonoBehaviour
                     float poisonHPEffect = bpUnit.getPoisonHPEffect();
                     if (poisonHPEffect > 0)
                     {
-                        temp = "This unit has been poisoned and will lose "+(poisonHPEffect*100)+"% of its hp at the start of it's turn.";
+                        temp = "This unit has been poisoned and will lose "+(poisonHPEffect*100)+"% of its hp at the start of its turn.";
                     }
                     else
                     {
-                        temp = "This unit has been poisoned and will gain " + (-poisonHPEffect * 100) + "% of its hp at the start of it's turn.";
+                        temp = "This unit has been poisoned and will gain " + (-poisonHPEffect * 100) + "% of its hp at the start of its turn.";
                     }
                     makeUnitAttribute("Poisoned", temp, "Attribute Lifetime: "+attributeDict["Poisoned"]+" Days", "", 5,"Unit");
                 }

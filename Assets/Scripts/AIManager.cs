@@ -13,6 +13,7 @@ public class AIManager : MonoBehaviour
     //Dictionary to tell which AI has what difficulty
     public Dictionary<string, string> aiDifficulties;
     public Dictionary<Player, UtilityAI> ais = new Dictionary<Player, UtilityAI>();
+    public UtilityAI currentUtilityAI;
     public bool needToRestart = false;
     int limitedActions = 1000000, actions = 0;
     bool limitActions = true;
@@ -91,6 +92,7 @@ public class AIManager : MonoBehaviour
                         ais.Add(aiPlayer, tempAI);
                     }
                     UtilityAI currentAI = ais[aiPlayer];
+                    currentUtilityAI = currentAI;
                     List<PossibleAssignment> orders = getUtilityOrders(currentAI);
 
                     foreach (PossibleAssignment order in orders)

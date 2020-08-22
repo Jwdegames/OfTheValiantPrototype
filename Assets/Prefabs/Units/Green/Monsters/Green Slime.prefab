@@ -279,7 +279,7 @@ MonoBehaviour:
   currentCapacity: 0
   loadTime: 0.5
   unloadTime: 0.5
-  dissolvesOnDeath: 0
+  dissolvesOnDeath: 1
   dissolveTime: 1
   hpBoost: 0
   initialHP: 0

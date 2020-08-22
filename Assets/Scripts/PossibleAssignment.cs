@@ -19,6 +19,7 @@ public class PossibleAssignment
     public List<HashSet<Weapon>> orderedWeapons = new List<HashSet<Weapon>>(), actualOrderedWeapons = new List<HashSet<Weapon>>();
     public float killedBonus = 15;
     public float exhaustRetreatBonus = 10;
+    public float canAttackBonus = 10;
     public float exhaustAttackRetreatDrawback = 10;
     public float exhaustHealRepairRetreatDrawback = 10;
     public float exhaustCaptureDrawback = 10;
@@ -58,6 +59,10 @@ public class PossibleAssignment
         possibleTaskDoer = pTD;
         buildingUnit = bU;
         buildingTile = bUTile;
+        if (!bU && aiTask.taskType != "Make Unit")
+        {
+            //Debug.Log(aiTask.taskType + " is considering " + pTD);
+        }
         this.gM = g;
         if (pTD.tile == null) distance = 0.5f;
         if (task.priority == 13)
@@ -171,16 +176,20 @@ public class PossibleAssignment
                 pTD.taskSubType = "Attack Enemy";
                 if (pTD.isTaskSuitable(gM, aiTask, buildingUnit, buildingTile))
                 {
-                    attackAdvantage = determineAttackAdvantage((Unit)pTD, (Unit)obj, false);
+                    attackAdvantage = determineAttackAdvantage((Unit)pTD, (Unit)obj, false, false);
 
                     tempMod = attackAdvantage;
                     if (!buildingUnit)
                     {
                         //Debug.Log(pTD + " has an attack advantage of " + aa + " against " + obj);
                     }
-                    if (((Unit)pTD).getCurrentAP() == 0)
+                    if (!ptdUnit.canAttackThisTurn())
                     {
                         tempMod -= exhaustAttackRetreatDrawback;
+                    }
+                    else
+                    {
+                        tempMod += canAttackBonus;
                     }
                     if (tempMod > maxMod)
                     {
@@ -189,6 +198,10 @@ public class PossibleAssignment
                         actualOrderedWeapons = orderedWeapons;
                     }
                 }
+                else
+                {
+                    //Debug.Log(ptdUnit + " can't attack " + (Unit)obj);
+                }
                 if (type == "Attack Enemy Near Building") return maxMod;
                 //Reverse the attack order for sentry
                 pTD.taskSubType = "Sentry";
@@ -196,12 +209,13 @@ public class PossibleAssignment
                 {
                     tempMod = -1;
                  
-                    float sentryAdvantage = determineAttackAdvantage((Unit)obj, (Unit)pTD, true);
+                    float sentryAdvantage = determineAttackAdvantage((Unit)obj, (Unit)pTD, true, true);
                     if (!buildingUnit)
                     {
                         //Debug.Log(pTD + " has an attack sentry advantage of " + aa + " against " + obj);
                     }
-                    if (ptdUnit.getCurrentAP() < ptdUnit.getAP())
+                    //if (ptdUnit.getCurrentAP() < ptdUnit.getAP())
+                    if (!ptdUnit.canAttackThisTurn())
                     {
                         tempMod -= exhaustAttackRetreatDrawback;
                     }
@@ -232,9 +246,10 @@ public class PossibleAssignment
                     tempMod = -2;
                     bool lastGuard = ptdUnit.getGuard();
                     ptdUnit.setGuard(true);
-                    tempMod -= determineAttackAdvantage((Unit)obj, (Unit)pTD, false);
+                    tempMod -= determineAttackAdvantage((Unit)obj, (Unit)pTD, false, true);
                     ptdUnit.setGuard(lastGuard);
-                    if (ptdUnit.getCurrentAP() < ptdUnit.getAP())
+                    //if (ptdUnit.getCurrentAP() < ptdUnit.getAP())
+                    if (!ptdUnit.canAttackThisTurn())
                     {
                         tempMod -= exhaustAttackRetreatDrawback;
                     }
@@ -294,7 +309,7 @@ public class PossibleAssignment
         return mod;
     }
 
-    public float determineAttackAdvantage(Unit attacker, Unit defender, bool sentry)
+    public float determineAttackAdvantage(Unit attacker, Unit defender, bool sentry, bool flipped)
     {
         float advantage = 0;
         //Deal with primary weapons first

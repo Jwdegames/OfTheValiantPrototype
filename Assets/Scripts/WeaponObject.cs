@@ -35,6 +35,9 @@ public class WeaponObject : MonoBehaviour
     public List<GameObject> slimeBalls = new List<GameObject>();
     public GameObject currentSlimeBall;
 
+    public List<GameObject> grenades = new List<GameObject>();
+    public GameObject currentGrenade;
+
     public List<Sprite> sprites;
 
     public Sprite uiSprite;
@@ -186,6 +189,12 @@ public class WeaponObject : MonoBehaviour
                 usesExternalSprite = false;
                 uiSprite = ui.uiWeaponSprites[25];
                 break;
+            case "Slime Ball":
+            case "Small Slime Ball":
+            case "Mini Slime Ball":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[26];
+                break;
 
         }
     }
@@ -314,7 +323,7 @@ public class WeaponObject : MonoBehaviour
                     defender.setTintColor(Color.white);
                     yield return new WaitForSeconds(0.05f);
                     muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
-                    defender.setTintColor(new Color(0,0,0,0));
+                    defender.setTintColor(new Color(0, 0, 0, 0));
                     yield return new WaitForSeconds(0.05f);
                     shotCount++;
 
@@ -324,7 +333,7 @@ public class WeaponObject : MonoBehaviour
                 muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
                 rpgProjectileExhaust.GetComponent<SpriteRenderer>().enabled = true;
                 Vector3 origPos = rpgProjectile.transform.position;
-                yield return StartCoroutine(launchRPGProjectile(1f,3f,18f, defender));
+                yield return StartCoroutine(launchRPGProjectile(1f, 3f, 18f, defender));
                 //yield return new WaitForSeconds(0.1f);
                 muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
                 rpgProjectileExhaust.GetComponent<SpriteRenderer>().enabled = false;
@@ -401,7 +410,7 @@ public class WeaponObject : MonoBehaviour
                 yield return StartCoroutine(launchRPGProjectile(1f, 3f, 18f, defender));
                 //yield return new WaitForSeconds(0.1f);
                 muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
-                 rpgProjectileExhaust.GetComponent<SpriteRenderer>().enabled = false;
+                rpgProjectileExhaust.GetComponent<SpriteRenderer>().enabled = false;
                 StartCoroutine(reloadRPGProjectile(0.25f, 0.25f, 3));
                 break;
             case "Laser Minigun":
@@ -462,7 +471,7 @@ public class WeaponObject : MonoBehaviour
             case "Rocket Burster":
                 while (shotCount < 5)
                 {
-                    currentMissile = Instantiate(rpgProjectile,rpgProjectile.transform.position,Quaternion.identity) as GameObject;
+                    currentMissile = Instantiate(rpgProjectile, rpgProjectile.transform.position, Quaternion.identity) as GameObject;
                     currentMissile.transform.SetParent(transform);
                     currentMissile.transform.localPosition = rpgProjectile.transform.localPosition;
                     currentMissile.transform.eulerAngles = rpgProjectile.transform.eulerAngles;
@@ -496,12 +505,12 @@ public class WeaponObject : MonoBehaviour
                 break;
             case "Gas Grenade":
                 //Debug.Log("Throwing grenade");
-                currentMissile = Instantiate(gameObject, gameObject.transform.position, Quaternion.identity) as GameObject;
-                currentMissile.transform.SetParent(transform);
-                currentMissile.transform.localPosition = gameObject.transform.localPosition;
-                currentMissile.transform.eulerAngles = gameObject.transform.eulerAngles;
-                currentMissile.transform.localScale = gameObject.transform.localScale;
-                currentMissile.GetComponent<SpriteRenderer>().enabled = true;
+                currentGrenade = Instantiate(gameObject, gameObject.transform.position, Quaternion.identity) as GameObject;
+                currentGrenade.transform.SetParent(transform);
+                currentGrenade.transform.localPosition = gameObject.transform.localPosition;
+                currentGrenade.transform.eulerAngles = gameObject.transform.eulerAngles;
+                currentGrenade.transform.localScale = gameObject.transform.localScale;
+                currentGrenade.GetComponent<SpriteRenderer>().enabled = true;
                 /*foreach (Transform child in currentMissile.transform)
                 {
                     child.gameObject.SetActive(true);
@@ -510,8 +519,8 @@ public class WeaponObject : MonoBehaviour
                         child.GetComponent<SpriteRenderer>().enabled = true;
                     }
                 }*/
-                missiles.Add(currentMissile);
-                yield return StartCoroutine(launchMissile(currentMissile, gameObject, 0.35f, 8f, 32f, defender));
+                grenades.Add(currentGrenade);
+                yield return StartCoroutine(launchGrenade(currentGrenade, defender.gameObject, gM.getAbsoluteDistance(u.getTile(), defender.getTile()), 30f));
                 //yield return new WaitForSeconds(0.25f);
                 //yield return StartCoroutine(waitForAllMissiles());
                 break;
@@ -555,13 +564,26 @@ public class WeaponObject : MonoBehaviour
                 break;
             //Notice
             case "Slime Ball":
+            case "Small Slime Ball":
+            case "Mini Slime Ball":
                 u.gameObject.GetComponent<Animator>().SetBool("Firing", true);
                 yield return new WaitForSeconds(0.5f);
                 currentSlimeBall = Instantiate(slimeballPrefab, transform.position, Quaternion.identity);
-                currentSlimeBall.transform.localScale *= 10;
+                if (name == "Slime Ball")
+                {
+                    currentSlimeBall.transform.localScale *= 10;
+                }
+                else if (name == "Small Slime Ball")
+                {
+                    currentSlimeBall.transform.localScale *= 7;
+                }
+                else
+                {
+                    currentSlimeBall.transform.localScale *= 4;
+                }
                 currentSlimeBall.GetComponent<SpriteRenderer>().enabled = true;
                 slimeBalls.Add(currentSlimeBall);
-                StartCoroutine(launchSlimeBall(currentSlimeBall,defender.gameObject,gM.getAbsoluteDistance(u.getTile(),defender.getTile())));
+                StartCoroutine(launchSlimeBall(currentSlimeBall,defender.gameObject,gM.getAbsoluteDistance(u.getTile(),defender.getTile()),30f));
                 yield return new WaitForSeconds(0.5f);
                 u.gameObject.GetComponent<Animator>().SetBool("Firing", false);
                 yield return StartCoroutine(waitForAllSlimeBalls());
@@ -626,6 +648,36 @@ public class WeaponObject : MonoBehaviour
                 break;
         }
         yield return null;
+    }
+
+    public IEnumerator performSpecialAnimation(Tile target, int mode)
+    {
+        float elapsedTime = 0;
+        int shotCount = 0;
+        switch (name)
+        {
+            case "Slime Ball":
+            case "Small Slime Ball":
+                switch (mode) 
+                {
+                    case 0:
+                        u.gameObject.GetComponent<Animator>().SetBool("Firing", true);
+                        yield return new WaitForSeconds(0.5f);
+                        currentSlimeBall = Instantiate(slimeballPrefab, transform.position, Quaternion.identity);
+                        if (name == "Slime Ball")
+                            currentSlimeBall.transform.localScale *= 10;
+                        else
+                            currentSlimeBall.transform.localScale *= 7;
+                        currentSlimeBall.GetComponent<SpriteRenderer>().enabled = true;
+                        slimeBalls.Add(currentSlimeBall);
+                        StartCoroutine(launchSlimeBall(currentSlimeBall, target.gameObject, gM.getAbsoluteDistance(u.getTile(), target), 30f));
+                        yield return new WaitForSeconds(0.5f);
+                        u.gameObject.GetComponent<Animator>().SetBool("Firing", false);
+                        yield return StartCoroutine(waitForAllSlimeBalls());
+                        break;
+                }
+                break;
+        }
     }
 
     public void lookAt(GameObject obj, Vector3 targetPos, bool affectZ)
@@ -832,15 +884,15 @@ public class WeaponObject : MonoBehaviour
         }
     }
 
-    public IEnumerator launchSlimeBall(GameObject slimeBall, GameObject target, int tileDist)
+    public IEnumerator launchGrenade(GameObject grenade, GameObject target, int tileDist, float g)
     {
-        Vector3 initPos = slimeBall.transform.position;
+        Vector3 initPos = grenade.transform.position;
         Vector3 endPos = target.transform.position;
 
         float time = tileDist * 0.4f;
         float timeSquared = Mathf.Pow(time, 2);
 
-        float angle = 1f*Mathf.Atan((endPos.y - initPos.y + 20f*timeSquared) / (endPos.x - initPos.x));
+        float angle = 1f * Mathf.Atan((endPos.y - initPos.y + g * timeSquared) / (endPos.x - initPos.x));
         /*if (angle < 0)
         {
             angle = Mathf.Abs(angle)+Mathf.PI/2;
@@ -854,7 +906,43 @@ public class WeaponObject : MonoBehaviour
 
         while (elaspedTime < time)
         {
-            slimeBall.transform.position = new Vector3(horizVel * elaspedTime + initPos.x ,-20f*Mathf.Pow(elaspedTime, 2) + elaspedTime * vertVel + initPos.y, slimeBall.transform.position.z);
+            grenade.transform.position = new Vector3(horizVel * elaspedTime + initPos.x, -g * Mathf.Pow(elaspedTime, 2) + elaspedTime * vertVel + initPos.y, grenade.transform.position.z);
+            grenade.transform.eulerAngles = new Vector3(grenade.transform.eulerAngles.x, grenade.transform.eulerAngles.y, grenade.transform.eulerAngles.z + 2f);
+            elaspedTime += Time.deltaTime;
+            yield return null;
+
+        }
+        //rpgProjectile.GetComponent<SpriteRenderer>().enabled = false;
+        //rpgProjectile.transform.position = origPos;
+        missiles.Remove(grenade);
+        Destroy(grenade);
+        yield return StartCoroutine(makeExplosion(target.transform.position, explosionPrefab.transform.localScale, -3));
+
+    }
+
+    public IEnumerator launchSlimeBall(GameObject slimeBall, GameObject target, int tileDist, float g)
+    {
+        Vector3 initPos = slimeBall.transform.position;
+        Vector3 endPos = target.transform.position;
+
+        float time = tileDist * 0.4f;
+        float timeSquared = Mathf.Pow(time, 2);
+
+        float angle = 1f*Mathf.Atan((endPos.y - initPos.y + g*timeSquared) / (endPos.x - initPos.x));
+        /*if (angle < 0)
+        {
+            angle = Mathf.Abs(angle)+Mathf.PI/2;
+        }*/
+        float startVel = (endPos.x - initPos.x) / (time * Mathf.Cos(angle));
+
+        float horizVel = startVel * Mathf.Cos(angle);
+        float vertVel = startVel * Mathf.Sin(angle);
+
+        float elaspedTime = 0;
+
+        while (elaspedTime < time)
+        {
+            slimeBall.transform.position = new Vector3(horizVel * elaspedTime + initPos.x ,-g*Mathf.Pow(elaspedTime, 2) + elaspedTime * vertVel + initPos.y, slimeBall.transform.position.z);
             elaspedTime += Time.deltaTime;
             yield return null;
 

@@ -159,21 +159,20 @@ public class UnitsList
             weapons.getWeaponCopy(25), null, null, new List<Weapon>() { weapons.getWeaponCopy(25) }, null, null));
 
         Dictionary<string, Vector3> unitsMadeOnDeath = new Dictionary<string, Vector3>();
-        unitsMadeOnDeath.Add("Small Slime", new Vector3(1,2,0));
+        unitsMadeOnDeath.Add("Small Slime", new Vector3(1,2,1));
 
-        setUnitForFaction("Vita", "Advanced Infantry", new UnitTemplate(400, 6f, 2, 5, 400, 2, 5, 7, 0, "Slime", "The slime's unique molecular structure helps to protect it from attacks." +
-            " Additionally, the slime produces two small slimes on death, which each spawn two mini slimes on death.",
-            "Green", "Slime", "Slime", false, 0, 0, 0, "", false, 0, 0, unitsMadeOnDeath, new List<string>() { "Move", "Attack", "Fortify", "Sentry" },
+        setUnitForFaction("Vita", "Advanced Infantry", new UnitTemplate(400, 6f, 2, 5, 400, 2, 5, 7, 0, "Slime", "The slime has a unique armor and spawns two small slimes on death, which each " +
+            "spawn two mini slimes on death.",
+            "Green", "Slime", "Slime", false, 0, 0, 0, "Dissolve After Make Unit", false, 0, 0, unitsMadeOnDeath, new List<string>() { "Move", "Attack", "Fortify", "Sentry" },
             weapons.getWeaponCopy(25), null, null, new List<Weapon>() { weapons.getWeaponCopy(26) }, null, null));
 
         unitsMadeOnDeath = new Dictionary<string, Vector3>();
-        unitsMadeOnDeath.Add("Mini Slime", new Vector3(1, 2, 0));
-        setUnitForFaction("Vita", "Token Advanced Infantry", new UnitTemplate(300, 5f, 2, 6f, 300, 2, 6f, 3, 0, "Small Slime", "The small slime's unique molecular structure helps to protect it from attacks." +
-            " Additionally, the slime produces two mini slimes on death. The small slime is a weaker version of the slime.",
-            "Green", "Slime", "Slime", false, 0, 0, 0, "", false, 0, 0, unitsMadeOnDeath, new List<string>() { "Move", "Attack", "Fortify", "Sentry" },
+        unitsMadeOnDeath.Add("Mini Slime", new Vector3(1, 2, 1));
+        setUnitForFaction("Vita", "Token Advanced Infantry", new UnitTemplate(300, 5f, 2, 6f, 300, 2, 6f, 3, 0, "Small Slime", "The small slime has a unique armor and spawns two mini slimes on death " +
+            "and is weaker than regular slimes.",
+            "Green", "Slime", "Slime", false, 0, 0, 0, "Dissolve After Make Unit", false, 0, 0, unitsMadeOnDeath, new List<string>() { "Move", "Attack", "Fortify", "Sentry" },
             weapons.getWeaponCopy(27), null, null, new List<Weapon>() { weapons.getWeaponCopy(27) }, null, null));
-        setUnitForFaction("Vita", "Token Advanced Infantry", new UnitTemplate(225, 4f, 2, 7f, 225, 2, 7f, 1, 0, "Mini Slime", "The slime's unique molecular structure helps to protect it from attacks." +
-            " Additionally, the mini slime is a weaker version of the small slime.",
+        setUnitForFaction("Vita", "Token Advanced Infantry", new UnitTemplate(225, 4f, 2, 7f, 225, 2, 7f, 1, 0, "Mini Slime", "The mini slime has a unique armor and is weaker than mini slimes.",
             "Green", "Slime", "Slime", false, 0, 0, 0, "", false, 0, 0, null, new List<string>() { "Move", "Attack", "Fortify", "Sentry" },
             weapons.getWeaponCopy(28), null, null, new List<Weapon>() { weapons.getWeaponCopy(28) }, null, null));
 
@@ -359,6 +358,12 @@ public class UnitsList
                                     return bM.unitPrefabs[20];
                                 }
                                 else if (template.name == "Slime")
+                                {
+                                    return bM.unitPrefabs[21];
+                                }
+                                return null;
+                            case "Token Advanced Infantry":
+                                if (template.name == "Small Slime" || template.name == "Mini Slime")
                                 {
                                     return bM.unitPrefabs[21];
                                 }

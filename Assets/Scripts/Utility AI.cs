@@ -7,6 +7,7 @@ using Priority_Queue;
 using System.Linq;
 using UnityEditor;
 
+[Serializable]
 public class UtilityAI
 {
     public List<Controllable> visibleControllables;
@@ -73,7 +74,11 @@ public class UtilityAI
         {
             if (!custom)
             {
-                //asset.finished = false;
+                if (!asset.isBuilding)
+                {
+
+                }
+                //Debug.Log(asset);
             }
             asset.assignedTask = null;
         }
@@ -208,9 +213,18 @@ public class UtilityAI
         {
             foreach(Controllable asset in assets)
             {
+                asset.taskSubType = "";
                 if (asset.isTaskSuitable(gM, task, false, null))
                 {
                     possibleAssignments.Add(new PossibleAssignment(gM, task, asset, false, null));
+                }
+                else
+                {
+                    if (!asset.isBuilding && task.taskType == "Attack Enemy")
+                    {
+                        //Debug.Log(asset + " is unable to complete task: " + task.taskType+ " wrt "+task.objective);
+                        //Debug.Log(gM.getInRangePathAH((Unit)asset, asset.tile, task.objective.tile, ((Unit)asset).getAllActiveWeapons(), true, false) == null);
+                    }
                 }
             }
         }

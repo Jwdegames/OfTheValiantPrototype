@@ -27,6 +27,7 @@ public class AITask
         gM = assignment.gM;
         orderedWeapons = assignment.orderedWeapons;
         this.assignment = assignment;
+        
 
     }
 

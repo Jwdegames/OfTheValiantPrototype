@@ -49,6 +49,7 @@ public class Controllable : MonoBehaviour
         assignedTask = task;
         //if (!isBuilding) Debug.Log("Task assigned to unit " + (Unit)this);
         //else Debug.Log("Task assigned to building " + (Building)this);
+        //Debug.Log(this + " is receiving a task!");
     }
 
     public void freeUp()
@@ -59,7 +60,11 @@ public class Controllable : MonoBehaviour
     public IEnumerator performTask(AIManager aiM, UtilityAI uAI)
     {
         lastTask = assignedTask;
-        if (finished) yield break;
+        if (finished)
+        {
+            //Debug.Log("Finished Task already: "+ assignedTask.taskType + " from  " + this);
+            yield break;
+        }
         GameManager gM = aiM.gM;
         if (isBuilding)
         {
@@ -126,6 +131,7 @@ public class Controllable : MonoBehaviour
                                     unitBuilt = gM.boardScript.buildUnit(((Unit)(assignment.possibleTaskDoer)).gameObject, player, building.tile.mapX, building.tile.mapY, false);
                                     //Debug.Log(unitBuilt);
                                     builtUnit = true;
+                                    //unitBuilt.useTemplate(unitsList.templateDictionary[((Unit)(assignment.possibleTaskDoer)).name]);
                                     break;
                                 }
                             }
@@ -374,9 +380,18 @@ public class Controllable : MonoBehaviour
             Unit unit = (Unit)this;
             Unit enemy;
             //Return if we can't do anything
+           
             if (!buildUnit)
             {
-                if (!unit.checkIfActionPossible()) return false;
+                if (unit.getName() == "Slime")
+                {
+                    //Debug.Log("Checking if slime can do task: " + task.taskType);
+                }
+                if (!unit.checkIfActionPossible())
+                {
+                    Debug.Log(unit + " is unable to perform any more actions!");
+                    return false;
+                }
             }
             //Unit should have AP to complete tasks
             switch (task.taskType)
@@ -389,11 +404,16 @@ public class Controllable : MonoBehaviour
                         if (unit.canAttackAbsolute())
                         {
                             enemy = (Unit)task.objective;
+                            if (!buildUnit)
+                            {
+                                //Debug.Log("Checking if " + unit + " can attack " + enemy);
+                            }
                             if (!buildUnit && gM.getInRangePathAH(unit, unit.tile, task.objective.tile, unit.getAllDamageActiveWeapons(), true, false) != null)
                             {
                                 if (enemy.flying && !unit.canTargetAir(unit.getAllDamageActiveWeapons())) return false;
                                 if (enemy.isSubmerged && !unit.canTargetSub(unit.getAllDamageActiveWeapons())) return false;
                                 return true;
+                                
                             }
                             else if (buildUnit && gM.getInRangePathAH(unit, buildTile, task.objective.tile, unit.getAllDamageActiveWeapons(), true, true) != null)
                             {

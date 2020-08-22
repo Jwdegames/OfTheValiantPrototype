@@ -125,9 +125,9 @@ public class BoardManager : MonoBehaviour
                         //makeUnit("Droid Gattler", gM.playerDictionary["Red"], 2, 3);
                         //makeUnit("S-Jet Trooper", gM.playerDictionary["Red"], 1, 4);
 
-                        makeUnit("Droid Gattler", gM.playerDictionary["Red"], 17, 3);
-                        makeUnit("Droid Gattler", gM.playerDictionary["Red"], 17, 4);
-                        makeUnit("Droid Gattler", gM.playerDictionary["Red"], 16, 3);
+                        makeUnit("Assault Heavy Tank", gM.playerDictionary["Red"], 17, 3);
+                        makeUnit("Assault Heavy Tank", gM.playerDictionary["Red"], 17, 4);
+                        makeUnit("Assault Heavy Tank", gM.playerDictionary["Red"], 16, 3);
 
                         makeUnit("Slime", gM.playerDictionary["Green"], 22, 3);
                         //makeUnit("Masked Trooper", gM.playerDictionary["Green"], 22, 4);
@@ -306,10 +306,15 @@ public class BoardManager : MonoBehaviour
         tile.setUnit(u.gameObject);
         tile.unitHP = u.getCurrentHP();
         u.setTile(tile);
+        UnitsList unitsList = new UnitsList();
+        u.useTemplate(unitsList.templateDictionary[unitScript.getName()]);
         u.matchWeapon("Build Unit");
+        //Debug.Log(unitScript.getName());
+
         u.startTurn();
         u.setCurrentMP(0);
         u.setCurrentAP(0);
+
         if (ui)
         {
             u.undoUIScale();
@@ -321,6 +326,7 @@ public class BoardManager : MonoBehaviour
         u.makeShadow();
         u.setOutlineColor(player.color, 10f);
         u.setOutlineThickness(outlineThickness);
+        u.currentJetToggles = u.maxJetToggles;
         return u;
 
     }

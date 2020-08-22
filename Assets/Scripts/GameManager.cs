@@ -156,6 +156,7 @@ public class GameManager : MonoBehaviour
 
         foreach(Tile tile in boardScript.tileList)
         {
+            tile.destroyEverything();
             Destroy(tile.gameObject);
         }
     }
@@ -371,6 +372,21 @@ public class GameManager : MonoBehaviour
         Debug.Log("Moving unit!");
 
     }*/
+
+    //Gets the closest empty Tile
+    public Tile findClosestEmptyTile(Tile start, bool includeStart)
+    {
+        if (dCalc == null)
+        {
+            dCalc = new DijakstraCalculator(this, start, null);
+        }
+        else
+        {
+            dCalc.setValues(start, null);
+            dCalc.reset();
+        }
+        return dCalc.findClosestEmptyTile(includeStart);
+    }
 
     //Moves unit in range and then attacks
     public IEnumerator moveInRangeAttack(Unit unit, Tile start, Unit defender, Tile dest, bool finalUnitAction, List<Weapon> attackerWeapons)

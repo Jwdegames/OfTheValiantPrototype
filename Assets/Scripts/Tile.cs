@@ -68,6 +68,7 @@ public class Tile : MonoBehaviour
 
     //Tile Effects
     public GameObject poisonGas;
+    public List<GameObject> tileObjects = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -81,6 +82,14 @@ public class Tile : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void destroyEverything()
+    {
+        foreach(GameObject tileObject in tileObjects)
+        {
+            Destroy(tileObject);
+        }
     }
 
     public void makeMoveable()
@@ -889,6 +898,7 @@ public class Tile : MonoBehaviour
                     extraAttributes.Remove("Poison Gas");
                     if (poisonGas != null)
                     {
+                        tileObjects.Remove(poisonGas);
                         Destroy(poisonGas);
                     }
                 }
@@ -921,7 +931,7 @@ public class Tile : MonoBehaviour
         if (effect == "Poison Gas" && val > 0 && poisonGas == null)
         {
             poisonGas = Instantiate(board.tileEffectPrefabs[0], new Vector3(transform.position.x, transform.position.y, transform.position.z - 3), Quaternion.identity) as GameObject;
-
+            tileObjects.Add(poisonGas);
             poisonGas.GetComponent<PoisonGasCloud>().recordPos(poisonGas.transform.position);
             poisonGas.GetComponent<PoisonGasCloud>().animating = true;
             if (unit != null)
