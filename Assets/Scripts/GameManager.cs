@@ -57,6 +57,9 @@ public class GameManager : MonoBehaviour
     public Dictionary<string, List<Building>> buildingDictionary;
 
     public Dictionary<string, Player> playerDictionary;
+
+    //Influence Map as a dictionary, where the int is the team number
+    public Dictionary<int, Dictionary<Tile, float>> influenceDict;
     //Awake is always called before any Start functions
     void Awake()
     {
@@ -97,6 +100,7 @@ public class GameManager : MonoBehaviour
         levelType = "bonus";
         levelNum = 1;
         endTurnButton = endTurnButtonObject.GetComponent<Button>();
+        initInfluenceDict();
     }
 
     // Update is called once per frame
@@ -166,7 +170,23 @@ public class GameManager : MonoBehaviour
         destroyEverything();
         day = 1;
         boardScript.makeGridLevel(levelType, levelNum);
+        initInfluenceDict();
 
+    }
+
+    public Dictionary<int, Dictionary<Tile, float>> initInfluenceDict()
+    {
+        if (dCalc == null)
+        {
+            dCalc = new DijakstraCalculator(this, boardScript.tileList[0], null);
+        }
+        else
+        {
+            dCalc.setValues(boardScript.tileList[0], null);
+            dCalc.reset();
+        }
+        influenceDict = dCalc.initInfluenceDict();
+        return influenceDict;
     }
 
     //Ends the player's turn and moves on to the next player
@@ -263,11 +283,43 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
 
+    public Dictionary<int, Dictionary<Tile, float>> applyUnitEffectToInfluenceDict(Unit unit, bool add)
+    {
+        if (dCalc == null)
+        {
+            dCalc = new DijakstraCalculator(this, unit.getTile(), null); ;
+        }
+        else
+        {
+            dCalc.setValues(unit.getTile(), null);
+            dCalc.reset();
+        }
+        return dCalc.applyUnitEffectToInfluenceDict(influenceDict, unit, add);
+    }
+
+    public Dictionary<int, Dictionary<Tile, float>> applyBuildingEffectToInfluenceDict(Building building, bool add)
+    {
+        if (dCalc == null)
+        {
+            dCalc = new DijakstraCalculator(this, building.tile, null); ;
+        }
+        else
+        {
+            dCalc.setValues(building.tile, null);
+            dCalc.reset();
+        }
+        return dCalc.applyBuildingEffectToInfluenceDict(influenceDict, building, add);
+    }
+
     //Clear the available tiles List and revert the tiles to normal
     public void clearAvailableTiles()
     {
         foreach (Tile tile in availableTiles)
         {
+            tile.actingUnit = null;
+            tile.actingWeapons = null;
+            tile.directWeapons = null;
+            tile.aoeWeapons = null;
             tile.deleteSelector();
         }
         availableTiles = new List<Tile>();
@@ -314,7 +366,7 @@ public class GameManager : MonoBehaviour
         }
         start.unitHP = 0;
 
-        Debug.Log("Moving unit!");
+        //Debug.Log("Moving unit!");
         
     }
 
@@ -322,10 +374,10 @@ public class GameManager : MonoBehaviour
     //Disables end turn button to prevent AI from thinking unit is still on a certain tile
     public IEnumerator moveUnitAsPlayer(Unit unit, Tile start, Tile dest)
     {
-        endTurnButton.interactable = false;
+        uiScript.disableInBattleButtons();
         animationInProgress = true;
         yield return StartCoroutine(moveUnit(unit, start, dest));
-        endTurnButton.interactable = true;
+        uiScript.enableInBattleButtons();
         animationInProgress = false;
     }
 
@@ -388,6 +440,20 @@ public class GameManager : MonoBehaviour
         return dCalc.findClosestEmptyTile(includeStart);
     }
 
+    public Tile findClosestEmptyTileWithinRange(Tile start, bool includeStart, int minRange, int maxRange)
+    {
+        if (dCalc == null)
+        {
+            dCalc = new DijakstraCalculator(this, start, null);
+        }
+        else
+        {
+            dCalc.setValues(start, null);
+            dCalc.reset();
+        }
+        return dCalc.findClosestEmptyTileWithinRange(includeStart,minRange,maxRange,true,true);
+    }
+
     //Moves unit in range and then attacks
     public IEnumerator moveInRangeAttack(Unit unit, Tile start, Unit defender, Tile dest, bool finalUnitAction, List<Weapon> attackerWeapons)
     {
@@ -400,6 +466,7 @@ public class GameManager : MonoBehaviour
             dCalc.setValues(start, dest);
             dCalc.reset();
         }
+        Debug.Log("Searching");
         path = dCalc.findInRangePath(unit, attackerWeapons, false, false);
         //Debug.Log(path);
         /*int i = 1;
@@ -498,6 +565,7 @@ public class GameManager : MonoBehaviour
             dCalc.reset();
         }
         path = dCalc.findInRangePath(unit, attackerWeapons, false, false);
+        printPath(path);
         //Debug.Log(path);
         /*int i = 1;
         for (i = 1; i < path.Count - 1; i++)
@@ -1030,7 +1098,19 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator MoveOverSecondsPath(Unit unit, List<Tile> ends, float seconds)
     {
+
+        if (dCalc == null)
+        {
+            dCalc = new DijakstraCalculator(this, ends[0], null);
+        }
+        else
+        {
+            dCalc.setValues(ends[0], null);
+            dCalc.reset();
+        }
+        dCalc.applyUnitEffectToInfluenceDict(influenceDict, unit, false);
         GameObject objectToMove = unit.gameObject;
+        
         for (int i = 1; i < ends.Count; i++)
         {
             unit.gameObject.GetComponent<Animator>().SetBool("Moving", true);
@@ -1061,6 +1141,10 @@ public class GameManager : MonoBehaviour
         unit.setTile(endTile);
         endTile.unitToArrive = null;
         unit.checkIfActionPossible();
+        dCalc.setValues(ends[ends.Count - 1], null);
+        dCalc.reset();
+        dCalc.applyUnitEffectToInfluenceDict(influenceDict, unit, true);
+
     }
 
     public IEnumerator MoveOverSecondsPathAttack(Unit unit, List<Tile> ends, Unit defender, float seconds,List<Weapon> attackerWeapons)
@@ -1145,6 +1229,11 @@ public class GameManager : MonoBehaviour
             {
                 if (!weaponAnimated)
                 {
+                    foreach (Weapon weapon in attackerWeapons)
+                    {
+                        //if (canAttackEnemyExactlyWithWeapon(weapon))
+                        //weapon.currentAttacks++;
+                    }
                     if (!defender.getSentry())
                     {
                         float attackerDmg = calculateDamage(attacker, defender, true, false, attackerWeapons);
@@ -1191,6 +1280,11 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
+                    foreach (Weapon weapon in attackerWeapons)
+                    {
+                        if (canAttackEnemyExactlyWithWeapon(attacker, attacker.getTile(), defender, defender.getTile(), weapon))
+                        weapon.currentAttacks++;
+                    }
                     if (!defender.getSentry())
                     {
                         float attackerDmg = calculateDamage(attacker, defender, true, false, attackerWeapons);
@@ -1209,10 +1303,7 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
-            foreach (Weapon weapon in attackerWeapons)
-            {
-                weapon.currentAttacks++;
-            }
+
         }
         attacker.checkIfActionPossible();
     }
@@ -1250,41 +1341,56 @@ public class GameManager : MonoBehaviour
     //Gets AOE tiles
     public HashSet<Tile> getAOETiles(Unit unit, Tile start, Tile target, Weapon weapon)
     {
+        
         HashSet<Tile> toAttack = new HashSet<Tile>();
         switch (weapon.aoeType)
         {
             //Target all tiles around the tile to be fired on
 
             case 0:
-                int aoe = unit.targetingWeapon.aoe;
+                //Debug.Log("Checking aoe of " + weapon + " for " + unit);
+                int aoe = weapon.aoe;
+                
                 SimplePriorityQueue<Tile> frontier = new SimplePriorityQueue<Tile>();
                 HashSet<Tile> explored = new HashSet<Tile>();
                 SimpleNode<Tile, float> current, temp, temp2;
                 toAttack = new HashSet<Tile>();
                 frontier.Enqueue(target, 0);
-                int actions = 0, limitedActions = 100;
+                int actions = 0, limitedActions = 1000;
                 while (frontier.Count > 0)
                 {
                     actions++;
                     current = frontier.DequeueNode();
                     Tile currentTile = current.Data;
+                    currentTile.setAdjacent();
+                    explored.Add(currentTile);
                     //Try to target the tile
-                    if (current.Priority <= aoe && currentTile.getUnit() != null)
+                    if (current.Priority <= aoe)
                     {
                         toAttack.Add(currentTile);
                     }
-                    foreach (Tile tile in currentTile.adjacent)
+                    else
                     {
+                        Debug.Log("Current tile is out of aoe!");
+                    }
+
+                    List<Tile> adjacentNodes = currentTile.getAdjacent();
+                    foreach (Tile tile in adjacentNodes)
+                    {
+                        //Debug.Log(tile);
                         if (tile != null)
                         {
                             temp = new SimpleNode<Tile, float>(tile);
                             temp.Priority = current.Priority + 1;
+                            //Debug.Log(temp.Priority);
                             if (temp.Priority > aoe) continue;
+                            //Debug.Log("Test 2");
                             if (!explored.Contains(tile) && !frontier.Contains(tile))
                             {
                                 //Add the node to the frontier if we didn't explore it already
                                 frontier.Enqueue(tile, current.Priority + 1);
                                 tile.predecessor = current.Data;
+                                //Debug.Log("Enqueing");
                             }
                             //If we have a move path that is shorter than what is in the frontier, replace it
                             else if (frontier.Contains(tile))
@@ -1573,30 +1679,30 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator attackEnemyAsPlayer(Unit attacker, Unit defender, List<Weapon> weapons)
     {
-        endTurnButton.interactable = false;
+        uiScript.disableInBattleButtons();
         animationInProgress = true;
         yield return StartCoroutine(attackEnemy(attacker, defender, weapons));
-        endTurnButton.interactable = true;
+        uiScript.enableInBattleButtons();
         animationInProgress = false;
     }
 
     public IEnumerator healAllyAsPlayer(Unit healer, Unit healee, List<Weapon> weapons)
     {
-        endTurnButton.interactable = false;
+        uiScript.disableInBattleButtons();
         animationInProgress = true;
         yield return StartCoroutine(healAlly(healer, healee, weapons));
-        endTurnButton.interactable = true;
+        uiScript.enableInBattleButtons();
         animationInProgress = false;
     }
 
     public void disableButtons()
     {
-        endTurnButton.interactable = false;
+        uiScript.disableInBattleButtons();
     }
 
     public void enableButtons()
     {
-        endTurnButton.interactable = true;
+        uiScript.enableInBattleButtons();
     }
 
     //Coroutine Method - Straightline move only
@@ -1663,5 +1769,24 @@ public class GameManager : MonoBehaviour
         toPrint = toPrint.Substring(0, toPrint.Length - 1);
         toPrint += "\n";
         Debug.Log(toPrint);
+    }
+
+    public void printPath(List<Tile> path, string prePrint, string postPrint)
+    {
+
+        String toPrint = "Printing a path: \n";
+        if (path == null)
+        {
+            Debug.Log("There are no tiles in the path!");
+            return;
+        }
+        foreach (Tile tile in path)
+        {
+            //Unit unit = tile.getUnitScript();
+            toPrint += tile + ",";
+        }
+        toPrint = toPrint.Substring(0, toPrint.Length - 1);
+        toPrint += "\n";
+        Debug.Log(prePrint+toPrint+postPrint);
     }
 }

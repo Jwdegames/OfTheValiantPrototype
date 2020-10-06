@@ -291,6 +291,11 @@ public class PossibleAssignment
                 break;
             case "Deploy Units":
                 mod = 10;
+                ptdUnit = (Unit)pTD;
+                if (ptdUnit.getCurrentAP() <= 0)
+                {
+                    mod -= exhaustAttackRetreatDrawback*100;
+                }
                 break;
             case "Transport Units":
                 ptdUnit = (Unit)pTD;

@@ -219,7 +219,9 @@ MonoBehaviour:
   team: 0
   isBuilding: 0
   cloaked: 0
+  finished: 0
   lastSeen: 0
+  taskSubType: 
   hp: 10
   sizeMultiplier: 0
   ap: 1
@@ -338,6 +340,7 @@ MonoBehaviour:
   weapons: []
   turrets: []
   allWeapons: []
+  gM: {fileID: 0}
   rMaterial: {fileID: 0}
   cwObject: {fileID: 0}
   cwScript: {fileID: 0}
@@ -356,8 +359,12 @@ MonoBehaviour:
   unitType: Droid
   healing: 0
   repairing: 0
-  flying: 0
+  flying: 1
+  canLand: 0
+  hasJetpack: 0
   displacementVector: {x: 0, y: 1, z: 0}
+  maxJetToggles: 1
+  currentJetToggles: 0
   hasShadow: 1
   shadowPrefab: {fileID: 1720379409386452387, guid: c26ef37e1bbc10548bd7531a049f8271,
     type: 3}
@@ -390,7 +397,18 @@ MonoBehaviour:
   currentCapacity: 0
   loadTime: 0.5
   unloadTime: 0.5
+  dissolvesOnDeath: 1
+  dissolveTime: 1
   hpBoost: 0
   initialHP: 0
   initialCurrentHP: 0
   boostedHP: 0
+  isSubmerged: 0
+  doesDamageOnDeath: 0
+  damageOnDeath: 0
+  damageOnDeathAOE: 0
+  damageOnDeathAOEType: 0
+  deathAEType: 
+  leavesPoisonGasOnDeath: 0
+  poisonGasOnDeathAOE: 0
+  poisonGasOnDeathAOEType: 0

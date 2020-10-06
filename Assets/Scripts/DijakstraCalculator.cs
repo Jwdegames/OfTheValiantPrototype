@@ -9,6 +9,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml;
 using System.Configuration;
+using TMPro;
 
 //A custom class that performs calculations based off of Dijakstra's Algorithm for C#. Made by JWDE.
 public class DijakstraCalculator
@@ -21,6 +22,7 @@ public class DijakstraCalculator
     private SimpleNode<Tile, float> current;
     private Tile currentT;
     private bool foundGoal = false;
+    private bool specializedPrint = false;
     GameManager gM;
 
     //Constructor
@@ -296,7 +298,12 @@ public class DijakstraCalculator
         if (weapon.aoe <= 0) return null;
         if (weapon.aoeType == 0) return null;
         List<Tile> presetAOETiles = new List<Tile>();
+        SimplePriorityQueue<Tile> queue = new SimplePriorityQueue<Tile>();
         Tile temp, previous = target;
+        if (includeTarget)
+        {
+            queue.Enqueue(target,weapon.aoe+1);
+        }
         List<string> dirs = new List<string>() { "upleft", "upright", "left", "right", "downleft", "downright" };
         switch(weapon.aoeType)
         {
@@ -305,24 +312,27 @@ public class DijakstraCalculator
                 foreach (string dir in dirs)
                 {
                     previous = target;
-                    for (int i = 0; i < weapon.aoe; i++)
+                    for (int i = 0; i <= weapon.aoe; i++)
                     {
                         temp = previous.getAdjacentTileOnSide(dir);
                         if (temp == null)
                         {
                             break;
                         }
-                        presetAOETiles.Add(temp);
+                        //presetAOETiles.Insert(0,temp);
+                        queue.Enqueue(temp,weapon.aoe-i);
+                        //Debug.Log("Adding " + temp);
                         previous = temp;
                     }
                 }
                 break;
 
         }
-        if (includeTarget)
+        while (queue.Count > 0)
         {
-            presetAOETiles.Add(target);
+            presetAOETiles.Add(queue.Dequeue());
         }
+        //gM.printPath(presetAOETiles);
         return presetAOETiles;
     }
 
@@ -338,6 +348,7 @@ public class DijakstraCalculator
         List<Tile> inRange = new List<Tile>();
         foreach (Weapon weapon in weapons)
         {
+            reset();
             int minRange = weapon.minRange;
             int maxRange = weapon.maxRange;
             DijakstraCalculator aoeCalc = new DijakstraCalculator(gM, null, null);
@@ -362,7 +373,14 @@ public class DijakstraCalculator
             {
                 //Add the destination node, than add all nodes around it
                 //We do this because we want to find all nodes that we can attack the enemy unit from
-                frontier.Enqueue(dest, 0);
+                if (weapon.aoe == 0 || (weapon.aoe > 0 && weapon.aoeType != 1))
+                {
+                    frontier.Enqueue(dest, 0);
+                }
+                else
+                {
+                    inRange.AddRange(presetAOETiles);
+                }
                 while (frontier.Count != 0)
                 {
                     current = frontier.DequeueNode();
@@ -454,6 +472,9 @@ public class DijakstraCalculator
 
         DijakstraCalculator extraCalc = new DijakstraCalculator(gM, start, dest);
         List<Tile> inRangeTiles = extraCalc.getInRangeTiles(weapons);
+        
+        //gM.printPath(inRangeTiles, "Finding In Range \n","");
+        
         DijakstraCalculator extraCalc2 = new DijakstraCalculator(gM, start, dest);
         if (unit.getTile() == null && !hypothetical)
         {
@@ -469,7 +490,7 @@ public class DijakstraCalculator
         {
             Debug.Log("Couldn't find tile to attack " + dest);
         }
-
+        
         //
         //Debug.Log("Printing in range tiles!");
         //Debug.Log(inRangeTiles.Count);
@@ -497,11 +518,12 @@ public class DijakstraCalculator
         SimpleNode<Tile, float> temp, temp2;
         frontier.Enqueue(start, start.getMoveCost(unit));
         start.predecessor = null;
-
+        //return null;
         //printPath(inRangeTiles);
-
-        while (frontier.Count != 0)
+        int limitedCounts = 1000000000, counts = 0;
+        while (frontier.Count != 0 && counts < limitedCounts)
         {
+            counts++;
             current = frontier.DequeueNode();
             Tile currentTile = current.Data;
             currentTile.setAdjacent();
@@ -514,8 +536,13 @@ public class DijakstraCalculator
             {
                 if (current.Data.canMoveToAdjacent(tile, true) || tile == start)
                 {
-                    tile.predecessor = current.Data;
+                    if (tile != current.Data)
+                    {
+                        tile.predecessor = current.Data;
+                        
+                    }
                     currentT = tile;
+                    //if (tile == current.Data) Debug.LogError("Make predecessor different: " + tile);
                     foundGoal = true;
                     break;
                 }
@@ -525,6 +552,7 @@ public class DijakstraCalculator
             List<Tile> adjacentNodes = currentTile.getAdjacent();
             foreach (Tile t in adjacentNodes)
             {
+                //if (t == current.Data) Debug.LogError("We shouldn't be adjacent to ourselves: " + t);
                 if (t == null) continue;
                 //Check to make sure we can move to the tile as well as that we have the mp to move there
                 if (!hypothetical && !start.canMoveTo(t, false))
@@ -541,21 +569,24 @@ public class DijakstraCalculator
                 }
                 //Check first if the node is in the explored array, otherwise we don't do anything
                 temp = new SimpleNode<Tile, float>(t);
+
                 temp.Priority = current.Priority + t.getMoveCost(unit);
                 if (!exploredT.Contains(t) && !frontier.Contains(t))
                 {
                     //Add the node to the frontier if we didn't explore it already
                     frontier.Enqueue(t, current.Priority + t.getMoveCost(unit));
                     t.predecessor = current.Data;
+                    //if (t == current.Data)
+                    
                 }
                 //If we have a move path that is shorter than what is in the frontier, replace it
-                else if (frontier.Contains(t))
+                else if (!exploredT.Contains(t) && frontier.Contains(t))
                 {
                     temp2 = frontier.RemoveNode(t);
                     if (temp.Priority < temp2.Priority)
                     {
-                        frontier.Enqueue(temp.Data, temp.Priority);
-                        t.predecessor = currentTile;
+                        frontier.Enqueue(t, temp.Priority);
+                        t.predecessor = current.Data;
                     }
                     else
                     {
@@ -566,14 +597,28 @@ public class DijakstraCalculator
                 
             }
         }
+        if (currentT == null)
+        {
+            Debug.Log("Was unable to find T");
+            return null;
+        }
         //Generate the path if we managed to find out goal
+        int limitedInserts = 1000000, inserts = 0;
         if (foundGoal)
         {
-            while (currentT != null)
+            while (currentT != null && inserts < limitedInserts)
             {
+
+                inserts++;
                 //Since we are adding backwards, add at the front rather than the back of the list
                 path.Insert(0, currentT);
+                if (currentT == currentT.predecessor)
+                {
+                    Debug.Log("Current T and predecessor are the same!");
+                    return path;
+                }
                 currentT = currentT.predecessor;
+                
 
             }
             return path;
@@ -588,6 +633,12 @@ public class DijakstraCalculator
     //Finds the closest empty tile
     public Tile findClosestEmptyTile(bool includeStart)
     {
+        return findClosestEmptyTileWithinRange(includeStart, 0, 0, false, false);
+    }
+
+    //Finds the closest empty tile
+    public Tile findClosestEmptyTileWithinRange(bool includeStart, int minRange, int maxRange, bool limitMin, bool limitMax)
+    {
         SimpleNode<Tile, float> temp, temp2;
         if (includeStart)
         {
@@ -597,7 +648,7 @@ public class DijakstraCalculator
         {
             start.setAdjacent();
             List<Tile> adjTiles = start.getAdjacent();
-            foreach(Tile adjTile in adjTiles)
+            foreach (Tile adjTile in adjTiles)
             {
                 frontier.Enqueue(start, 0);
             }
@@ -609,7 +660,7 @@ public class DijakstraCalculator
             Tile currentTile = current.Data;
             currentTile.setAdjacent();
             exploredT.Add(current.Data);
-            if (currentTile.getUnit() == null)
+            if (currentTile.getUnit() == null && (!limitMin || (limitMin && current.Priority >= minRange)) && (!limitMax || (limitMax && current.Priority <= maxRange)))
             {
                 return currentTile;
             }
@@ -645,7 +696,7 @@ public class DijakstraCalculator
         }
         return null;
     }
-   
+
 
     //Finds all tiles that the unit at the start tile can move to
     public List<Tile> findAllMoveables()
@@ -714,7 +765,14 @@ public class DijakstraCalculator
     //Find all tiles that can be attacked from the start if the unit was there
     public List<Tile> findAllAttacks(Unit unit)
     {
-         return findAllAttacksWithWeapons(unit, unit.getAllDamageHandWeapons());
+        //Debug.Log(unit.getAllDamageHandWeapons().Count);
+        List<Weapon> weapons = unit.getAllDamageHandWeapons();
+        //weapons.Reverse();
+        specializedPrint = true;
+        List<Tile> attackables = findAllAttacksWithWeapons(unit, weapons);
+        //specializedPrint = false;
+        //printPath(attackables);
+        return attackables;
     }
 
     //Find all tiles that can be attacked from the start if the unit was there
@@ -726,6 +784,8 @@ public class DijakstraCalculator
         //Weapon weapon = unit.getCurrentWeapon();
         foreach (Weapon weapon in weapons)
         {
+            reset();
+            //if (specializedPrint) Debug.Log("Checking " + weapon);
             if (weapon.currentAttacks == weapon.maxAttacksPerTurn) continue;
             int minRange = weapon.minRange;
             int maxRange = weapon.maxRange;
@@ -751,12 +811,37 @@ public class DijakstraCalculator
                     exploredT.Add(current.Data);
                     if (current.Priority >= minRange && current.Priority <= maxRange)
                     {
+                        //if (specializedPrint)
+                            //Debug.Log("Checking " + currentTile);
                         //Debug.Log("Tile identified!");
                         if (weapon.mustTargetEnemies)
                         {
                             //Debug.Log("Found tile to attack! It was "+currentTile.getPos());
                             if (currentTile.getUnit() != null && currentTile.getUnitScript().getTeam() != team)
-                                attackable.Add(current.Data);
+                            {
+                                Unit enemy = currentTile.getUnitScript();
+                                if (weapon.canTargetAir || (!weapon.canTargetAir && !enemy.flying))
+                                {
+                                    if (weapon.canTargetSub || (!weapon.canTargetSub && !enemy.isSubmerged))
+                                    {
+                                        attackable.Add(current.Data);
+                                        //if (specializedPrint)
+                                        //Debug.Log("Can attack " + enemy+" with "+weapon);
+                                    }
+                                    /*else if(specializedPrint)
+                                    {
+                                        //Debug.Log("Can't attack sub units!");
+                                    }*/
+                                }
+                                /*else if (specializedPrint)
+                                {
+                                    Debug.Log("Can't attack air units!");
+                                }*/
+                            }
+                            /*else if (currentTile.getUnit() != null && specializedPrint)
+                            {
+                                Debug.Log("Can't use " + weapon + " to attack unit on same team" + currentTile.getUnitScript());
+                            }*/
                         }
                         else
                         {
@@ -807,6 +892,7 @@ public class DijakstraCalculator
 
                 }
             }
+            //Debug.Log("Finished checking " + weapon);
         }
         if (attackable == null || attackable.Count == 0) return new List<Tile>();
         return attackable;
@@ -823,6 +909,7 @@ public class DijakstraCalculator
     {
         if (start.getUnit() == null) return null;
         List<Tile> attackableTiles = findAllTilesAttackableWithWeapons(weapons);
+        if (attackableTiles == null) return null;
         int team = start.getUnitScript().getTeam();
         attackableTiles.RemoveAll(item => item.getUnit() == null || item.getUnitScript().getTeam() == team);
         return attackableTiles;
@@ -830,77 +917,79 @@ public class DijakstraCalculator
 
     public List<Tile> findAllTilesAttackableWithWeapons(List<Weapon> weapons)
     {
-        if (start.getUnit() == null) return null;
+        if (start.getUnit() == null || weapons == null || weapons.Count == 0) return null;
         Unit unitScript = start.getUnitScript();
+        float unitMP = unitScript.getCurrentMP();
         string side = start.getUnitSide();
-
-        double minRange = unitScript.getCurrentWeapon().minRange;
-        ////double maxRange = unitScript.getCurrentWeapon().maxRange;
-        double unitMP = unitScript.getCurrentMP();
 
         //Extra calculator for getting attackble tiles
         DijakstraCalculator extraCalc = new DijakstraCalculator(gM, null, null);
         DijakstraCalculator pathCalc = new DijakstraCalculator(gM, null, null);
         List<Tile> attackable = new List<Tile>();
         SimpleNode<Tile, float> temp, temp2;
-        
-
-        frontier.Enqueue(start, 0);
-        while (frontier.Count != 0)
+        foreach (Weapon weapon in weapons)
         {
-            current = frontier.DequeueNode();
-            Tile currentTile = current.Data;
-            currentTile.setAdjacent();
-            exploredT.Add(current.Data);
 
-            if (current.Priority <= unitMP)
+
+
+
+            frontier.Enqueue(start, 0);
+            while (frontier.Count != 0)
             {
-                //Make sure we can actually get to the tile itself
-                pathCalc.reset();
-                pathCalc.setValues(start, currentTile);
+                current = frontier.DequeueNode();
+                Tile currentTile = current.Data;
+                currentTile.setAdjacent();
+                exploredT.Add(current.Data);
 
-                if (pathCalc.findPath(true, false) != null)
+                if (current.Priority <= unitMP)
                 {
-                    extraCalc.reset();
-                    extraCalc.setStart(currentTile);
-                    //Only add the tile if we can attack the enemy unit
-                    //if (currentTile.getUnit() != null && currentTile.getUnitScript().getSide() != side && currentTile.unitHP > currentTile.expectedDamage)
-                    //Debug.Log(currentTile + " is the tile we are measuring from");
-                    attackable.AddRange(extraCalc.findAllAttacksWithWeapons(unitScript,weapons));
-                    //printPath(attackable);
-                }
-            }
-            List<Tile> adjacentNodes = currentTile.getAdjacent();
-            foreach (Tile t in adjacentNodes)
-            {
-                if (t == null) continue;
-                temp = new SimpleNode<Tile, float>(t);
-                temp.Priority = current.Priority + t.getMoveCost(unitScript);
-                if (temp.Priority > unitMP) continue;
-                if (!exploredT.Contains(t) && !frontier.Contains(t))
-                {
-                    //Add the node to the frontier if we didn't explore it already
-                    frontier.Enqueue(t, current.Priority + t.getMoveCost(unitScript));
-                }
-                //If we have a move path that is shorter than what is in the frontier, replace it
-                else if (frontier.Contains(t))
-                {
-                    //Debug.Log(t);
-                    temp2 = frontier.RemoveNode(t);
-                    if (temp.Priority < temp2.Priority)
+                    //Make sure we can actually get to the tile itself
+                    pathCalc.reset();
+                    pathCalc.setValues(start, currentTile);
+
+                    if (pathCalc.findPath(true, false) != null)
                     {
-                        frontier.Enqueue(temp.Data, temp.Priority);
+                        extraCalc.reset();
+                        extraCalc.setStart(currentTile);
+                        //Only add the tile if we can attack the enemy unit
+                        //if (currentTile.getUnit() != null && currentTile.getUnitScript().getSide() != side && currentTile.unitHP > currentTile.expectedDamage)
+                        //Debug.Log(currentTile + " is the tile we are measuring from");
+                        attackable.AddRange(extraCalc.findAllAttacksWithWeapons(unitScript, weapons));
+                        //printPath(attackable);
                     }
-                    else
-                    {
-                        frontier.Enqueue(temp2.Data, temp2.Priority);
-                    }
-
                 }
+                List<Tile> adjacentNodes = currentTile.getAdjacent();
+                foreach (Tile t in adjacentNodes)
+                {
+                    if (t == null) continue;
+                    temp = new SimpleNode<Tile, float>(t);
+                    temp.Priority = current.Priority + t.getMoveCost(unitScript);
+                    if (temp.Priority > unitMP) continue;
+                    if (!exploredT.Contains(t) && !frontier.Contains(t))
+                    {
+                        //Add the node to the frontier if we didn't explore it already
+                        frontier.Enqueue(t, current.Priority + t.getMoveCost(unitScript));
+                    }
+                    //If we have a move path that is shorter than what is in the frontier, replace it
+                    else if (frontier.Contains(t))
+                    {
+                        //Debug.Log(t);
+                        temp2 = frontier.RemoveNode(t);
+                        if (temp.Priority < temp2.Priority)
+                        {
+                            frontier.Enqueue(temp.Data, temp.Priority);
+                        }
+                        else
+                        {
+                            frontier.Enqueue(temp2.Data, temp2.Priority);
+                        }
+
+                    }
+                }
+
+
+
             }
-
-
-
         }
         
         
@@ -918,6 +1007,8 @@ public class DijakstraCalculator
     //+1/-1 if unit can heal this tile without moving
     //+1/-1 for a building
     //+3/-3 for a building that heals
+
+    //NOTICE: Extremely Intensive, should be ran as little as possible
     public Dictionary<Tile,float> getInfluenceMapAsDict()
     {
         if (start.getUnit() == null) return null;
@@ -1082,7 +1173,370 @@ public class DijakstraCalculator
         }
         return influenceDict;
     }
-    
+
+    //Initializes the influence dictionary
+    //Should only be ran once after map is generated
+    //Update individual values as units move, deal damage, heal/repair, or transport
+    public Dictionary<int ,Dictionary<Tile,float>> initInfluenceDict()
+    {
+        Dictionary<int, Dictionary<Tile, float>> influenceDict = new Dictionary<int, Dictionary<Tile, float>>();
+        int numTeams = gM.teams.Count;
+        for (int i = 0; i < numTeams; i++)
+        {
+            Dictionary<Tile,float> specificInfluenceDict = new Dictionary<Tile, float>();
+            influenceDict.Add(i, specificInfluenceDict);
+        }
+        //Now go through each tile and add it to each specific influence dictionary
+        DijakstraCalculator extraCalc = new DijakstraCalculator(gM, null, null);
+        frontier.Enqueue(start, 0);
+        SimpleNode<Tile, float> temp, temp2;
+        while (frontier.Count > 0)
+        {
+            //Current Tile Data
+            current = frontier.DequeueNode();
+            Tile currentTile = current.Data;
+            currentTile.setAdjacent();
+            exploredT.Add(current.Data);
+
+            int point = 0, point2 = 0, buildingTeam = -99;
+
+            if (currentTile.getBuilding() != null)
+            {
+                Building building = currentTile.getBuilding();
+                buildingTeam = building.team;
+                point++;
+                if (building.team >= 0)
+                {
+                    if (building.name == "Hospital")
+                    {
+                        point += 3;
+                    }
+                    else if (building.name == "Warehouse")
+                    {
+                        point += 3;
+                    }
+                    else if (building.name == "Airpad")
+                    {
+                        point += 3;
+                    }
+                    else
+                    {
+                        point += 1;
+                    }
+                }
+            }
+
+            int unitTeam = -99;
+            //Handle giving bonuses to tiles
+            if (currentTile.getUnit() != null)
+            {
+                Unit currentUnit = currentTile.getUnitScript();
+                point2++;
+                int mod = 0, score = 0;
+                mod = 3;
+
+                extraCalc.reset();
+                extraCalc.setValues(currentTile, null);
+                List<Tile> attackTilesWithoutMoving = extraCalc.findAllAttacksWithWeapons(currentUnit, currentUnit.getAllDamageActiveWeapons());
+                extraCalc.reset();
+                extraCalc.setValues(currentTile, null);
+                List<Tile> attackTiles = extraCalc.findAllTilesAttackableWithWeapons(currentUnit.getAllDamageActiveWeapons());
+                extraCalc.reset();
+                extraCalc.setValues(currentTile, null);
+                List<Tile> healTilesWithoutMoving = extraCalc.findAllHealables(currentUnit, currentUnit.getAllHealRepairActiveWeapons());
+                extraCalc.reset();
+                extraCalc.setValues(currentTile, null);
+                List<Tile> healTiles = extraCalc.findAllTilesHealableWithWeapons(currentUnit.getAllHealRepairActiveWeapons());
+                //Go through each list and add a value
+                //We need to iterate through each team as well
+                unitTeam = currentUnit.getTeam();
+                if (attackTilesWithoutMoving != null)
+                {
+                    foreach (Tile tile in attackTilesWithoutMoving)
+                    {
+                        for (int i = 0; i < numTeams; i++)
+                        {
+                            if (influenceDict[i].ContainsKey(tile))
+                            {
+                                //If on the same team, increase value on the influence map, otherwise subtract
+                                influenceDict[i][tile] += (unitTeam == i) ? mod : -mod;
+                            }
+                            else
+                            {
+                                influenceDict[i].Add(tile, (unitTeam == i) ? mod : -mod);
+                            }
+                        }
+                    }
+                }
+                if (attackTiles != null)
+                {
+                    foreach (Tile tile in attackTiles)
+                    {
+                        for (int i = 0; i < numTeams; i++)
+                        {
+                            if (influenceDict[i].ContainsKey(tile))
+                            {
+                                //If on the same team, increase value on the influence map, otherwise subtract
+                                influenceDict[i][tile] += (unitTeam == i) ? mod : -mod;
+                            }
+                            else
+                            {
+                                influenceDict[i].Add(tile, (unitTeam == i) ? mod : -mod);
+                            }
+                        }
+                    }
+                }
+                if (healTilesWithoutMoving != null)
+                {
+                    foreach (Tile tile in healTilesWithoutMoving)
+                    {
+                        for (int i = 0; i < numTeams; i++)
+                        {
+                            if (influenceDict[i].ContainsKey(tile))
+                            {
+                                //If on the same team, increase value on the influence map, otherwise subtract
+                                influenceDict[i][tile] += (unitTeam == i) ? mod * 2 : -mod * 2;
+                            }
+                            else
+                            {
+                                influenceDict[i].Add(tile, (unitTeam == i) ? mod * 2 : -mod * 2);
+                            }
+                        }
+                    }
+                }
+                if (healTiles != null)
+                {
+                    foreach (Tile tile in healTiles)
+                    {
+                        for (int i = 0; i < numTeams; i++)
+                        {
+                            if (influenceDict[i].ContainsKey(tile))
+                            {
+                                //If on the same team, increase value on the influence map, otherwise subtract
+                                influenceDict[i][tile] += (unitTeam == i) ? mod : -mod;
+                            }
+                            else
+                            {
+                                influenceDict[i].Add(tile, (unitTeam == i) ? mod : -mod);
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            //Add the point to the current Tile
+            for (int i = 0; i < numTeams; i++)
+            {
+                if (influenceDict[i].ContainsKey(currentTile))
+                {
+                    influenceDict[i][currentTile] += ((buildingTeam == i) ? point:- point) + ((unitTeam == i) ? point2 : -point2);
+                }
+                else
+                {
+                    influenceDict[i].Add(currentTile, ((buildingTeam == i) ? point : -point) + ((unitTeam == i) ? point2 : -point2));
+                }
+            }
+
+            List<Tile> adjacentNodes = currentTile.getAdjacent();
+            foreach (Tile t in adjacentNodes)
+            {
+                if (t == null) continue;
+                temp = new SimpleNode<Tile, float>(t);
+                temp.Priority = current.Priority + 1;
+                if (!exploredT.Contains(t) && !frontier.Contains(t))
+                {
+                    //Add the node to the frontier if we didn't explore it already
+                    frontier.Enqueue(t, current.Priority + 1);
+                }
+                //If we have a move path that is shorter than what is in the frontier, replace it
+                else if (frontier.Contains(t))
+                {
+                    //Debug.Log(t);
+                    temp2 = frontier.RemoveNode(t);
+                    if (temp.Priority < temp2.Priority)
+                    {
+                        frontier.Enqueue(temp.Data, temp.Priority);
+                    }
+                    else
+                    {
+                        frontier.Enqueue(temp2.Data, temp2.Priority);
+                    }
+
+                }
+            }
+        }
+        return influenceDict;
+    }
+
+    //Use to update individual units that need to be moved
+    public Dictionary<int, Dictionary<Tile, float>> applyUnitEffectToInfluenceDict(Dictionary<int, Dictionary<Tile, float>> influenceDict, Unit unit, bool add)
+    {
+        //If we don't actually have a unit, just give back the influence dict
+        if (unit == null) return influenceDict;
+        DijakstraCalculator extraCalc = new DijakstraCalculator(gM, null, null);
+        int unitTeam = unit.getTeam(), numTeams = influenceDict.Count;
+        int mod = 0, score = 0;
+        int point2 = 1;
+        mod = 3;
+        if (!add)
+        {
+            mod = -3;
+        }
+        extraCalc.reset();
+        extraCalc.setValues(start, null);
+        List<Tile> attackTilesWithoutMoving = extraCalc.findAllAttacksWithWeapons(unit, unit.getAllDamageActiveWeapons());
+        extraCalc.reset();
+        extraCalc.setValues(start, null);
+        List<Tile> attackTiles = extraCalc.findAllTilesAttackableWithWeapons(unit.getAllDamageActiveWeapons());
+        extraCalc.reset();
+        extraCalc.setValues(start, null);
+        List<Tile> healTilesWithoutMoving = extraCalc.findAllHealables(unit, unit.getAllHealRepairActiveWeapons());
+        extraCalc.reset();
+        extraCalc.setValues(start, null);
+        List<Tile> healTiles = extraCalc.findAllTilesHealableWithWeapons(unit.getAllHealRepairActiveWeapons());
+        //Go through each list and add a value
+        //We need to iterate through each team as well
+        if (attackTilesWithoutMoving != null)
+        {
+            foreach (Tile tile in attackTilesWithoutMoving)
+            {
+                for (int i = 0; i < numTeams; i++)
+                {
+                    if (influenceDict[i].ContainsKey(tile))
+                    {
+                        //If on the same team, increase value on the influence map, otherwise subtract
+                        influenceDict[i][tile] += (unitTeam == i) ? mod : -mod;
+                    }
+                    else
+                    {
+                        influenceDict[i].Add(tile, (unitTeam == i) ? mod : -mod);
+                    }
+                }
+            }
+        }
+        if (attackTiles != null)
+        {
+            foreach (Tile tile in attackTiles)
+            {
+                for (int i = 0; i < numTeams; i++)
+                {
+                    if (influenceDict[i].ContainsKey(tile))
+                    {
+                        //If on the same team, increase value on the influence map, otherwise subtract
+                        influenceDict[i][tile] += (unitTeam == i) ? mod : -mod;
+                    }
+                    else
+                    {
+                        influenceDict[i].Add(tile, (unitTeam == i) ? mod : -mod);
+                    }
+                }
+            }
+        }
+        if (healTilesWithoutMoving != null)
+        {
+            foreach (Tile tile in healTilesWithoutMoving)
+            {
+                for (int i = 0; i < numTeams; i++)
+                {
+                    if (influenceDict[i].ContainsKey(tile))
+                    {
+                        //If on the same team, increase value on the influence map, otherwise subtract
+                        influenceDict[i][tile] += (unitTeam == i) ? mod * 2 : -mod * 2;
+                    }
+                    else
+                    {
+                        influenceDict[i].Add(tile, (unitTeam == i) ? mod * 2 : -mod * 2);
+                    }
+                }
+            }
+        }
+        if (healTiles != null)
+        {
+            foreach (Tile tile in healTiles)
+            {
+                for (int i = 0; i < numTeams; i++)
+                {
+                    if (influenceDict[i].ContainsKey(tile))
+                    {
+                        //If on the same team, increase value on the influence map, otherwise subtract
+                        influenceDict[i][tile] += (unitTeam == i) ? mod : -mod;
+                    }
+                    else
+                    {
+                        influenceDict[i].Add(tile, (unitTeam == i) ? mod : -mod);
+                    }
+                }
+            }
+        }
+        
+        if (!add)
+        {
+            point2 *= -1;
+        }
+        //Add the point to the current Tile
+        for (int i = 0; i < numTeams; i++)
+        {
+            if (influenceDict[i].ContainsKey(start))
+            {
+                influenceDict[i][start] += ((unitTeam == i) ? point2 : -point2);
+            }
+            else
+            {
+                influenceDict[i].Add(start, ((unitTeam == i) ? point2 : -point2));
+            }
+        }
+
+        return influenceDict;
+        
+    }
+
+    //Use to update buildings units that get built/captured/destroyed
+    public Dictionary<int, Dictionary<Tile, float>> applyBuildingEffectToInfluenceDict(Dictionary<int, Dictionary<Tile, float>> influenceDict, Building building, bool add)
+    {
+        int numTeams = influenceDict.Count;
+        int buildingTeam = building.team;
+        int point = 0;
+        if (building.team >= 0)
+        {
+            if (building.name == "Hospital")
+            {
+                point += 3;
+            }
+            else if (building.name == "Warehouse")
+            {
+                point += 3;
+            }
+            else if (building.name == "Airpad")
+            {
+                point += 3;
+            }
+            else
+            {
+                point += 1;
+            }
+        }
+        if (!add)
+        {
+            point *= -1;
+        }
+
+        //Add the point to the current Tile
+        for (int i = 0; i < numTeams; i++)
+        {
+            if (influenceDict[i].ContainsKey(start))
+            {
+                influenceDict[i][start] += ((buildingTeam == i) ? point : -point);
+            }
+            else
+            {
+                influenceDict[i].Add(start, ((buildingTeam == i) ? point : -point));
+            }
+        }
+
+        return influenceDict;
+    }
+
     //Determine if enemy unit can be attacked by the current unit with any of the active weapons
     public bool canAttackEnemyAtAll(Unit attacker, Unit defender)
     {
@@ -1302,6 +1756,7 @@ public class DijakstraCalculator
         }
         foreach (Weapon weapon in weapons)
         {
+            reset();
             //Continue to next weapon if the weapon can't attack
             if (!weapon.doesSomething || !weapon.damages) continue;
             if (defender != null)
@@ -1382,12 +1837,21 @@ public class DijakstraCalculator
     //Determine if enemy unit can be attacked by the current unit with any of the active weapons
     public bool canAttackEnemyWithWeapons(Unit attacker, List<Weapon> weapons, Unit defender)
     {
+        if (attacker == null || attacker.getTile() == null)
+        {
+            return false;
+        }
         if (defender != null)
         {
             defender = dest.getUnitScript();
         }
+        if (defender == null || defender.getTile() == null)
+        {
+            return false;
+        }
         foreach (Weapon weapon in weapons)
         {
+            reset();
             //Continue to next weapon if the weapon can't attack
             if (!weapon.doesSomething || !weapon.damages) continue;
             if (defender != null)
@@ -1399,14 +1863,23 @@ public class DijakstraCalculator
             List<Tile> attackable = new List<Tile>();
             int minRange = weapon.minRange;
             int maxRange = weapon.maxRange;
-            DijakstraCalculator aoeCalc = new DijakstraCalculator(gM, null, null);
+            DijakstraCalculator aoeCalc = new DijakstraCalculator(gM, attacker.getTile(), defender.getTile());
             SimpleNode<Tile, float> temp, temp2;
             List<Tile> presetAOETiles = new List<Tile>();
             if (weapon.aoe > 0)
             {
                 if (weapon.aoeType != 0)
                 {
-                    presetAOETiles = getPresetAOETiles(weapon, dest, true);
+                    //This list contains the tiles that the attacker can attack the enemy from
+                    //If the start is within that list, that means we can attack the enemy
+                    presetAOETiles = aoeCalc.getPresetAOETiles(weapon, dest, true);
+                    if (presetAOETiles.Contains(start)) {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
             //max range should never be less than min range
@@ -1454,17 +1927,19 @@ public class DijakstraCalculator
                                 }
 
                                 break;
-                            case 1:
+                            /*case 1:
                                 if (current.Priority >= minRange - weapon.aoe && current.Priority <= maxRange + weapon.aoe)
                                 {
                                     //Now must determine if current is in the same dir
                                     //Better to get tiles before hand, rather than generating a whole bunch
                                     if (presetAOETiles.Contains(currentTile))
                                     {
+                                        //printPath(presetAOETiles);
+                                        //Debug.Log("Current " + currentTile + " is in preset AOE Tiles, which is where " + dest + " can be attacked with " + weapon);
                                         return true;
                                     }
                                 }
-                                break;
+                                break;*/
                         }
 
                     }
@@ -1526,6 +2001,7 @@ public class DijakstraCalculator
         //Weapon weapon = unit.getCurrentWeapon();
         foreach (Weapon weapon in weapons)
         {
+            reset();
             //Skip to the next weapon if this can't heal or repair
             if (!(weapon.heals || weapon.repairs)) continue;
             //Debug.Log("Finding Healables");
@@ -1631,6 +2107,7 @@ public class DijakstraCalculator
 
         foreach (Weapon weapon in weapons)
         {
+            reset();
             double minRange = weapon.minRange;
             double maxRange = weapon.maxRange;
             double unitMP = unitScript.getCurrentMP();
@@ -1711,13 +2188,14 @@ public class DijakstraCalculator
     {
         if (start.getUnit() == null) return null;
         List<Tile> attackableTiles = findAllTilesHealableWithWeapons(weapons);
+        if (attackableTiles == null) return null;
         int team = start.getUnitScript().getTeam();
         attackableTiles.RemoveAll(item => item.getUnit() == null || item.getUnitScript().getTeam() != team);
         return attackableTiles;
     }
 
     public List<Tile> findAllTilesHealableWithWeapons(List<Weapon> weapons)    {
-        if (start.getUnit() == null) return null;
+        if (start.getUnit() == null || weapons == null || weapons.Count == 0) return null;
         Unit unitScript = start.getUnitScript();
         string side = start.getUnitSide();
 
@@ -1814,6 +2292,7 @@ public class DijakstraCalculator
         //Continue to next weapon if the weapon can't attack
         foreach (Weapon weapon in weapons)
         {
+            reset();
             if (!weapon.doesSomething || !(weapon.heals || weapon.repairs)) continue;
 
             string side = start.getUnitSide();

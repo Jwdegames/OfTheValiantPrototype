@@ -155,6 +155,7 @@ public class Building : Controllable
                     yield return new WaitForSeconds(0.25f);
                     flashes++;
                 }
+
                 //
                 player = null;
                 
@@ -164,6 +165,7 @@ public class Building : Controllable
         enabled = false;
         gM.uiScript.getBPEconStats();
         team = gM.getTeam(side);
+        gM.applyBuildingEffectToInfluenceDict(this, (player == null) ? false : true);
     }
     public void setSizeAccordingly()
     {

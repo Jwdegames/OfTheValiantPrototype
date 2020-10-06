@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 //using System.Numerics;
@@ -17,7 +18,7 @@ public class UIManager : MonoBehaviour
     public UnitActionMenu bmUI;
     public bool selectingAction = false;
 
-    public List<GameObject> inBattleButtons;
+    public List<Button> inBattleButtons;
 
     //Handle Battle Panel UI Functions
     public GameObject battlePanel;
@@ -360,7 +361,7 @@ public class UIManager : MonoBehaviour
             ugoScript.resetWeaponsList();
             ugoScript.matchWeapon("UI");
             unitGameObject.transform.localPosition = new Vector3(0, 0, -2);
-            unitGameObject.transform.localScale = new Vector3(30, 30, 0);
+            unitGameObject.transform.localScale = new Vector3(33, 33, 0);
             List<Weapon> unitWeapons = ugoScript.getAllActiveWeapons();
             int i = 0;
             if (unitWeapons != null && unitWeapons.Count > 0)
@@ -368,7 +369,7 @@ public class UIManager : MonoBehaviour
                 foreach (Weapon unitWeapon in unitWeapons)
                 {
                     
-                    //Debug.Log(i+" Unit Weapon: " + unitWeapon.name);
+                    //Debug.Log(i+" Unit Weapon: " + unitWeapon.name +". Does it exist in the dictionary? "+ugoScript.weaponDictionary.ContainsKey(unitWeapon));
                     ugoScript.weaponDictionary[unitWeapon].makeUI(null,unitWeapons.Count - i);
                     i++;
 
@@ -379,7 +380,7 @@ public class UIManager : MonoBehaviour
             unitTXT.text = unit.getDescription();
             unitTypeTXT.text = unit.getType();
 
-            string temp = "HP(" + getArmorPrefix(unit.getArmor()) + "): " + unit.getCurrentHP() + "/" + unit.getHP() + ",MP(" + unit.getMovementType() + "): " + unit.getCurrentMP() + "/" + unit.getMP() + ",AP: " + unit.getCurrentAP() + "/" + unit.getAP();
+            string temp = "HP(" + getArmorPrefix(unit.getArmor()) + "): " + Math.Round( unit.getCurrentHP(), 3)+ "/" + unit.getHP() + ",MP(" + unit.getMovementType() + "): " + unit.getCurrentMP() + "/" + unit.getMP() + ",AP: " + unit.getCurrentAP() + "/" + unit.getAP();
             temp += "\nMain Weapon| Dmg(" + getArmorPrefix(unit.getCurrentWeapon().weaponType) + "):" + unit.getCurrentWeapon().getDamagePerSalvo() + ",Range:" + unit.getCurrentWeapon().minRange + "-" + unit.getCurrentWeapon().maxRange;
             unitStatsTXT.text = temp;
         }
@@ -398,7 +399,7 @@ public class UIManager : MonoBehaviour
 
     public Vector3 getNextAttributePosition()
     {
-        return new Vector3(-65f + 30*attributeIcons.Count, -12.6f, -1);
+        return new Vector3(-80f + 30*(attributeIcons.Count%6), -12.6f + 30 * (attributeIcons.Count/6) , -1);
     }
 
     public string getWeaponCarriedSuffix(Weapon weapon)
@@ -414,8 +415,31 @@ public class UIManager : MonoBehaviour
     {
         switch (weaponSpriteObj.name)
         {
+            case "Drone Gun":
             case "Assault Turret":
+            case "Laser Assault Turret":
+            case "Blast Eye x3":
+            case "Blast Eye x5":
                 weaponSpriteObj.scaleToUI(80, 80);
+                break;
+            case "Tank Cannon":
+            case "Heavy Tank Cannon":
+            case "Rocket Burster":
+            case "Artillery Cannon":
+            case "Duality Tank Cannon":
+            case "Duality Rocket Burster":
+            case "Laser Tank Cannon":
+            case "Duality Artillery Cannon":
+            case "Duality Laser Tank Cannon":
+            case "Gas Mortar MK 2":
+            case "Flak Gun":
+            case "Venom Tank Cannon":
+            case "Gas Mortar MK 3":
+            case "P Flak Gun":
+            case "DP Rocket Burster":
+            case "Tall Brewer":
+            case "Slime Launcher":
+                weaponSpriteObj.scaleToUI(50, 50);
                 break;
             default:
                 weaponSpriteObj.scaleToUI(30, 30);
@@ -520,7 +544,7 @@ public class UIManager : MonoBehaviour
             }
 
             //Begin writing the expanded info text
-            string temp = "This unit has "+bpUnit.getCurrentHP()+"/"+bpUnit.getHP()+" Hit Points. ";
+            string temp = "This unit has "+Math.Round(bpUnit.getCurrentHP(),3)+"/"+bpUnit.getHP()+" Hit Points. ";
 
 
             temp += "\n\nThis unit has " + bpUnit.getCurrentMP() + "/" + bpUnit.getMP() + " Movement Points. This unit is " + bpUnit.getMovementType()+".";
@@ -610,6 +634,21 @@ public class UIManager : MonoBehaviour
                         temp = "This unit has been poisoned and will gain " + (-poisonHPEffect * 100) + "% of its hp at the start of its turn.";
                     }
                     makeUnitAttribute("Poisoned", temp, "Attribute Lifetime: "+attributeDict["Poisoned"]+" Days", "", 5,"Unit");
+                }
+                if (attributeDict.ContainsKey("Self Heal"))
+                {
+                    float val = attributeDict["Self Heal"];
+                    if (val > 0)
+                    {
+                        temp = "This unit self heals " + (val * 100) + "% of its hp at the start of its turn.";
+                        makeUnitAttribute("Self Heals", temp, "Attribute Lifetime: Forever", "", 9, "Unit");
+                    }
+                    else
+                    {
+                        temp = "This unit automatically loses " + (-val * 100) + "% of its hp at the start of its turn.";
+                        makeUnitAttribute("Self Damages", temp, "Attribute Lifetime: Forever", "", 9, "Unit");
+                    }
+                    
                 }
             }
             //Handle attributes not in the dictionary
@@ -1083,6 +1122,7 @@ public class UIManager : MonoBehaviour
     //Make the unit builder menu when selected
     public void makeUnitBuilderMenu()
     {
+        disableInBattleButtons();
         buPanel.SetActive(true);
         selectingAction = true;
         buildUnitButtons = new List<GameObject>();
@@ -1169,6 +1209,7 @@ public class UIManager : MonoBehaviour
 
     public void makeUnloadingMenu(Unit transporter)
     {
+        disableInBattleButtons();
         originalWeaponPositions = new Dictionary<GameObject, Vector3>();
         buPanel.SetActive(true);
         selectingAction = true;
@@ -1202,6 +1243,22 @@ public class UIManager : MonoBehaviour
                 originalWeaponPositions[wO.gameObject] = wO.transform.localPosition;
                 wO.transform.localPosition = new Vector3(wO.transform.localPosition.x, wO.transform.localPosition.y, 0);
             }
+        }
+    }
+
+    public void disableInBattleButtons()
+    {
+        foreach(Button button in inBattleButtons)
+        {
+            button.interactable = false;
+        }
+    }
+
+    public void enableInBattleButtons()
+    {
+        foreach (Button button in inBattleButtons)
+        {
+            button.interactable = true;
         }
     }
 
@@ -1242,6 +1299,7 @@ public class UIManager : MonoBehaviour
                 break;
 
         }
+        enableInBattleButtons();
     }
 
 

@@ -30,6 +30,19 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
     public Sprite deployUnits;
     public Sprite deployDrones;
     public Sprite toggleJetpack;
+    public Sprite launchSlime;
+    public Sprite cRally;
+    public Sprite cBolster;
+    public Sprite cFocus;
+    public Sprite cResetAlly;
+    public Sprite cPressure;
+    public Sprite cCaution;
+    public Sprite cInspire;
+    public Sprite cEnergize;
+    public Sprite cAnger;
+    public Sprite cConfuse;
+    public Sprite cDebuff;
+    public Sprite cIntimidate;
     public float apCost;
     public Unit unit;
     public Image image;
@@ -133,6 +146,46 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
                 image.sprite = toggleJetpack;
                 apCost = 1;
                 break;
+            case "Launch Slime":
+                image.sprite = launchSlime;
+                apCost = 1;
+                break;
+            case "Rally":
+                image.sprite = cRally;
+                break;
+            case "Bolster":
+                image.sprite = cBolster;
+                break;
+            case "Focus":
+                image.sprite = cFocus;
+                break;
+            case "Reset Ally":
+                image.sprite = cResetAlly;
+                break;
+            case "Pressure":
+                image.sprite = cPressure;
+                break;
+            case "Caution":
+                image.sprite = cCaution;
+                break;
+            case "Inspire":
+                image.sprite = cInspire;
+                break;
+            case "Energize":
+                image.sprite = cEnergize;
+                break;
+            case "Anger":
+                image.sprite = cAnger;
+                break;
+            case "Confuse":
+                image.sprite = cConfuse;
+                break;
+            case "Debuff":
+                image.sprite = cDebuff;
+                break;
+            case "Intimidate":
+                image.sprite = cIntimidate;
+                break;
             default:
                 image.sprite = move;
                 break;
@@ -188,12 +241,16 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
 
     public void getAttackables()
     {
-        List<Tile> attackTiles = gM.getAttackTiles(unit, tile);
+        //We need to get attack tiles for each weapon
+        List<Weapon> attackWeapons = unit.getAllDamageHandWeapons();
+        foreach (Weapon weapon in attackWeapons) {
+            List<Tile> attackTiles = gM.getAttackTilesWithWeapons(unit, tile, new List<Weapon> { weapon });
 
 
-        foreach (Tile t in attackTiles)
-        {
-            t.makeAttackable(unit, unit.getAllDamageHandWeapons());
+            foreach (Tile t in attackTiles)
+            {
+                t.makeAttackable(unit, new List<Weapon>() { weapon });
+            }
         }
     }
 
@@ -412,6 +469,9 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
             case "Toggle Jetpack":
                 unit.startToggleJetpack();
                 gM.selectedTile.deleteSelector();
+                break;
+            case "Rally":
+                unit.doCommand("Rally");
                 break;
             default:
                 break;

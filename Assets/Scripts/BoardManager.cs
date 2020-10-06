@@ -125,14 +125,16 @@ public class BoardManager : MonoBehaviour
                         //makeUnit("Droid Gattler", gM.playerDictionary["Red"], 2, 3);
                         //makeUnit("S-Jet Trooper", gM.playerDictionary["Red"], 1, 4);
 
-                        makeUnit("Assault Heavy Tank", gM.playerDictionary["Red"], 17, 3);
-                        makeUnit("Assault Heavy Tank", gM.playerDictionary["Red"], 17, 4);
-                        makeUnit("Assault Heavy Tank", gM.playerDictionary["Red"], 16, 3);
+                        makeUnit("Asher", gM.playerDictionary["Red"], 19, 2);
+                        makeUnit("Drone", gM.playerDictionary["Red"], 17, 2);
+                        makeUnit("Assault Auto Duality Tank", gM.playerDictionary["Red"], 17, 3);
+                        makeUnit("Drone Deployer Truck", gM.playerDictionary["Red"], 17, 4);
+                        makeUnit("Assault Auto Artillery", gM.playerDictionary["Red"], 16, 3);
 
-                        makeUnit("Slime", gM.playerDictionary["Green"], 22, 3);
-                        //makeUnit("Masked Trooper", gM.playerDictionary["Green"], 22, 4);
-                        //makeUnit("Grenadier", gM.playerDictionary["Green"], 23, 4);
-                        //makeUnit("Eyesore", gM.playerDictionary["Green"], 21, 3);
+                        makeUnit("Slime Launcher Truck", gM.playerDictionary["Green"], 22, 3);
+                        makeUnit("Masked Trooper", gM.playerDictionary["Green"], 22, 4);
+                        makeUnit("Grenadier", gM.playerDictionary["Green"], 23, 4);
+                        makeUnit("Eyesore", gM.playerDictionary["Green"], 21, 3);
                         //makeUnit(1, 3, gM.playerDictionary["Green"], 24, 5);
 
                         makeBuilding(0,"House", gM.playerDictionary["Red"], 7, 2);
@@ -262,10 +264,11 @@ public class BoardManager : MonoBehaviour
         
         tile.unitHP = unit.getCurrentHP();
         unit.applyScale();
-        unit.matchWeapon("Make Unit");
-        unit.makeShadow();
         unit.setOutlineColor(player.color, 10f);
         unit.setOutlineThickness(outlineThickness);
+        unit.matchWeapon("Make Unit");
+        unit.makeShadow();
+
         return unit;
     }
 
@@ -299,7 +302,7 @@ public class BoardManager : MonoBehaviour
         Destroy(u.shadow.gameObject);
         u.turretObjects = new List<GameObject>();
         u.turretObjectScripts = new List<WeaponObject>();
-        u.setSide(player.side);
+
         gM.unitDictionary[player.side].Add(u);
 
 
@@ -308,6 +311,8 @@ public class BoardManager : MonoBehaviour
         u.setTile(tile);
         UnitsList unitsList = new UnitsList();
         u.useTemplate(unitsList.templateDictionary[unitScript.getName()]);
+        u.setOutlineColor(player.color, 10f);
+        u.setOutlineThickness(outlineThickness);
         u.matchWeapon("Build Unit");
         //Debug.Log(unitScript.getName());
 
@@ -324,9 +329,10 @@ public class BoardManager : MonoBehaviour
             u.transform.localScale = new Vector3(u.getSizeMultiplier(), u.getSizeMultiplier(), 1);
         }
         u.makeShadow();
-        u.setOutlineColor(player.color, 10f);
-        u.setOutlineThickness(outlineThickness);
+
         u.currentJetToggles = u.maxJetToggles;
+        u.setSide(player.side);
+        gM.applyUnitEffectToInfluenceDict(u, true);
         return u;
 
     }

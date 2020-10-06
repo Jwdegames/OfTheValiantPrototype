@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,7 @@ public class WeaponObject : MonoBehaviour
     public GameObject muzzleSprite4;
     public GameObject muzzleSprite5;
     public GameObject rpgProjectile;
+    public GameObject rpgProjectile2;
     public GameObject rpgProjectileExhaust;
     public GameObject explosionPrefab;
     public GameObject soundWavePrefab;
@@ -47,6 +49,7 @@ public class WeaponObject : MonoBehaviour
     public Weapon weapon;
     public Weapon template;
     public bool firstTime = true;
+    public Material rMaterial;
     //
     // Start is called before the first frame update
     void Start()
@@ -62,73 +65,77 @@ public class WeaponObject : MonoBehaviour
 
     public void updateSprite()
     {
-        SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
+        SpriteRenderer renderer = null;
+        if (sprites != null && sprites.Count > 0) 
+        renderer = gameObject.GetComponent<SpriteRenderer>();
         ui = gM.uiScript;
+        //Debug.Log("Test");
         switch (name)
         {
             case "Rifle":
+               // Debug.Log(sprites.Count);
                 usesExternalSprite = true;
-                renderer.sprite = sprites[0];
+               // renderer.sprite = sprites[0];
                 uiSprite = ui.uiWeaponSprites[0];
                 break;
             case "RPG":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[0];
+                //renderer.sprite = sprites[0];
                 uiSprite = ui.uiWeaponSprites[1];
                 break;
             case "Sniper Rifle":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[2];
+                //renderer.sprite = sprites[2];
                 uiSprite = ui.uiWeaponSprites[2];
                 break;
             case "Mortar":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[3];
+                //renderer.sprite = sprites[3];
                 uiSprite = ui.uiWeaponSprites[3];
                 break;
             case "Uzi":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[4];
+                //renderer.sprite = sprites[4];
                 uiSprite = ui.uiWeaponSprites[4];
                 break;
             case "Shield":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[5];
+                //renderer.sprite = sprites[5];
                 uiSprite = ui.uiWeaponSprites[5];
                 break;
             case "Minigun":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[6];
+                //renderer.sprite = sprites[6];
                 uiSprite = ui.uiWeaponSprites[6];
                 break;
             case "Medkit":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[7];
+                //renderer.sprite = sprites[7];
                 uiSprite = ui.uiWeaponSprites[7];
                 break;
             case "Wrench":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[8];
+                //renderer.sprite = sprites[8];
                 uiSprite = ui.uiWeaponSprites[8];
                 break;
             case "Laser Rifle":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[9];
+                //renderer.sprite = sprites[9];
                 uiSprite = ui.uiWeaponSprites[9];
                 break;
             case "Laser Uzi":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[10];
+                //renderer.sprite = sprites[10];
                 uiSprite = ui.uiWeaponSprites[10];
                 break;
             case "Advanced RPG":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[0];
+                //renderer.sprite = sprites[0];
                 uiSprite = ui.uiWeaponSprites[11];
                 break;
             case "Laser Minigun":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[12];
+                //renderer.sprite = sprites[12];
                 uiSprite = ui.uiWeaponSprites[12];
                 break;
             case "Drone Gun":
@@ -138,17 +145,33 @@ public class WeaponObject : MonoBehaviour
             case "Tank Cannon":
                 usesExternalSprite = false;
                 uiSprite = ui.uiWeaponSprites[14];
+                //Debug.Log(u.getSide());
+                //Debug.Log(gM.playerDictionary[u.getSide()]);
+                if (gM.playerDictionary[u.getSide()].faction == "Vita")
+                {
+                    //Debug.Log("Green tank!");
+                    uiSprite = ui.uiWeaponSprites[30];
+                }
                 break;
             case "Heavy Tank Cannon":
                 usesExternalSprite = false;
                 uiSprite = ui.uiWeaponSprites[15];
+                if (gM.playerDictionary[u.side].faction == "Vita")
+                {
+                    uiSprite = ui.uiWeaponSprites[31];
+                }
                 break;
             case "Assault Turret":
                 usesExternalSprite = true;
                 uiSprite = ui.uiWeaponSprites[16];
-                renderer.sprite = sprites[16];
+                //renderer.sprite = sprites[16];
                 break;
             case "Rocket Burster":
+                if (gM.playerDictionary[u.getSide()].faction == "Vita")
+                {
+                    //Debug.Log("Green tank!");
+                    uiSprite = ui.uiWeaponSprites[31];
+                }
                 usesExternalSprite = false;
                 uiSprite = ui.uiWeaponSprites[17];
                 //renderer.sprite = sprites[17];
@@ -159,22 +182,22 @@ public class WeaponObject : MonoBehaviour
                 break;
             case "Poison Rifle":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[19];
+                //renderer.sprite = sprites[19];
                 uiSprite = ui.uiWeaponSprites[19];
                 break;
             case "Gas Grenade":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[20];
+                //renderer.sprite = sprites[20];
                 uiSprite = ui.uiWeaponSprites[20];
                 break;
             case "Gas Mortar":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[0];
+                //renderer.sprite = sprites[0];
                 uiSprite = ui.uiWeaponSprites[21];
                 break;
             case "Syringe":
                 usesExternalSprite = true;
-                renderer.sprite = sprites[0];
+                //renderer.sprite = sprites[0];
                 uiSprite = ui.uiWeaponSprites[22];
                 break;
             case "Screamer Mouth":
@@ -186,6 +209,7 @@ public class WeaponObject : MonoBehaviour
                 uiSprite = ui.uiWeaponSprites[24];
                 break;
             case "Blast Eye x3":
+            case "Blast Eye x5":
                 usesExternalSprite = false;
                 uiSprite = ui.uiWeaponSprites[25];
                 break;
@@ -195,8 +219,125 @@ public class WeaponObject : MonoBehaviour
                 usesExternalSprite = false;
                 uiSprite = ui.uiWeaponSprites[26];
                 break;
+            case "Bio Rose":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[27];
+                break;
+            case "Focus Eye":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[28];
+                break;
+            case "Weak Focus Eye":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[29];
+                break;
+            case "Gas Mortar MK 2":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[33];
+                break;
+            case "Flak Gun":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[34];
+                break;
+            case "Venom Cannon":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[35];
+                break;
+            case "Gas Mortar MK 3":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[33];
+                break;
+            case "P Flak Gun":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[36];
+                break;
+            case "DP Rocket Burster":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[37];
+                break;
+            case "Tall Brewer":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[38];
+                break;
+            case "Slime Launcher":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[39];
+                break;
+            case "Duality Tank Cannon":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[14];
+                break;
+            case "Duality Rocket Burster":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[17];
 
+                //renderer.sprite = sprites[17];
+                break;
+            case "Laser Tank Cannon":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[40];
+
+                //renderer.sprite = sprites[17];
+                break;
+            case "Laser Assault Turret":
+                usesExternalSprite = true;
+                uiSprite = ui.uiWeaponSprites[41];
+                //renderer.sprite = sprites[0];
+                break;
+            case "Duality Artillery Cannon":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[18];
+                break;
+            case "Duality Laser Tank Cannon":
+                usesExternalSprite = false;
+                uiSprite = ui.uiWeaponSprites[40];
+
+                //renderer.sprite = sprites[17];
+                break;
         }
+        if (usesExternalSprite)
+        {
+            if (renderer != null && u != null)
+            {
+                rMaterial = renderer.material;
+                setOutlineColor(u.getOutlineColor(), 1);
+                setTintColor(new Color(0, 0, 0, 0));
+                setOutlineThickness(u.getOutlineThickness());
+            }
+            else if (renderer != null && u == null)
+            {
+                rMaterial = renderer.material;
+                setOutlineColor(new Color(0,0,0,0), 1);
+                setTintColor(new Color(0, 0, 0, 0));
+                setOutlineThickness(0);
+            }
+        }
+    }
+
+    public void setOutlineColor(Color color, float intensity)
+    {
+        //if (name == "Tank") intensity *= 1 / 5f;
+        rMaterial.SetColor("_OutlineColor", new Color(color.r * intensity, color.g * intensity, color.b * intensity, color.a));
+    }
+
+    public void setOutlineThickness(float thickness)
+    {
+        rMaterial.SetFloat("_Thickness", thickness);
+    }
+
+    public void setTintColor(Color color)
+    {
+        rMaterial.SetColor("_TintColor", color);
+    }
+
+    public void setBaseColor(Color color)
+    {
+        rMaterial.SetColor("_BaseColor", color);
+    }
+
+    public void setFade(float fade)
+    {
+        rMaterial.SetFloat("_Fade", fade);
     }
 
     public void applyScale()
@@ -240,6 +381,7 @@ public class WeaponObject : MonoBehaviour
         name = template.name;
         description = template.description;
         quote = template.quote;
+        u = unit;
         //If it's already set ignore the template
         if ((xSize == 1 || xSize == 0) || (weapon != null && !firstTime))
         {
@@ -259,9 +401,9 @@ public class WeaponObject : MonoBehaviour
         }
         weapon = template;
         applyScale();
-        if (sprites != null && sprites.Count > 0)
+        //if (sprites != null && sprites.Count > 0)
         updateSprite();
-        u = unit;
+
         firstTime = false;
     }
 
@@ -540,7 +682,7 @@ public class WeaponObject : MonoBehaviour
                 Destroy(currentPoisonGasCloud);
                 break;
             case "Blast Eye x3":
-                //Shoot 5 times
+                //Shoot 3 times
                 muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
                 defender.setTintColor(Color.green);
                 yield return new WaitForSeconds(0.05f);
@@ -588,6 +730,192 @@ public class WeaponObject : MonoBehaviour
                 u.gameObject.GetComponent<Animator>().SetBool("Firing", false);
                 yield return StartCoroutine(waitForAllSlimeBalls());
                 break;
+            case "Blast Eye x5":
+                //Shoot 5 times
+                u.gameObject.GetComponent<Animator>().SetBool("Firing", true);
+                muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
+                defender.setTintColor(Color.green);
+                yield return new WaitForSeconds(0.05f);
+                muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
+                defender.setTintColor(new Color(0, 0, 0, 0));
+                yield return new WaitForSeconds(0.05f);
+
+                muzzleSprite2.GetComponent<SpriteRenderer>().enabled = true;
+                defender.setTintColor(Color.green);
+                yield return new WaitForSeconds(0.05f);
+                muzzleSprite2.GetComponent<SpriteRenderer>().enabled = false;
+                defender.setTintColor(new Color(0, 0, 0, 0));
+                yield return new WaitForSeconds(0.05f);
+
+                muzzleSprite3.GetComponent<SpriteRenderer>().enabled = true;
+                defender.setTintColor(Color.green);
+                yield return new WaitForSeconds(0.05f);
+                muzzleSprite3.GetComponent<SpriteRenderer>().enabled = false;
+                defender.setTintColor(new Color(0, 0, 0, 0));
+                yield return new WaitForSeconds(0.05f);
+
+                muzzleSprite4.GetComponent<SpriteRenderer>().enabled = true;
+                defender.setTintColor(Color.green);
+                yield return new WaitForSeconds(0.05f);
+                muzzleSprite4.GetComponent<SpriteRenderer>().enabled = false;
+                defender.setTintColor(new Color(0, 0, 0, 0));
+                yield return new WaitForSeconds(0.05f);
+
+                muzzleSprite5.GetComponent<SpriteRenderer>().enabled = true;
+                defender.setTintColor(Color.green);
+                yield return new WaitForSeconds(0.05f);
+                muzzleSprite5.GetComponent<SpriteRenderer>().enabled = false;
+                defender.setTintColor(new Color(0, 0, 0, 0));
+                yield return new WaitForSeconds(0.05f);
+                u.gameObject.GetComponent<Animator>().SetBool("Firing", false);
+                break;
+            case "Focus Eye":
+            case "Weak Focus Eye":
+                u.gameObject.GetComponent<Animator>().SetBool("Firing", true);
+                yield return new WaitForSeconds(0.5f);
+                muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
+                defender.setTintColor(Color.green);
+                yield return new WaitForSeconds(0.05f);
+                muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
+                defender.setTintColor(new Color(0, 0, 0, 0));
+                u.gameObject.GetComponent<Animator>().SetBool("Firing", false);
+                yield return new WaitForSeconds(0.05f);
+
+                break;
+            case "Flak Gun":
+                //Shoot 9 times
+                while (shotCount < 9)
+                {
+                    muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
+                    defender.setTintColor(Color.white);
+                    yield return new WaitForSeconds(0.04f);
+                    muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
+                    defender.setTintColor(new Color(0, 0, 0, 0));
+                    yield return new WaitForSeconds(0.04f);
+                    shotCount++;
+
+                }
+                break;
+            case "Venom Tank Cannon":
+                muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
+                yield return new WaitForSeconds(0.15f);
+                muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
+                yield return new WaitForSeconds(0.15f);
+                yield return StartCoroutine(makeExplosion(defender.transform.position, explosionPrefab.transform.localScale, -3));
+                break;
+            case "P Flak Gun":
+                //Shoot 9 times
+                while (shotCount < 9)
+                {
+                    muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
+                    defender.setTintColor(Color.green);
+                    yield return new WaitForSeconds(0.04f);
+                    muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
+                    defender.setTintColor(new Color(0, 0, 0, 0));
+                    yield return new WaitForSeconds(0.04f);
+                    shotCount++;
+
+                }
+                break;
+            case "DP Rocket Burster":
+                while (shotCount < 5)
+                {
+                    if (template.currentAttacks == 0)
+                    {
+                        currentMissile = Instantiate(rpgProjectile, rpgProjectile.transform.position, Quaternion.identity) as GameObject;
+                        currentMissile.transform.SetParent(transform);
+                        currentMissile.transform.localPosition = rpgProjectile.transform.localPosition;
+                        currentMissile.transform.eulerAngles = rpgProjectile.transform.eulerAngles;
+                        currentMissile.transform.localScale = rpgProjectile.transform.localScale;
+                    }
+                    else
+                    {
+                        currentMissile = Instantiate(rpgProjectile2, rpgProjectile2.transform.position, Quaternion.identity) as GameObject;
+                        currentMissile.transform.SetParent(transform);
+                        currentMissile.transform.localPosition = rpgProjectile2.transform.localPosition;
+                        currentMissile.transform.eulerAngles = rpgProjectile2.transform.eulerAngles;
+                        currentMissile.transform.localScale = rpgProjectile2.transform.localScale;
+                    }
+                    
+                    currentMissile.GetComponent<SpriteRenderer>().enabled = true;
+                    foreach (Transform child in currentMissile.transform)
+                    {
+                        child.gameObject.SetActive(true);
+                        child.GetComponent<SpriteRenderer>().enabled = true;
+                    }
+                    missiles.Add(currentMissile);
+                    StartCoroutine(launchMissile(currentMissile, rpgProjectile, 0.35f, 8f, 32f, defender));
+                    shotCount++;
+                    yield return new WaitForSeconds(0.25f);
+                }
+                yield return StartCoroutine(waitForAllMissiles());
+                break;
+            case "Slime Launcher":
+                u.gameObject.GetComponent<Animator>().SetBool("Firing", true);
+                
+                currentSlimeBall = Instantiate(slimeballPrefab, slimeballPrefab.transform.position, Quaternion.identity);
+                currentSlimeBall.transform.SetParent(slimeballPrefab.transform);
+
+                currentSlimeBall.GetComponent<SpriteRenderer>().enabled = true;
+                currentSlimeBall.GetComponent<Animator>().SetInteger("Slime Ball State", 1);
+                yield return new WaitForSeconds(0.5f);
+                currentSlimeBall.GetComponent<Animator>().SetInteger("Slime Ball State", 2);
+                u.gameObject.GetComponent<Animator>().SetBool("Firing", false);
+                slimeBalls.Add(currentSlimeBall);
+                StartCoroutine(launchSlimeBall(currentSlimeBall, defender.gameObject, gM.getAbsoluteDistance(u.getTile(), defender.getTile()), 30f));
+                yield return new WaitForSeconds(0.5f);
+
+                yield return StartCoroutine(waitForAllSlimeBalls());
+                break;
+            case "Duality Tank Cannon":
+                muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
+                yield return new WaitForSeconds(0.15f);
+                muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
+                yield return new WaitForSeconds(0.15f);
+                yield return makeExplosion(defender.transform.position, explosionPrefab.transform.localScale, -3);
+                break;
+            case "Duality Rocket Burster":
+                while (shotCount < 5)
+                {
+                    currentMissile = Instantiate(rpgProjectile, rpgProjectile.transform.position, Quaternion.identity) as GameObject;
+                    currentMissile.transform.SetParent(transform);
+                    currentMissile.transform.localPosition = rpgProjectile.transform.localPosition;
+                    currentMissile.transform.eulerAngles = rpgProjectile.transform.eulerAngles;
+                    currentMissile.transform.localScale = rpgProjectile.transform.localScale;
+                    currentMissile.GetComponent<SpriteRenderer>().enabled = true;
+                    foreach (Transform child in currentMissile.transform)
+                    {
+                        child.gameObject.SetActive(true);
+                        child.GetComponent<SpriteRenderer>().enabled = true;
+                    }
+                    missiles.Add(currentMissile);
+                    StartCoroutine(launchMissile(currentMissile, rpgProjectile, 0.35f, 8f, 32f, defender));
+                    shotCount++;
+                    yield return new WaitForSeconds(0.25f);
+                }
+                yield return StartCoroutine(waitForAllMissiles());
+                break;
+            case "Laser Tank Cannon":
+            case "Duality Laser Tank Cannon":
+                muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
+                yield return new WaitForSeconds(0.15f);
+                muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
+                yield return new WaitForSeconds(0.15f);
+                yield return makeExplosion(defender.transform.position, explosionPrefab.transform.localScale, -3);
+                break;
+            case "Laser Assault Turret":
+                while (shotCount < 5)
+                {
+                    muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
+                    defender.setTintColor(Color.red);
+                    yield return new WaitForSeconds(0.05f);
+                    muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
+                    defender.setTintColor(new Color(0, 0, 0, 0));
+                    yield return new WaitForSeconds(0.05f);
+                    shotCount++;
+
+                }
+                break;
 
 
 
@@ -617,22 +945,15 @@ public class WeaponObject : MonoBehaviour
                 yield return StartCoroutine(makeExplosion(target.transform.position, explosionPrefab.transform.localScale * 4,-3));
                 break;
             case "Artillery Cannon":
+            case "Duality Artillery Cannon":
                 muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
-                Debug.Log(muzzleSprite.GetComponent<SpriteRenderer>().enabled);
+                //Debug.Log(muzzleSprite.GetComponent<SpriteRenderer>().enabled);
                 muzzleSprite.GetComponent<Animator>().SetBool("Firing", true);
                 yield return new WaitForSeconds(1/6f);
                 muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
                 muzzleSprite.GetComponent<Animator>().SetBool("Firing", false);
                 yield return StartCoroutine(makeExplosion(target.transform.position, explosionPrefab.transform.localScale * 4, -3));
                 //yield return new WaitForSeconds(0.5f);
-                break;
-            case "Gas Mortar":
-                muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
-                muzzleSprite.GetComponent<Animator>().SetBool("Firing", true);
-                yield return new WaitForSeconds(1 / 6f);
-                muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
-                muzzleSprite.GetComponent<Animator>().SetBool("Firing", false);
-                yield return StartCoroutine(makeExplosion(target.transform.position, explosionPrefab.transform.localScale * 4, -3));
                 break;
             case "Screamer Mouth":
                 currentSoundWave = Instantiate(soundWavePrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
@@ -646,6 +967,48 @@ public class WeaponObject : MonoBehaviour
                 //Debug.Log("Destroying scream wave");
                 Destroy(currentSoundWave);
                 break;
+            case "Bio Rose":
+                currentPoisonGasCloud = Instantiate(poisonGasPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+                currentPoisonGasCloud.transform.SetParent(transform);
+                currentPoisonGasCloud.transform.localPosition = gameObject.transform.localPosition;
+                currentPoisonGasCloud.transform.eulerAngles = gameObject.transform.eulerAngles;
+                currentPoisonGasCloud.transform.localScale = gameObject.transform.localScale;
+                currentPoisonGasCloud.GetComponent<SpriteRenderer>().enabled = true;
+                yield return StartCoroutine(movePoisonGasCloud(currentPoisonGasCloud, gM.getAOETiles(u, u.getTile(), target, template).ToList<Tile>(), 1 / 3f));
+                //Debug.Log("Destroying scream wave");
+                Destroy(currentPoisonGasCloud);
+                break;
+            case "Gas Mortar":
+            case "Gas Mortar MK 2":
+            case "Gas Mortar MK 3":
+                muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
+                muzzleSprite.GetComponent<Animator>().SetBool("Firing", true);
+                yield return new WaitForSeconds(1 / 6f);
+                muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
+                muzzleSprite.GetComponent<Animator>().SetBool("Firing", false);
+                yield return StartCoroutine(makeExplosion(target.transform.position, explosionPrefab.transform.localScale * 4, -3));
+                List<Tile> tilesToPoison = gM.getAOETiles(u, u.getTile(), target, template).ToList();
+                tilesToPoison.RemoveAll(item => item.getUnit() != null);
+                foreach (Tile t in tilesToPoison)
+                {
+                    StartCoroutine(t.addEffect("Poison Gas", 5, true));
+                }
+                break;
+            case "Tall Brewer":
+                u.gameObject.GetComponent<Animator>().SetBool("Moving", true);
+                yield return new WaitForSeconds(1f);
+                u.gameObject.GetComponent<Animator>().SetBool("Moving", false);
+                currentPoisonGasCloud = Instantiate(poisonGasPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+                currentPoisonGasCloud.transform.SetParent(transform);
+                currentPoisonGasCloud.transform.localPosition = gameObject.transform.localPosition;
+                currentPoisonGasCloud.transform.eulerAngles = gameObject.transform.eulerAngles;
+                currentPoisonGasCloud.transform.localScale = gameObject.transform.localScale;
+                currentPoisonGasCloud.GetComponent<SpriteRenderer>().enabled = true;
+                yield return StartCoroutine(movePoisonGasCloud(currentPoisonGasCloud, gM.getAOETiles(u, u.getTile(), target, template).ToList<Tile>(), 1 / 3f));
+                //Debug.Log("Destroying scream wave");
+                Destroy(currentPoisonGasCloud);
+                break;
+
         }
         yield return null;
     }
@@ -658,7 +1021,7 @@ public class WeaponObject : MonoBehaviour
         {
             case "Slime Ball":
             case "Small Slime Ball":
-                switch (mode) 
+                switch (mode)
                 {
                     case 0:
                         u.gameObject.GetComponent<Animator>().SetBool("Firing", true);
@@ -677,6 +1040,30 @@ public class WeaponObject : MonoBehaviour
                         break;
                 }
                 break;
+            case "Slime Launcher":
+                switch (mode)
+                {
+
+                    case 0:
+                        u.gameObject.GetComponent<Animator>().SetBool("Firing", true);
+
+                        currentSlimeBall = Instantiate(slimeballPrefab, slimeballPrefab.transform.position, Quaternion.identity);
+
+
+                        currentSlimeBall.GetComponent<SpriteRenderer>().enabled = true;
+                        currentSlimeBall.GetComponent<Animator>().SetInteger("Slime Ball State", 1);
+                        yield return new WaitForSeconds(0.5f);
+                        currentSlimeBall.GetComponent<Animator>().SetInteger("Slime Ball State", 2);
+                        u.gameObject.GetComponent<Animator>().SetBool("Firing", false);
+                        slimeBalls.Add(currentSlimeBall);
+                        StartCoroutine(launchSlimeBall(currentSlimeBall, target.gameObject, gM.getAbsoluteDistance(u.getTile(), target), 30f));
+                        yield return new WaitForSeconds(0.5f);
+
+                        yield return StartCoroutine(waitForAllSlimeBalls());
+                        break;
+                }
+                break;
+
         }
     }
 
@@ -747,6 +1134,10 @@ public class WeaponObject : MonoBehaviour
             if (tiles[i].getUnit() != null)
             {
                 StartCoroutine(tiles[i].getUnitScript().blinkTintColor(Color.green, 0.2f, 1));
+            }
+            else
+            {
+                StartCoroutine(tiles[i].addEffect("Poison Gas", 5, true));
             }
             poisonGasCloud.transform.parent = tiles[i].transform;
             //ends[i].setUnit(unit.gameObject);
@@ -927,13 +1318,18 @@ public class WeaponObject : MonoBehaviour
 
         float time = tileDist * 0.4f;
         float timeSquared = Mathf.Pow(time, 2);
-
-        float angle = 1f*Mathf.Atan((endPos.y - initPos.y + g*timeSquared) / (endPos.x - initPos.x));
+        float offset = 0.01f;
+        float deltaX = endPos.x - initPos.x;
+        if (Math.Round(endPos.x - initPos.x,3) == 0)
+        {
+            deltaX = offset;
+        }
+        float angle = 1f*Mathf.Atan((endPos.y - initPos.y + g*timeSquared) / deltaX);
         /*if (angle < 0)
         {
             angle = Mathf.Abs(angle)+Mathf.PI/2;
         }*/
-        float startVel = (endPos.x - initPos.x) / (time * Mathf.Cos(angle));
+        float startVel = deltaX / (time * Mathf.Cos(angle));
 
         float horizVel = startVel * Mathf.Cos(angle);
         float vertVel = startVel * Mathf.Sin(angle);

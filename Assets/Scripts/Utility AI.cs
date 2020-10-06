@@ -70,6 +70,7 @@ public class UtilityAI
         List<Controllable> customAssets = new List<Controllable>();
         customAssets.AddRange(gM.unitDictionary[side]);
         customAssets.AddRange(gM.buildingDictionary[side]);
+        
         foreach(Controllable asset in customAssets)
         {
             if (!custom)
@@ -86,6 +87,7 @@ public class UtilityAI
         {
             assets = customAssets;
         }
+        customAssets.RemoveAll(item => item.finished);
         return customAssets;
     }
 

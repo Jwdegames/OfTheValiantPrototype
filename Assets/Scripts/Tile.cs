@@ -61,6 +61,8 @@ public class Tile : MonoBehaviour
 
     public Unit actingUnit;
     public Unit secondaryUnit;
+    public string tempUnitType;
+    public List<Weapon> tempWeapons;
     public List<Weapon> actingWeapons;
     public List<Weapon> directWeapons;
     public List<Weapon> aoeWeapons;
@@ -161,14 +163,51 @@ public class Tile : MonoBehaviour
         secondaryUnit = unloadee;
     }
 
+    public void makeDeployable(string unitType, Unit deployer)
+    {
+        if (isOutlined && (outLineNum == 0 || outLineNum == 9))
+        {
+            return;
+        }
+        if (isOutlined && outLineNum != 9)
+        {
+            selector.GetComponent<UnitSelector>().setColor(new Color(255, 137, 3));
+            outLineNum = 9;
+        }
+        else if (!isOutlined)
+        {
+            outLineNum = 9;
+            isOutlined = true;
+            selector = Instantiate(selectorPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z - 9), Quaternion.identity) as GameObject;
+            selector.GetComponent<UnitSelector>().setColor(new Color(255, 137, 3));
+
+        }
+        gM.availableTiles.Add(this);
+        actingUnit = deployer;
+        tempUnitType = unitType;
+    }
+
     public void makeAttackable(Unit unit, List<Weapon> weapons)
     {
-        List<Weapon> directWeapons = unit.getOnlyDirectWeapons(weapons);
-        List<Weapon> aoeWeapons = unit.getOnlyAOEWeapons(weapons);
-        List<Weapon> directThenAOEWeapons = new List<Weapon>(directWeapons);
-        directThenAOEWeapons.AddRange(aoeWeapons);
-        this.directWeapons = directWeapons;
-        this.aoeWeapons = aoeWeapons;
+        List<Weapon> directWeapons, aoeWeapons, directThenAOEWeapons;
+        if (unit != actingUnit)
+        {
+            directWeapons = unit.getOnlyDirectWeapons(weapons);
+            aoeWeapons = unit.getOnlyAOEWeapons(weapons);
+            directThenAOEWeapons = new List<Weapon>(directWeapons);
+            directThenAOEWeapons.AddRange(aoeWeapons);
+            this.directWeapons = directWeapons;
+            this.aoeWeapons = aoeWeapons;
+        }
+        else
+        {
+            this.directWeapons.AddRange(unit.getOnlyDirectWeapons(weapons));
+            this.aoeWeapons.AddRange(unit.getOnlyAOEWeapons(weapons));
+            directThenAOEWeapons = new List<Weapon>(this.directWeapons);
+            directThenAOEWeapons.AddRange(this.aoeWeapons);
+
+        }
+        
         foreach (Weapon weapon in directThenAOEWeapons)
         {
             this.weapon = weapon;
@@ -176,9 +215,9 @@ public class Tile : MonoBehaviour
             {
                 if (isOutlined && (outLineNum == 0 || outLineNum == 2))
                 {
-                    return;
+                   // return;
                 }
-                if (isOutlined && outLineNum != 2)
+                else if (isOutlined && outLineNum != 2)
                 {
                     selector.GetComponent<UnitSelector>().setColor(Color.red);
                     outLineNum = 2;
@@ -196,9 +235,9 @@ public class Tile : MonoBehaviour
             {
                 if (isOutlined && (outLineNum == 0 || outLineNum == 4))
                 {
-                    return;
+                    //return;
                 }
-                if (isOutlined && outLineNum != 4)
+                else if (isOutlined && outLineNum != 4)
                 {
                     selector.GetComponent<UnitSelector>().setColor(new Color(0.5f, 0, 0));
                     outLineNum = 4;
@@ -214,6 +253,7 @@ public class Tile : MonoBehaviour
             }
         }
         gM.availableTiles.Add(this);
+        //Debug.Log(gM.availableTiles.Contains(this));
         actingUnit = unit;
 
     }
@@ -379,6 +419,7 @@ public class Tile : MonoBehaviour
                         }
                         StartCoroutine(gM.doAOEAttack(start.getUnitScript(), start, this, aoeWeapons));
                 }
+                actingUnit = null;
                 gM.clearAvailableTiles();
             }
             else if (isOutlined && outLineNum == 5 || outLineNum == 6)
@@ -427,6 +468,7 @@ public class Tile : MonoBehaviour
                     unit.healing = false;
                     unit.repairing = false;
                 }
+                actingUnit = null;
                 gM.clearAvailableTiles();
             }
             else if (isOutlined && outLineNum == 7)
@@ -438,6 +480,11 @@ public class Tile : MonoBehaviour
             else if (isOutlined && outLineNum == 8)
             {
                 StartCoroutine(actingUnit.unloadUnit(secondaryUnit, this, gM.doUUnLAnimations));
+                gM.clearAvailableTiles();
+            }
+            else if (isOutlined && outLineNum == 9)
+            {
+                StartCoroutine(actingUnit.deployDronesCustom(new Dictionary<string, List<Tile>>() { { tempUnitType, new List<Tile>() { this } } }));
                 gM.clearAvailableTiles();
             }
             else if (isOutlined && outLineNum == 3)

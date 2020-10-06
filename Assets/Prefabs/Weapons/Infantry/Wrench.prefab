@@ -51,7 +51,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 795f64c0df42f1842b359b5d9369ca6a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -109,7 +109,27 @@ MonoBehaviour:
   quote: 
   usesExternalSprite: 1
   muzzleSprite: {fileID: 8734379550286381647}
+  muzzleSprite2: {fileID: 0}
+  muzzleSprite3: {fileID: 0}
+  muzzleSprite4: {fileID: 0}
+  muzzleSprite5: {fileID: 0}
   rpgProjectile: {fileID: 0}
+  rpgProjectile2: {fileID: 0}
+  rpgProjectileExhaust: {fileID: 0}
+  explosionPrefab: {fileID: 0}
+  soundWavePrefab: {fileID: 0}
+  poisonGasPrefab: {fileID: 0}
+  slimeballPrefab: {fileID: 0}
+  missiles: []
+  currentMissile: {fileID: 0}
+  soundWaves: []
+  currentSoundWave: {fileID: 0}
+  poisonGasClouds: []
+  currentPoisonGasCloud: {fileID: 0}
+  slimeBalls: []
+  currentSlimeBall: {fileID: 0}
+  grenades: []
+  currentGrenade: {fileID: 0}
   sprites:
   - {fileID: 21300000, guid: d481b8eb5bd921b4ea681386c78573a7, type: 3}
   - {fileID: 21300000, guid: 0a6a3dd003ff5aa47896dd77dff3fea8, type: 3}
@@ -133,6 +153,67 @@ MonoBehaviour:
   - {fileID: 0}
   uiSprite: {fileID: 0}
   gM: {fileID: 0}
+  weapon:
+    minRange: 0
+    maxRange: 0
+    aoe: 0
+    aoeType: 0
+    roundsFired: 0
+    maxAttacksPerTurn: 0
+    currentAttacks: 0
+    damage: 0
+    healRepairAmountBefore: 0
+    healRepairPercent: 0
+    healRepairAmountAfter: 0
+    xScale: 0
+    yScale: 0
+    weaponType: 
+    name: 
+    description: 
+    quote: 
+    canTargetAir: 0
+    damages: 0
+    heals: 0
+    repairs: 0
+    canTargetSub: 0
+    mustTargetEnemies: 0
+    doesSomething: 0
+    uiSprite: {fileID: 0}
+    isPrimary: 0
+    isSecondary: 0
+    isTertiary: 0
+    isTurret: 0
+  template:
+    minRange: 0
+    maxRange: 0
+    aoe: 0
+    aoeType: 0
+    roundsFired: 0
+    maxAttacksPerTurn: 0
+    currentAttacks: 0
+    damage: 0
+    healRepairAmountBefore: 0
+    healRepairPercent: 0
+    healRepairAmountAfter: 0
+    xScale: 0
+    yScale: 0
+    weaponType: 
+    name: 
+    description: 
+    quote: 
+    canTargetAir: 0
+    damages: 0
+    heals: 0
+    repairs: 0
+    canTargetSub: 0
+    mustTargetEnemies: 0
+    doesSomething: 0
+    uiSprite: {fileID: 0}
+    isPrimary: 0
+    isSecondary: 0
+    isTertiary: 0
+    isTurret: 0
+  firstTime: 1
 --- !u!1 &8734379550286381647
 GameObject:
   m_ObjectHideFlags: 0

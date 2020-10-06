@@ -10,13 +10,21 @@ public class AIManager : MonoBehaviour
     public Dictionary<string, List<Unit>> unitDictionary;
     public List<Unit> unitsUsed;
     public GameManager gM;
+    public string currentSide = "";
     //Dictionary to tell which AI has what difficulty
     public Dictionary<string, string> aiDifficulties;
     public Dictionary<Player, UtilityAI> ais = new Dictionary<Player, UtilityAI>();
     public UtilityAI currentUtilityAI;
+    public IEnumerator currentCoroutine;
+    public IEnumerator taskCoroutine;
+    public IEnumerator currentLoopRequest;
+    public Controllable currentTaskDoer;
     public bool needToRestart = false;
-    int limitedActions = 1000000, actions = 0;
+    int limitedActions = 100, actions = 0;
+    public float limitedActionTime = 10, actionTime = 0;
     bool limitActions = true;
+    bool limitActionTime = true;
+    bool completedAction = false;
 
     // Start is called before the first frame update
     void Start()
@@ -33,8 +41,8 @@ public class AIManager : MonoBehaviour
     public IEnumerator performUtilityTask(PossibleAssignment order, UtilityAI aiM)
     {
         //Debug.Log("PUT!");
-        
-        yield return StartCoroutine(order.possibleTaskDoer.performTask(this, aiM));
+        taskCoroutine = order.possibleTaskDoer.performTask(this, aiM);
+        yield return StartCoroutine(taskCoroutine);
     }
 
     public List<PossibleAssignment> getUtilityOrders(UtilityAI ai)
@@ -52,12 +60,18 @@ public class AIManager : MonoBehaviour
         {
             needToRestart = false;
             List<PossibleAssignment> orders = getUtilityOrders(ai);
-
+            if (orders == null || orders.Count == 0) yield break;
             foreach (PossibleAssignment order in orders)
             {
                 //yield return new WaitForSeconds(1f);
                 //Debug.Log("Out of "+orders.Count+" orders, performing "+order.aiTask.taskType);
-                yield return StartCoroutine(performUtilityTask(order, ai));
+                currentTaskDoer = order.possibleTaskDoer;
+                currentCoroutine = performUtilityTask(order, ai);
+                completedAction = false;
+                StartCoroutine(clockActionTime());
+                yield return StartCoroutine(currentCoroutine);
+                StopCoroutine(clockActionTime());
+                completedAction = true;
                 if (needToRestart)
                 {
                     break;
@@ -67,17 +81,39 @@ public class AIManager : MonoBehaviour
 
             if (needToRestart)
             {
-                yield return StartCoroutine(loopUtilityRequest(side, ai));
+                currentLoopRequest = loopUtilityRequest(side, ai);
+                yield return StartCoroutine(currentLoopRequest);
             }
+        }
+    }
+
+    public void stopCurrentCoroutine()
+    {
+        StopCoroutine(currentCoroutine);
+        StartCoroutine(requestAIAction(currentSide));
+    }
+
+    public IEnumerator clockActionTime()
+    {
+        actionTime = 0;
+        yield return new WaitForSeconds(limitedActionTime);
+        if (!completedAction)
+        {
+            StopCoroutine(currentCoroutine);
+            StopCoroutine(taskCoroutine);
+            Debug.Log("Exceeded allotted action time!");
+            StartCoroutine(requestAIAction(currentSide));
         }
     }
 
     public IEnumerator requestAIAction(string side)
     {
         actions = 0;
+        actionTime = 0;
         //bool finished = true;
         //Prevent while loops from going in infinite loops
         Player aiPlayer = gM.playerDictionary[side];
+        currentSide = side;
         //printUnitDictionary();
         Debug.Log("Doing action!");
         switch (aiDifficulties[side])
@@ -94,11 +130,21 @@ public class AIManager : MonoBehaviour
                     UtilityAI currentAI = ais[aiPlayer];
                     currentUtilityAI = currentAI;
                     List<PossibleAssignment> orders = getUtilityOrders(currentAI);
-
+                    if (orders == null || orders.Count == 0)
+                    {
+                        gM.endTurn();
+                        yield break;
+                    }
                     foreach (PossibleAssignment order in orders)
                     {
                         //yield return new WaitForSeconds(1f);
-                        yield return StartCoroutine(performUtilityTask(order, currentAI));
+                        currentTaskDoer = order.possibleTaskDoer;
+                        currentCoroutine = performUtilityTask(order, currentAI);
+                        completedAction = false;
+                        StartCoroutine(clockActionTime());
+                        yield return StartCoroutine(currentCoroutine);
+                        StopCoroutine(clockActionTime());
+                        completedAction = true;
                         if (needToRestart)
                         {
                         break;
@@ -108,7 +154,8 @@ public class AIManager : MonoBehaviour
 
                     if (needToRestart)
                     {
-                        yield return StartCoroutine(loopUtilityRequest(side, currentAI));
+                        currentLoopRequest = loopUtilityRequest(side, currentAI);
+                        yield return StartCoroutine(currentLoopRequest);
                     }
                 }
                 gM.endTurn();
@@ -242,7 +289,7 @@ public class AIManager : MonoBehaviour
         //Debug.Log(attacker);
         if (gM.canAttackEnemy(attacker, attackTile, defender, defendTile))
         {
-            
+            Debug.Log("We're in range!");
             yield return StartCoroutine(gM.attackEnemy(attacker, defender, weapons));
         }
         else

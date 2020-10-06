@@ -1,7 +1,10 @@
 ﻿
+using JetBrains.Annotations;
 using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +22,8 @@ public class Unit : Controllable
 
     [SerializeField]
     private List<string> possibleActions;
+
+    public bool isCommander = false;
 
     //Weapon used for choosing to attack
     public Weapon targetingWeapon;
@@ -120,6 +125,7 @@ public class Unit : Controllable
     public int totalDeploys = 0;
     public int totalDrones = 0;
 
+    public Dictionary<string, List<Vector4>> dronesDict = new Dictionary<string, List<Vector4>>();
     //Transport Variables
     public string mainTransportType;
     public string secondaryTransportType;
@@ -634,9 +640,19 @@ public class Unit : Controllable
         if (dissolvesOnDeath && deathAEType == "")
         {
             float elaspedTime = 0f;
+            List<Weapon> weaponsToDissolve = getAllActiveWeapons();
             while (elaspedTime < dissolveTime)
             {
                 rMaterial.SetFloat("_Fade", 1 - elaspedTime / dissolveTime);
+                //Dissolve all weapon objects
+                foreach(Weapon weapon in weaponsToDissolve)
+                {
+                    WeaponObject wO = weaponDictionary[weapon];
+                    if (wO.usesExternalSprite)
+                    {
+                        wO.rMaterial.SetFloat("_Fade", 1 - elaspedTime / dissolveTime);
+                    }
+                }
                 elaspedTime += Time.deltaTime;
                 yield return null;
             }
@@ -681,46 +697,68 @@ public class Unit : Controllable
         //Make the units
         UnitsList unitsList = new UnitsList();
         Player player = gM.playerDictionary[side];
-        foreach(string unitName in unitsMadeOnDeathDict.Keys)
+        if (unitsMadeOnDeathDict != null)
         {
-            Vector3 parameters = unitsMadeOnDeathDict[unitName];
-            Debug.Log("Making " + unitName);
-            switch(parameters.z)
+            foreach (string unitName in unitsMadeOnDeathDict.Keys)
             {
-                case 0:
-                    break;
-                case 1:
-                    for (int i = 0; i < parameters.y; i++)
-                    {
-                        Tile spawnTile = gM.findClosestEmptyTile(tile, false);
+                Vector3 parameters = unitsMadeOnDeathDict[unitName];
+                Debug.Log("Making " + unitName);
+                switch (parameters.z)
+                {
+                    //Note: If z is 0, then y is overriden to 0
+                    case 0:
+                        Tile spawnTile = tile;
+                        tile.setUnit(null);
                         GameObject unitObject = Instantiate(unitsList.getUnitPrefab(player.faction, gM.boardScript, unitName), Vector3.zero, Quaternion.identity) as GameObject;
                         Unit unitObjectScript = unitObject.GetComponent<Unit>();
                         unitObjectScript.matchWeapon("Build");
                         UnitTemplate template = unitsList.templateDictionary[unitName];
                         unitObjectScript.useTemplate(template);
-                        yield return StartCoroutine(cwScript.performSpecialAnimation(spawnTile, 0));
+                        //yield return StartCoroutine(cwScript.performSpecialAnimation(spawnTile, 0));
                         Unit builtUnit = gM.boardScript.buildUnit(unitObject, player, spawnTile.mapX, spawnTile.mapY, false);
                         //builtUnit.useTemplate(template);
                         Destroy(unitObject);
                         yield return new WaitForSeconds(0.001f);
-                    }
-                    break;
+                        break;
+                    case 1:
+                        for (int i = 0; i < parameters.y; i++)
+                        {
+                            spawnTile = gM.findClosestEmptyTile(tile, false);
+                            unitObject = Instantiate(unitsList.getUnitPrefab(player.faction, gM.boardScript, unitName), Vector3.zero, Quaternion.identity) as GameObject;
+                            unitObjectScript = unitObject.GetComponent<Unit>();
+                            unitObjectScript.matchWeapon("Build");
+                            template = unitsList.templateDictionary[unitName];
+                            unitObjectScript.useTemplate(template);
+                            yield return StartCoroutine(cwScript.performSpecialAnimation(spawnTile, 0));
+                            builtUnit = gM.boardScript.buildUnit(unitObject, player, spawnTile.mapX, spawnTile.mapY, false);
+                            //builtUnit.useTemplate(template);
+                            Destroy(unitObject);
+                            yield return new WaitForSeconds(0.001f);
+                        }
+                        break;
+                }
             }
-        }
 
-        if (dissolvesOnDeath && deathAEType == "Dissolve After Make Unit")
-        {
-            float elaspedTime = 0f;
-            while (elaspedTime < dissolveTime)
+            if (dissolvesOnDeath && deathAEType == "Dissolve After Make Unit")
             {
-                rMaterial.SetFloat("_Fade", 1 - elaspedTime / dissolveTime);
-                elaspedTime += Time.deltaTime;
-                yield return null;
+                float elaspedTime = 0f;
+                while (elaspedTime < dissolveTime)
+                {
+                    rMaterial.SetFloat("_Fade", 1 - elaspedTime / dissolveTime);
+                    elaspedTime += Time.deltaTime;
+                    yield return null;
+                }
             }
         }
-
+        gM.applyUnitEffectToInfluenceDict(this, false);
         gM.unitDictionary[side].Remove(this);
         gM.aiScript.unitDictionary[side].Remove(this);
+        if (gM.aiScript.currentTaskDoer == (Controllable)this)
+        {
+            //Debug.Log("Stopping");
+            gM.aiScript.stopCurrentCoroutine();
+        }
+
         Destroy(gameObject);
         yield break;
      
@@ -857,10 +895,12 @@ public class Unit : Controllable
     public IEnumerator dealAOEDamage(Weapon weapon, Tile target)
     {
         HashSet<Tile> tiles = gM.getAOETiles(this, tile, target, weapon);
-        foreach(Tile aoeTile in tiles)
+        Debug.Log("Dealing AOE damage with " + tiles.Count + " tile(s)");
+        foreach (Tile aoeTile in tiles)
         {
             if (aoeTile != null && aoeTile.getUnit() != null)
             {
+                Debug.Log("Doing AOE damage to " +target +" with "+weapon+" from "+this);
                 yield return StartCoroutine(dealDamage(weapon, aoeTile));
             }
         }
@@ -961,11 +1001,13 @@ public class Unit : Controllable
             Weapon turret = weaponsToUse[i];
             //Debug.Log(turret);
             if (turret == null) continue;
-            if (gM.canAttackEnemyWithWeapon(this, tile, target.getUnitScript(), target, turret))
+            if (target != null && gM.canAttackEnemyWithWeapon(this, tile, target.getUnitScript(), target, turret))
             {
                 if (turret.aoe > 0)
                 {
+                    //Debug.Log("AOE detected");
                     yield return StartCoroutine(weaponDictionary[weaponsToUse[i]].performAOEAnimation(target));
+                    //Debug.Log("AOE detected");
                     yield return StartCoroutine(dealAOEDamage(turret, target));
                 }
                 else
@@ -1017,12 +1059,12 @@ public class Unit : Controllable
     }
 
     //Helper method to clean up space in match weapon method
-    public void genWeaponMatch(Weapon weapon, Sprite weaponSprite, GameObject weaponObject, Vector3 weaponPos, Vector2 weaponScale,Vector3 weaponPos2, string type, string type2)
+    public void genWeaponMatch(Weapon weapon, Sprite weaponSprite, GameObject weaponObject, Vector3 weaponPos, Vector2 weaponScale, Vector3 weaponPos2, string type, string type2)
     {
         switch(type)
         {
             case "Primary":
-                weapons.Add(weapon);
+                weapons.Insert(0, weapon);
                 weapons[0].isPrimary = true;
                 weapons[0].uiSprite = weaponSprite;
                 setCurrentWeapon(0);
@@ -1037,9 +1079,15 @@ public class Unit : Controllable
                 break;
             //THERE SHOULD BE A PRIMARY WEAPON BEFORE A SECONDARY WEAPON IS ADDED
             case "Secondary":
-                weapons.Add(weapon);
+                if (weapons.Count == 0)
+                {
+                    genWeaponMatch(weapon, weaponSprite, weaponObject, weaponPos, weaponScale, weaponPos2, "Primary", type2);
+                    break;
+                }
+                weapons.Insert(1,weapon);
                 weapons[1].isSecondary = true;
                 weapons[1].uiSprite = weaponSprite;
+                currentWeapon2 = weapon;
                 cw2Object = Instantiate(weaponObject, genWeaponAboveCoords(weaponPos), Quaternion.identity) as GameObject;
 
                 setupCW2Object();
@@ -1048,6 +1096,7 @@ public class Unit : Controllable
                 cw2Script.ySize = weaponScale.y;
                 cw2Script.useWeapon(weapon, this);
                 weaponDictionary.Add(weapon, cw2Script);
+                //Debug.Log(weaponDictionary[weapon]);
                 break;
             case "Tertiary":
                 break;
@@ -1064,8 +1113,8 @@ public class Unit : Controllable
                 WeaponObject turretScript = turretObject.GetComponent<WeaponObject>();
                 turretScript.xSize = weaponScale.x;
                 turretScript.ySize = weaponScale.y;
-                turretScript.useWeapon(turrets[0], this);
-                weaponDictionary.Add(turrets[0], turretScript);
+                turretScript.useWeapon(turrets[turrets.Count - 1], this);
+                weaponDictionary.Add(turrets[turrets.Count - 1], turretScript);
                 break;
         }
     }
@@ -1082,1099 +1131,109 @@ public class Unit : Controllable
         {
             case "Trooper":
             case "Jet Trooper":
-                weapons.Add(weaponsList.getWeaponCopy(0));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[0];
-                setCurrentWeapon(0);
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(0, -1/8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(0, -1/8f);
-                        break;
-
-
-                }
-                cwObject = Instantiate(gM.weaponPrefabs[0], genWeaponAboveCoords(pos), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 1.6f;
-                cwScript.ySize = 1.6f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
-                
+                genWeaponMatch(weaponsList.getWeaponCopy(0), ui.uiWeaponSprites[0], gM.weaponPrefabs[0], new Vector3(0, -1 / 8f, -1), new Vector2(1.6f, 1.6f), new Vector3(), "Primary", null);
                 break;
             case "Rocketeer":
             case "Jet Rocketeer":
-                weapons.Add(weaponsList.getWeaponCopy(1));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[1];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[1], genWeaponAboveCoords(0,-1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 0.6f;
-                cwScript.ySize = 1.25f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(1), ui.uiWeaponSprites[1], gM.weaponPrefabs[1], new Vector3(0, -1 / 8f, -1), new Vector2(0.6f, 1.25f), new Vector3(), "Primary", null);
                 break;
             case "Sniper":
-                weapons.Add(weaponsList.getWeaponCopy(2));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[2];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[2], genWeaponAboveCoords(0, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1.6f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(2), ui.uiWeaponSprites[2], gM.weaponPrefabs[2], new Vector3(0, -1 / 8f, -1), new Vector2(1f, 1.6f), new Vector3(), "Primary", null);
                 break;
             case "Mortarman":
-                weapons.Add(weaponsList.getWeaponCopy(3));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[3];
-                setCurrentWeapon(0);
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(1/8f, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(1 / 8f, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(1/8f, -1 / 8f);
-                        break;
-
-
-                }
-                cwObject = Instantiate(gM.weaponPrefabs[3], genWeaponAboveCoords(1, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 1.6f;
-                cwScript.ySize = 1.25f;
+                genWeaponMatch(weaponsList.getWeaponCopy(3), ui.uiWeaponSprites[3], gM.weaponPrefabs[3], new Vector3(1 / 8, -1 / 8f, -1), new Vector2(1.6f, 1.25f), new Vector3(), "Primary", null);
                 cwObject.transform.localEulerAngles = new Vector3(0, 0, 30);
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
                 break;
             case "Shielded Trooper":
             case "S-Jet Trooper":
-                weapons.Add(weaponsList.getWeaponCopy(4));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[4];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(-0f/8, -1 / 8f, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0f / 8, -1 / 8f, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0f/8, -1 / 8f, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[4], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 1.25f;
-                cwScript.ySize = 1.25f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
-
-                //Now do the shield
-                weapons.Add(weaponsList.getWeaponCopy(5));
-                weapons[1].isSecondary = true;
-                weapons[1].uiSprite = ui.uiWeaponSprites[5];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(2/8f, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(2 / 8f, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(2/8f, -1 / 8f);
-                        break;
-
-
-                }
-                currentWeapon2 = weapons[1];
-                cw2Object = Instantiate(gM.weaponPrefabs[5], genWeaponAboveCoords(2f, -1), Quaternion.identity) as GameObject;
-                setupCW2Object();
-                offsetWeapon(cw2Object, pos);
-                cw2Script.xSize = 1.25f;
-                cw2Script.ySize = 1.6f;
-                cw2Script.useWeapon(weapons[1], this);
-                //printAttributeDictionary(weapons[1].extraAttributes);
-                weaponDictionary.Add(weapons[1], cw2Script);
+                genWeaponMatch(weaponsList.getWeaponCopy(4), ui.uiWeaponSprites[4], gM.weaponPrefabs[4], new Vector3(0, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(5), ui.uiWeaponSprites[5], gM.weaponPrefabs[5], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(1.25f, 1.6f), new Vector3(), "Secondary", null);
                 break;
             case "Gattler":
-                weapons.Add(weaponsList.getWeaponCopy(6));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[6];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[6], genWeaponAboveCoords(0, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(6), ui.uiWeaponSprites[6], gM.weaponPrefabs[6], new Vector3(0, -1 / 8f, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
                 break;
             case "Shielded Rocketeer":
-                weapons.Add(weaponsList.getWeaponCopy(1));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[0];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, -1 / 8f, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, -1 / 8f, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, -1 / 8f, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[1], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 0.6f;
-                cwScript.ySize = 1.25f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
-
-                //Now do the shield
-                weapons.Add(weaponsList.getWeaponCopy(5));
-                weapons[1].isSecondary = true;
-                weapons[1].uiSprite = ui.uiWeaponSprites[5];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(2 / 8f, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(2 / 8f, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(2 / 8f, -1 / 8f);
-                        break;
-
-
-                }
-                currentWeapon2 = weapons[1];
-                cw2Object = Instantiate(gM.weaponPrefabs[5], genWeaponAboveCoords(2f, -1), Quaternion.identity) as GameObject;
-                setupCW2Object();
-                offsetWeapon(cw2Object, pos);
-                cw2Script.xSize = 1.25f;
-                cw2Script.ySize = 1.6f;
-                cw2Script.useWeapon(weapons[1], this);
-
-                //printAttributeDictionary(weapons[1].extraAttributes);
-                weaponDictionary.Add(weapons[1], cw2Script);
+                genWeaponMatch(weaponsList.getWeaponCopy(1), ui.uiWeaponSprites[1], gM.weaponPrefabs[1], new Vector3(0, -1 / 8f, -1), new Vector2(0.6f, 1.25f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(5), ui.uiWeaponSprites[5], gM.weaponPrefabs[5], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(1.25f, 1.6f), new Vector3(), "Secondary", null);
                 break;
             case "Field Medic":
-                weapons.Add(weaponsList.getWeaponCopy(4));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[4];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(2f / 8, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(2f / 8, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(2f / 8, -1 / 8f);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[4], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 1.25f;
-                cwScript.ySize = 1.25f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
-
-                //Now do the shield
-                weapons.Add(weaponsList.getWeaponCopy(7));
-                weapons[1].isSecondary = true;
-                weapons[1].uiSprite = ui.uiWeaponSprites[7];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(-2 / 8f, -2 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(-2 / 8f, -2 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(-2 / 8f, -2 / 8f);
-                        break;
-
-
-                }
-                currentWeapon2 = weapons[1];
-                cw2Object = Instantiate(gM.weaponPrefabs[7], genWeaponAboveCoords(2f, -1), Quaternion.identity) as GameObject;
-                setupCW2Object();
-                offsetWeapon(cw2Object, pos);
-                cw2Script.xSize = 0.45f;
-                cw2Script.ySize = 0.45f;
-                cw2Script.useWeapon(weapons[1], this);
-                //printAttributeDictionary(weapons[1].extraAttributes);
+                genWeaponMatch(weaponsList.getWeaponCopy(4), ui.uiWeaponSprites[4], gM.weaponPrefabs[4], new Vector3(2f/8, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(7), ui.uiWeaponSprites[7], gM.weaponPrefabs[7], new Vector3(- 2 / 8f, -2 / 8f, -1), new Vector2(0.45f, 0.45f), new Vector3(), "Secondary", null);
                 cw2Object.transform.localEulerAngles = new Vector3(0, 0, -60);
-                weaponDictionary.Add(weapons[1], cw2Script);
                 break;
             case "Field Engineer":
-                weapons.Add(weaponsList.getWeaponCopy(4));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[4];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(2f / 8, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(2f / 8, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(2f / 8, -1 / 8f);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[4], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 1.25f;
-                cwScript.ySize = 1.25f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
-
-                //Now do the shield
-                weapons.Add(weaponsList.getWeaponCopy(8));
-                weapons[1].isSecondary = true;
-                weapons[1].uiSprite = ui.uiWeaponSprites[8];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(-2 / 8f, -2 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(-2 / 8f, -2 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(-2 / 8f, -2 / 8f);
-                        break;
-
-
-                }
-                currentWeapon2 = weapons[1];
-                cw2Object = Instantiate(gM.weaponPrefabs[8], genWeaponAboveCoords(2f, -1), Quaternion.identity) as GameObject;
-                setupCW2Object();
-                offsetWeapon(cw2Object, pos);
-                cw2Script.xSize = 1f;
-                cw2Script.ySize = 1f;
-                cw2Script.useWeapon(weapons[1], this);
-                //printAttributeDictionary(weapons[1].extraAttributes);
-                //cw2Object.transform.localEulerAngles = new Vector3(0, 0, 90);
-                weaponDictionary.Add(weapons[1], cw2Script);
+                genWeaponMatch(weaponsList.getWeaponCopy(4), ui.uiWeaponSprites[4], gM.weaponPrefabs[4], new Vector3(2f / 8, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(8), ui.uiWeaponSprites[8], gM.weaponPrefabs[8], new Vector3(-2 / 8f, -2 / 8f, -1), new Vector2(1f, 1f), new Vector3(), "Secondary", null);
                 break;
             case "Droid Trooper":
             case "Jet Droid":
-                weapons.Add(weaponsList.getWeaponCopy(9));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[9];
-                setCurrentWeapon(0);
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-
-
-                }
-                cwObject = Instantiate(gM.weaponPrefabs[9], genWeaponAboveCoords(pos), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 1.6f;
-                cwScript.ySize = 1.6f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
-
+                genWeaponMatch(weaponsList.getWeaponCopy(9), ui.uiWeaponSprites[9], gM.weaponPrefabs[9], new Vector3(0f, -1 / 8f, -1), new Vector2(1.6f, 1.6f), new Vector3(), "Primary", null);
                 break;
             case "Shielded Droid":
-                weapons.Add(weaponsList.getWeaponCopy(10));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[10];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(-0f / 8, -1 / 8f, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0f / 8, -1 / 8f, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0f / 8, -1 / 8f, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[10], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 1.25f;
-                cwScript.ySize = 1.25f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
-
-                //Now do the shield
-                weapons.Add(weaponsList.getWeaponCopy(5));
-                weapons[1].isSecondary = true;
-                weapons[1].uiSprite = ui.uiWeaponSprites[5];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(2 / 8f, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(2 / 8f, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(2 / 8f, -1 / 8f);
-                        break;
-
-
-                }
-                currentWeapon2 = weapons[1];
-                cw2Object = Instantiate(gM.weaponPrefabs[5], genWeaponAboveCoords(2f, -1), Quaternion.identity) as GameObject;
-                setupCW2Object();
-                offsetWeapon(cw2Object, pos);
-                cw2Script.xSize = 1.25f;
-                cw2Script.ySize = 1.6f;
-                cw2Script.useWeapon(weapons[1], this);
-                //printAttributeDictionary(weapons[1].extraAttributes);
-                weaponDictionary.Add(weapons[1], cw2Script);
+                genWeaponMatch(weaponsList.getWeaponCopy(10), ui.uiWeaponSprites[10], gM.weaponPrefabs[10], new Vector3(0f, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(5), ui.uiWeaponSprites[5], gM.weaponPrefabs[5], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(1.25f, 1.6f), new Vector3(), "Secondary", null);
                 break;
             case "S-Droid Rocketeer":
-                weapons.Add(weaponsList.getWeaponCopy(11));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[11];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, -1 / 8f, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, -1 / 8f, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, -1 / 8f, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[11], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 0.6f;
-                cwScript.ySize = 1.25f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
-
-                //Now do the shield
-                weapons.Add(weaponsList.getWeaponCopy(5));
-                weapons[1].isSecondary = true;
-                weapons[1].uiSprite = ui.uiWeaponSprites[5];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(2 / 8f, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(2 / 8f, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(2 / 8f, -1 / 8f);
-                        break;
-
-
-                }
-                currentWeapon2 = weapons[1];
-                cw2Object = Instantiate(gM.weaponPrefabs[5], genWeaponAboveCoords(2f, -1), Quaternion.identity) as GameObject;
-                setupCW2Object();
-                offsetWeapon(cw2Object, pos);
-                cw2Script.xSize = 1.25f;
-                cw2Script.ySize = 1.6f;
-                cw2Script.useWeapon(weapons[1], this);
-
-                //printAttributeDictionary(weapons[1].extraAttributes);
-                weaponDictionary.Add(weapons[1], cw2Script);
+                genWeaponMatch(weaponsList.getWeaponCopy(11), ui.uiWeaponSprites[11], gM.weaponPrefabs[11], new Vector3(0f, -1 / 8f, -1), new Vector2(0.6f, 1.25f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(5), ui.uiWeaponSprites[5], gM.weaponPrefabs[5], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(1.25f, 1.6f), new Vector3(), "Secondary", null);
                 break;
             case "Droid Gattler":
-                weapons.Add(weaponsList.getWeaponCopy(12));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[12];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[12], genWeaponAboveCoords(0, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(12), ui.uiWeaponSprites[12], gM.weaponPrefabs[12], new Vector3(0f, -1 / 8f, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
                 break;
             case "Jet Droid Rocketeer":
-                weapons.Add(weaponsList.getWeaponCopy(11));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[11];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, -1 / 8f, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, -1 / 8f, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, -1 / 8f, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[11], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 0.6f;
-                cwScript.ySize = 1.25f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(11), ui.uiWeaponSprites[11], gM.weaponPrefabs[11], new Vector3(0f, -1 / 8f, -1), new Vector2(0.6f, 1.25f), new Vector3(), "Primary", null);
                 break;
             case "Drone":
-                weapons.Add(weaponsList.getWeaponCopy(13));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[13];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[13], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(13), ui.uiWeaponSprites[13], gM.weaponPrefabs[13], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
                 break;
             case "Tank":
-                weapons.Add(weaponsList.getWeaponCopy(14));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[14];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[14], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(14), ui.uiWeaponSprites[14], gM.weaponPrefabs[14], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
                 break;
             case "Heavy Tank":
-                weapons.Add(weaponsList.getWeaponCopy(15));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[15];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[15], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(15), ui.uiWeaponSprites[15], gM.weaponPrefabs[15], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
                 break;
             case "Assault Transporter":
-                turrets.Add(weaponsList.getWeaponCopy(16));
-                turrets[0].isTurret = true;
-                turrets[0].uiSprite = ui.uiWeaponSprites[16];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(-0.072f, 0.297f, - 1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(-0.072f, 0.297f, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(-0.072f, 0.297f, -1);
-                        break;
-
-
-                }
-                //setCurrentWeapon(0);
-
-                GameObject turretObject = Instantiate(gM.weaponPrefabs[16], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                //setupCWObject();
-                setUpTurret(turretObject);
-                offsetWeapon(turretObject, pos3D);
-                WeaponObject turretScript = turretObject.GetComponent<WeaponObject>();
-                turretScript.xSize = 0.55f;
-                turretScript.ySize = 0.55f;
-                turretScript.useWeapon(turrets[0], this);
-                weaponDictionary.Add(turrets[0], turretScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(16), ui.uiWeaponSprites[16], gM.weaponPrefabs[16], new Vector3(-0.072f, 0.297f, - 1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
                 break;
             case "Rocket Truck":
-                weapons.Add(weaponsList.getWeaponCopy(17));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[17];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[17], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(17), ui.uiWeaponSprites[17], gM.weaponPrefabs[17], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
                 break;
             case "Artillery Truck":
-                weapons.Add(weaponsList.getWeaponCopy(18));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[18];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[18], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(18), ui.uiWeaponSprites[18], gM.weaponPrefabs[18], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
                 break;
             case "Assault Tank":
-                weapons.Add(weaponsList.getWeaponCopy(14));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[14];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[14], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
-
-                turrets.Add(weaponsList.getWeaponCopy(16));
-                turrets[0].isTurret = true;
-                turrets[0].uiSprite = ui.uiWeaponSprites[16];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(-0.05f, 0.37918f, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(-0.05f, 0.37918f, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(-0.05f, 0.37918f, -1);
-                        break;
-
-
-                }
-                //setCurrentWeapon(0);
-
-                turretObject = Instantiate(gM.weaponPrefabs[16], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                //setupCWObject();
-                setUpTurret(turretObject);
-                offsetWeapon(turretObject, pos3D);
-                turretScript = turretObject.GetComponent<WeaponObject>();
-                turretScript.xSize = 0.55f;
-                turretScript.ySize = 0.55f;
-                turretScript.useWeapon(turrets[0], this);
-                weaponDictionary.Add(turrets[0], turretScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(14), ui.uiWeaponSprites[14], gM.weaponPrefabs[14], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(16), ui.uiWeaponSprites[16], gM.weaponPrefabs[16], new Vector3(-0.05f, 0.37918f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
                 break;
             case "Assault Heavy Tank":
-                weapons.Add(weaponsList.getWeaponCopy(15));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[15];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[15], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
-
-                turrets.Add(weaponsList.getWeaponCopy(16));
-                turrets[0].isTurret = true;
-                turrets[0].uiSprite = ui.uiWeaponSprites[16];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(-0.046f, 0.403f, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(-0.046f, 0.403f, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(-0.046f, 0.403f, -1);
-                        break;
-
-
-                }
-                //setCurrentWeapon(0);
-
-                turretObject = Instantiate(gM.weaponPrefabs[16], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                //setupCWObject();
-                setUpTurret(turretObject);
-                offsetWeapon(turretObject, pos3D);
-                turretScript = turretObject.GetComponent<WeaponObject>();
-                turretScript.xSize = 0.55f;
-                turretScript.ySize = 0.55f;
-                turretScript.useWeapon(turrets[0], this);
-                weaponDictionary.Add(turrets[0], turretScript);
-
-                turrets.Add(weaponsList.getWeaponCopy(16));
-                turrets[1].isTurret = true;
-                turrets[1].uiSprite = ui.uiWeaponSprites[16];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(-0.045f, 0.275f, -2);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(-0.045f, 0.275f, -2);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(-0.045f, 0.275f, -2);
-                        break;
-
-
-                }
-                //setCurrentWeapon(0);
-
-                turretObject = Instantiate(gM.weaponPrefabs[16], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                //setupCWObject();
-                setUpTurret(turretObject);
-                offsetWeapon(turretObject, pos3D);
-                turretScript = turretObject.GetComponent<WeaponObject>();
-                turretScript.xSize = 0.55f;
-                turretScript.ySize = 0.55f;
-                turretScript.useWeapon(turrets[1], this);
-                weaponDictionary.Add(turrets[1], turretScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(15), ui.uiWeaponSprites[15], gM.weaponPrefabs[15], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(16), ui.uiWeaponSprites[16], gM.weaponPrefabs[16], new Vector3(-0.046f, 0.403f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(16), ui.uiWeaponSprites[16], gM.weaponPrefabs[16], new Vector3(-0.045f, 0.275f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
                 break;
             case "Masked Trooper":
             case "Mutant Trooper":
-                weapons.Add(weaponsList.getWeaponCopy(19));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[19];
-                setCurrentWeapon(0);
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(0, -1 / 8f);
-                        break;
-
-
-                }
-                cwObject = Instantiate(gM.weaponPrefabs[19], genWeaponAboveCoords(pos), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 1.6f;
-                cwScript.ySize = 1.6f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
-
+                genWeaponMatch(weaponsList.getWeaponCopy(19), ui.uiWeaponSprites[19], gM.weaponPrefabs[19], new Vector3(0f, -1 / 8f, -1), new Vector2(1.6f, 1.6f), new Vector3(), "Primary", null);
                 break;
             case "Grenadier":
-                weapons.Add(weaponsList.getWeaponCopy(20));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[20];
-                setCurrentWeapon(0);
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(1/8f, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(1 / 8f, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(1 / 8f, -1 / 8f);
-                        break;
-
-
-                }
-                cwObject = Instantiate(gM.weaponPrefabs[20], genWeaponAboveCoords(pos), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 0.8f;
-                cwScript.ySize = 0.8f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(20), ui.uiWeaponSprites[20], gM.weaponPrefabs[20], new Vector3(0.8f, 0.8f, -1), new Vector2(1.6f, 1.6f), new Vector3(), "Primary", null);
 
                 break;
             case "MG Mortarman":
-                weapons.Add(weaponsList.getWeaponCopy(21));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[21];
-                setCurrentWeapon(0);
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(1 / 8f, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(1 / 8f, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(1 / 8f, -1 / 8f);
-                        break;
-
-
-                }
-                cwObject = Instantiate(gM.weaponPrefabs[21], genWeaponAboveCoords(1, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 1.92f;
-                cwScript.ySize = 1.5f;
+                genWeaponMatch(weaponsList.getWeaponCopy(21), ui.uiWeaponSprites[21], gM.weaponPrefabs[21], new Vector3(1/8f, -1 / 8f, -1), new Vector2(1.92f, 1.5f), new Vector3(), "Primary", null);
                 cwObject.transform.localEulerAngles = new Vector3(0, 0, 30);
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
                 break;
             case "Scientist":
-                weapons.Add(weaponsList.getWeaponCopy(22));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[22];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos = new Vector2(2f / 8, -1 / 8f);
-                        break;
-                    case "UI":
-                        pos = new Vector2(2f / 8, -1 / 8f);
-                        break;
-                    case "Unit Template":
-                        pos = new Vector2(2f / 8, -1 / 8f);
-                        break;
+                genWeaponMatch(weaponsList.getWeaponCopy(22), ui.uiWeaponSprites[22], gM.weaponPrefabs[22], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(0.8f, 0.8f), new Vector3(), "Primary", null);
 
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[22], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos);
-                cwScript.xSize = 0.8f;
-                cwScript.ySize = 0.8f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
                 break;
             case "Screamer":
-                weapons.Add(weaponsList.getWeaponCopy(23));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[23];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[23], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(23), ui.uiWeaponSprites[23], gM.weaponPrefabs[23], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
                 break;
             case "Brewer":
-                weapons.Add(weaponsList.getWeaponCopy(24));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[24];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[24], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+                genWeaponMatch(weaponsList.getWeaponCopy(24), ui.uiWeaponSprites[24], gM.weaponPrefabs[24], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
                 break;
-            case "Eyesore":
-                weapons.Add(weaponsList.getWeaponCopy(25));
-                weapons[0].isPrimary = true;
-                weapons[0].uiSprite = ui.uiWeaponSprites[25];
-                switch (use)
-                {
-                    case "Build Unit":
-                    case "Make Unit":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "UI":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-                    case "Unit Template":
-                        pos3D = new Vector3(0, 0, -1);
-                        break;
-
-
-                }
-                setCurrentWeapon(0);
-                cwObject = Instantiate(gM.weaponPrefabs[25], genWeaponAboveCoords(-0.5f, -1), Quaternion.identity) as GameObject;
-                setupCWObject();
-                offsetWeapon(cwObject, pos3D);
-                cwScript.xSize = 1f;
-                cwScript.ySize = 1f;
-                cwScript.useWeapon(weapons[0], this);
-                weaponDictionary.Add(weapons[0], cwScript);
+            case "Eyesore": 
+                genWeaponMatch(weaponsList.getWeaponCopy(25), ui.uiWeaponSprites[25], gM.weaponPrefabs[25], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
                 break;
             case "Slime":
                 genWeaponMatch(weaponsList.getWeaponCopy(26), ui.uiWeaponSprites[26], gM.weaponPrefabs[26], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
@@ -2184,6 +1243,74 @@ public class Unit : Controllable
                 break;
             case "Mini Slime":
                 genWeaponMatch(weaponsList.getWeaponCopy(28), ui.uiWeaponSprites[26], gM.weaponPrefabs[26], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Eyebat":
+                genWeaponMatch(weaponsList.getWeaponCopy(29), ui.uiWeaponSprites[25], gM.weaponPrefabs[27], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Rosebat":
+                genWeaponMatch(weaponsList.getWeaponCopy(30), ui.uiWeaponSprites[25], gM.weaponPrefabs[28], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Focibat":
+                genWeaponMatch(weaponsList.getWeaponCopy(31), ui.uiWeaponSprites[28], gM.weaponPrefabs[29], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Weak Foci":
+                genWeaponMatch(weaponsList.getWeaponCopy(32), ui.uiWeaponSprites[29], gM.weaponPrefabs[30], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Mortar Truck":
+                genWeaponMatch(weaponsList.getWeaponCopy(33), ui.uiWeaponSprites[33], gM.weaponPrefabs[31], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Flak Truck":
+                genWeaponMatch(weaponsList.getWeaponCopy(34), ui.uiWeaponSprites[34], gM.weaponPrefabs[32], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Venom Tank":
+                genWeaponMatch(weaponsList.getWeaponCopy(35), ui.uiWeaponSprites[35], gM.weaponPrefabs[33], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Mortar Tank":
+                genWeaponMatch(weaponsList.getWeaponCopy(36), ui.uiWeaponSprites[33], gM.weaponPrefabs[34], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "P Flak Tank":
+                genWeaponMatch(weaponsList.getWeaponCopy(37), ui.uiWeaponSprites[36], gM.weaponPrefabs[35], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "DP Rocket Tank":
+                genWeaponMatch(weaponsList.getWeaponCopy(38), ui.uiWeaponSprites[37], gM.weaponPrefabs[36], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Brewer Truck":
+                genWeaponMatch(weaponsList.getWeaponCopy(39), ui.uiWeaponSprites[38], gM.weaponPrefabs[37], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Slime Launcher Truck":
+                genWeaponMatch(weaponsList.getWeaponCopy(40), ui.uiWeaponSprites[39], gM.weaponPrefabs[38], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Duality Tank":
+                genWeaponMatch(weaponsList.getWeaponCopy(41), ui.uiWeaponSprites[14], gM.weaponPrefabs[39], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(42), ui.uiWeaponSprites[17], gM.weaponPrefabs[40], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Secondary", null);
+                break;
+            case "Automated Tank":
+                genWeaponMatch(weaponsList.getWeaponCopy(43), ui.uiWeaponSprites[40], gM.weaponPrefabs[41], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                break;
+            case "Assault Automated Tank":
+                genWeaponMatch(weaponsList.getWeaponCopy(43), ui.uiWeaponSprites[40], gM.weaponPrefabs[41], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.045f, 0.275f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.046f, 0.403f, - 1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                break;
+            case "Assault Auto Transporter":
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.09f, 0.297f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.34f, 0.4f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(0.17f, 0.19f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(0.17f, 0.4f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.34f, 0.19f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                break;
+            case "Assault Auto Artillery":
+                genWeaponMatch(weaponsList.getWeaponCopy(18), ui.uiWeaponSprites[18], gM.weaponPrefabs[18], new Vector3(0, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.217f, 0.139f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                break;
+            case "Assault Auto Duality Tank":
+                genWeaponMatch(weaponsList.getWeaponCopy(45), ui.uiWeaponSprites[40], gM.weaponPrefabs[43], new Vector3(0, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(46), ui.uiWeaponSprites[18], gM.weaponPrefabs[44], new Vector3(0, 0, -1), new Vector2(1f, 1f), new Vector3(), "Secondary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.16f, 0.358f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                break;
+            case "Asher":
+                genWeaponMatch(weaponsList.getWeaponCopy(10), ui.uiWeaponSprites[10], gM.weaponPrefabs[10], new Vector3(-0f / 8, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(10), ui.uiWeaponSprites[10], gM.weaponPrefabs[10], new Vector3(2f / 8, -3 / 16f, -1), new Vector2(1.25f, 1.25f), new Vector3(), "Secondary", null);
                 break;
 
 
@@ -2466,7 +1593,7 @@ public class Unit : Controllable
             if (extraAttributes.ContainsKey("Poisoned"))
             {
                 float hpChange = hp * getPoisonHPEffect();
-                Debug.Log(hpChange);
+                //Debug.Log(hpChange);
                 if (hpChange < 0)
                 {
                     StartCoroutine(healHP(-hpChange));
@@ -2479,6 +1606,17 @@ public class Unit : Controllable
                 if (extraAttributes["Poisoned"] == 0)
                 {
                     extraAttributes.Remove("Poisoned");
+                }
+            }
+            if (extraAttributes.ContainsKey("Self Heal"))
+            {
+                StartCoroutine(healHP(extraAttributes["Self Heal"]*hp));
+            }
+            if (extraAttributes.ContainsKey("Heals Transported Units"))
+            {
+                foreach(Unit transportee in loadedUnits)
+                {
+                    StartCoroutine(transportee.healHP(extraAttributes["Heals Transported Units"] * transportee.hp));
                 }
             }
         }
@@ -2529,6 +1667,16 @@ public class Unit : Controllable
                 //Debug.Log(weapon.name + " has no attribute dictionary ");
             }
         }
+
+        if (deploysDrones && dronesDict != null)
+        {
+            foreach(string droneType in dronesDict.Keys)
+            {
+                List<Vector4> droneData = dronesDict[droneType];
+                droneData[3] = new Vector4(droneData[3].x, 0, droneData[3].z, 0);
+            }
+        }
+        
         boostedHP = true;
         didInitialCheck = true;
     }
@@ -2668,11 +1816,33 @@ public class Unit : Controllable
         checkIfActionPossible();
     }
 
+    //Mark tiles to deploy drones
+    //Should only take in one set of drones/units per time
+    public void markDeployTiles(string droneType)
+    {
+        List<Vector4> droneData = dronesDict[droneType];
+        switch(droneData[2].x)
+        {
+            case 0:
+                StartCoroutine(deployDronesCustom(new Dictionary<string, List<Tile>>() { { droneType, tile.getAdjacent().Where(t => t.getUnit() == null).ToList() } }));
+                break;
+            case 1:
+                break;
+            case 2:
+                List<Tile> adjTiles = tile.getAdjacent().Where(t => t.getUnit() == null).ToList();
+                foreach (Tile t in adjTiles)
+                {
+                    t.makeDeployable(droneType, this);
+                }
+                break;
+        }
+    }
+
     //Deploy drones
     public void deployDrones()
     {
         Debug.Log("Deploying Drones");
-        if (deploysDrones && droneTypes != null && droneTypes.Count > 0)
+        if (deploysDrones && deployType != "Custom" && droneTypes != null && droneTypes.Count > 0)
         {
             //Return if we reached our limit on drones
             //Debug.Log(maxDeploysAtAll);
@@ -2716,12 +1886,188 @@ public class Unit : Controllable
             }
 
         }
+        else if (deployType == "Custom" && canDeploy())
+        {
+            //Do the drone deployment for this
+            if (dronesDict.Count == 1)
+            {
+                markDeployTiles(dronesDict.Keys.ToList()[0]);
+            }
+        }
+    }
+
+   
+
+    //Should only be done with deploy type custom!
+    public IEnumerator deployDronesCustom(Dictionary<string,List<Tile>> cDDCDict) 
+    {
+        UnitsList unitsList = new UnitsList();
+        Player player = gM.playerDictionary[side];
+        foreach(string droneType in cDDCDict.Keys)
+        {
+            if (!canDeploySpecificCustom(droneType))
+            {
+                continue;
+            }
+            foreach(Tile t in cDDCDict[droneType])
+            {
+                //We need to find our deploy type within the dronesDict dictionary
+                List<Vector4> droneData = dronesDict[droneType];
+                switch(dronesDict[droneType][2].x)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        switch (dronesDict[droneType][2].z)
+                        {
+                            case 1:
+                                List<Weapon> weaponsToCheck = getAllActiveWeapons();
+                                foreach (Weapon weapon in weaponsToCheck)
+                                {
+                                    if (weapon.extraAttributes != null && weapon.extraAttributes.ContainsKey("Launches " + droneType))
+                                    {
+
+                                        //Determine if there are free tiles
+                                        int dist = gM.getAbsoluteDistance(tile, t);
+                                        if (weapon.minRange <= dist && dist <= weapon.maxRange)
+                                        {
+                                            
+                                            Tile spawnTile = t;
+                                            gM.lookAtRightDir(this, spawnTile);
+                                            GameObject unitObject = Instantiate(unitsList.getUnitPrefab(player.faction, gM.boardScript, droneType), Vector3.zero, Quaternion.identity) as GameObject;
+                                            Unit unitObjectScript = unitObject.GetComponent<Unit>();
+                                            unitObjectScript.matchWeapon("Build");
+                                            UnitTemplate template = unitsList.templateDictionary[droneType];
+                                            unitObjectScript.useTemplate(template);
+                                            yield return StartCoroutine(cwScript.performSpecialAnimation(spawnTile, 0));
+                                            Unit builtUnit = gM.boardScript.buildUnit(unitObject, player, spawnTile.mapX, spawnTile.mapY, false);
+                                            //builtUnit.useTemplate(template);
+                                            Destroy(unitObject);
+                                            droneData[3] = new Vector4(droneData[3].x, droneData[3].y + 1, droneData[3].z, droneData[3].w + 1);
+                                            droneData[1] = new Vector4(droneData[1].x + 1, droneData[1].y + 1, droneData[1].z + 1, droneData[1].w + 1);
+                                            yield return new WaitForSeconds(0.001f);
+                                        }
+                                    }
+                                }
+                                continue;
+                        }
+                        break;
+                    case 2:
+                        if (tile.getAdjacent().Contains(t))
+                        {
+                            Tile spawnTile = t;
+                            //Extra Attribute 1 is the time to do a deploy animation, if it's zero, don't do a deploy animation
+                            float deployTime = droneData[2].z;
+                            if (deployTime > 0)
+                            {
+                                //Debug.Log("Deploy animation");
+                                GetComponent<Animator>().SetBool("Deploying", true);
+                                yield return new WaitForSeconds(deployTime);
+                                GetComponent<Animator>().SetBool("Deploying", false);
+                            }
+                            gM.lookAtRightDir(this, spawnTile);
+                            GameObject unitObject = Instantiate(unitsList.getUnitPrefab(player.faction, gM.boardScript, droneType), Vector3.zero, Quaternion.identity) as GameObject;
+                            Unit unitObjectScript = unitObject.GetComponent<Unit>();
+                            unitObjectScript.matchWeapon("Build");
+                            UnitTemplate template = unitsList.templateDictionary[droneType];
+                            unitObjectScript.useTemplate(template);
+                            Unit builtUnit = gM.boardScript.buildUnit(unitObject, player, spawnTile.mapX, spawnTile.mapY, false);
+                            //builtUnit.useTemplate(template);
+                            Destroy(unitObject);
+                            droneData[3] = new Vector4(droneData[3].x, droneData[3].y + 1, droneData[3].z, droneData[3].w + 1);
+                            droneData[1] = new Vector4(droneData[1].x + 1, droneData[1].y + 1, droneData[1].z + 1, droneData[1].w + 1);
+                            yield return new WaitForSeconds(0.001f);
+                        }
+                        break;
+                }
+            }
+        }
+        useAP(1);
+        yield return null;
+    }
+
+    //Gets the weapons that can launch units
+    public List<Weapon> findLaunchers(string unitType)
+    {
+        List<Weapon> launchers = getAllActiveWeapons();
+        launchers.RemoveAll(weapon => weapon.extraAttributes == null || weapon.extraAttributes.Count == 0 || !weapon.extraAttributes.ContainsKey("Launches " + unitType));
+        return launchers;
+    }
+
+    public bool canDeploySpecificCustom(string unitType)
+    {
+        if (deploysDrones && deployType == "Custom" && dronesDict != null && dronesDict.Count > 0)
+        {
+            List<Vector4> droneVars = dronesDict[unitType];
+            //Check if we are allowed to deploy
+            if (droneVars[0].x > 0 || droneVars[0].y > 0 || droneVars[0].z > 0 || droneVars[0].w > 0 || droneVars[3].x > 0 || droneVars[3].z > 0)
+            {
+                //If we have exceeded any of our max deploy variables, move to the next unit that can be deployed
+                if (droneVars[0].x > 0 && droneVars[1].x >= droneVars[0].x) return false;
+                if (droneVars[0].y > 0 && droneVars[1].y >= droneVars[0].y) return false;
+                if (droneVars[0].z > 0 && droneVars[1].z >= droneVars[0].z) return false;
+                if (droneVars[0].w > 0 && droneVars[1].w >= droneVars[0].w) return false;
+                if (droneVars[3].x > 0 && droneVars[3].y >= droneVars[3].x) return false;
+                if (droneVars[3].z > 0 && droneVars[3].w >= droneVars[3].z) return false;
+                //Debug.Log(unitType + " is below limits for " + this);
+                switch (droneVars[2].x)
+                {
+                    //Deploy to all Adjacent
+                    case 0:
+                        List<Tile> adjacentTiles = tile.getAdjacent();
+                        foreach (Tile adjacentTile in adjacentTiles)
+                        {
+                            if (adjacentTile.getUnit() == null)
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    //Launch from weapon
+                    //extraAttribute1 restricts what can be launched, 0 = no restriction and check extraAttribute2 and extraAttribute3 for min and max launch range respectively
+                    //1 - Must be able to launch name
+                    case 1:
+                        switch (droneVars[2].z) {
+                            case 1:
+                                List<Weapon> weaponsToCheck = getAllActiveWeapons();
+                                foreach (Weapon weapon in weaponsToCheck)
+                                {
+                                    if (weapon.extraAttributes != null && weapon.extraAttributes.ContainsKey("Launches "+unitType))
+                                    {
+                                    Debug.Log(weapon + " can launch " + unitType);
+                                        //Determine if there are free tiles
+                                        Tile closestTile = gM.findClosestEmptyTileWithinRange(tile, false, weapon.minRange, weapon.maxRange);
+                                        if (closestTile != null)
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                }
+                                return false;
+                        }
+                        return false;
+                    //Choose an adjacent tile
+                    case 2:
+                        adjacentTiles = tile.getAdjacent();
+                        foreach (Tile adjacentTile in adjacentTiles)
+                        {
+                            if (adjacentTile.getUnit() == null)
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                }
+
+            }
+        }
+        return false;
     }
 
     //Determine if we can deploy
     public bool canDeploy()
     {
-        if (deploysDrones && droneTypes != null && droneTypes.Count > 0)
+        if (deploysDrones && deployType != "Custom" && droneTypes != null && droneTypes.Count > 0)
         {
             if (maxDeploysAtAll > 0 && totalDeploys >= maxDeploysAtAll) return false;
             if (maxDronesAtAll > 0 && totalDrones >= maxDronesAtAll) return false;
@@ -2742,6 +2088,27 @@ public class Unit : Controllable
 
             }
             return false;
+        }
+        else if (deploysDrones && deployType == "Custom" && dronesDict != null && dronesDict.Count > 0)
+        {
+            //First vector 4 relates to maxDronesAtTime, maxDronesAtAll, maxDeploysAtTime, maxDeploysAtAll
+            //Second vector 4 relates to currentDrones, totalDrones, currentDeploys, totalDeploys
+            //Third Vector 4 relates to deployType, dronesAreReliant, extraAttribute1, extraAttribute2
+            //Fourth Vector 4 relates to maxDronesThisTurn, currentDronesThisTurn, maxDeployThisTurn, currentDeploysThisTurn
+            //All other vectors are more extraAttributes
+            foreach (string droneType in dronesDict.Keys)
+            {
+                
+                if (canDeploySpecificCustom(droneType))
+                {
+                    return true;
+                }
+                else
+                {
+                    Debug.Log(this + " can't deploy " + droneType);
+                }
+                
+            }
         }
         return false;
     }
@@ -2807,12 +2174,15 @@ public class Unit : Controllable
                         {
                             Unit u = t.getUnitScript();
                             bool isExcluded = false;
-                            foreach(string excluder in excludeList)
+                            if (excludeList != null)
                             {
-                                if (excluder == u.mainTransportType || excluder == u.secondaryTransportType || excluder == u.tertiaryTransportType)
+                                foreach (string excluder in excludeList)
                                 {
-                                    isExcluded = true;
-                                    break;
+                                    if (excluder == u.mainTransportType || excluder == u.secondaryTransportType || excluder == u.tertiaryTransportType)
+                                    {
+                                        isExcluded = true;
+                                        break;
+                                    }
                                 }
                             }
                             if (isExcluded) return false;
@@ -2980,6 +2350,38 @@ public class Unit : Controllable
         currentJetToggles++;
     }
 
+    //Handle Commands
+
+    //Rally Command
+    public void doCommand(string command)
+    {
+        switch(command)
+        {
+            case "Rally":
+                StartCoroutine(doRally());
+                break;
+        }
+    }
+
+    //Give all allies extra attack power and movement
+    public IEnumerator doRally()
+    {
+        int team = getTeam();
+        yield return StartCoroutine(this.showEffect(ui.attributeSprites[10], "Rally"));
+        foreach (string tSide in gM.teams[team])
+        {
+            
+            foreach(Unit unit in gM.unitDictionary[tSide])
+            {
+                unit.addEffect("StrengthE-1", 3, true);
+                
+                unit.addEffect("MovementE-3", 3, true);
+                StartCoroutine(unit.showEffect(ui.attributeSprites[10], "Rallied"));
+            }
+        }
+        yield break;
+    }
+
     public void setPPLCost(int c)
     {
         pplCost = c;
@@ -3029,6 +2431,21 @@ public class Unit : Controllable
     public void setTintColor(Color color)
     {
         rMaterial.SetColor("_TintColor", color);
+    }
+
+    public Color getOutlineColor()
+    {
+        return rMaterial.GetColor("_OutlineColor");
+    }
+
+    public float getOutlineThickness()
+    {
+        return rMaterial.GetFloat("_Thickness");
+    }
+
+    public Color getTintColor()
+    {
+        return rMaterial.GetColor("_TintColor");
     }
 
     public IEnumerator blinkTintColor(Color color, float blinkSpread, int numBlinks)
@@ -3091,6 +2508,7 @@ public class Unit : Controllable
         currentDeploys = unitData.currentDeploys;
         totalDeploys = unitData.totalDeploys;
 
+        dronesDict = unitData.dronesDict;
         //End Deploy Drone Variables
 
         //Transport Variables
@@ -3372,7 +2790,7 @@ public class Unit : Controllable
         string temp = "Printing an attribute dictionary:";
         foreach(string key in attributes.Keys)
         {
-            temp += "\nAttribute: "+key+" with value: "+attributes[key];
+            temp += "\nAttribute: {"+key+"} with value: {"+attributes[key]+"}";
 
         }
         Debug.Log(temp);

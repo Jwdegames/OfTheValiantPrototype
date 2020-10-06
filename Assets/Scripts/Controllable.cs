@@ -59,6 +59,7 @@ public class Controllable : MonoBehaviour
 
     public IEnumerator performTask(AIManager aiM, UtilityAI uAI)
     {
+
         lastTask = assignedTask;
         if (finished)
         {
@@ -79,84 +80,95 @@ public class Controllable : MonoBehaviour
                         finished = true;
                         yield break;
                     }
+
+
+
+                    //Get a list of units that can be used to do the tasks
+                    Player player = gM.playerDictionary[side];
+                    string faction = player.faction;
+                    string unitType = "Infantry";
                     switch(building.name)
                     {
                         case "Barracks":
-
-
-                            //Get a list of units that can be used to do the tasks
-                            Player player = gM.playerDictionary[side];
-                            string faction = player.faction;
-                            List<UnitTemplate> unitTemplates = new List<UnitTemplate>(unitsList.unitTypes[faction]["Infantry"]);
-                            if (gM.playerDictionary[gM.humanSide].hasLab())
-                            {
-                                unitTemplates.AddRange(unitsList.unitTypes[faction]["Advanced Infantry"]);
-                            }
-                            List<GameObject> unitPrefabs = new List<GameObject>();
-                            List<Controllable> unitPrefabScripts = new List<Controllable>();
-                            foreach(UnitTemplate template in unitTemplates)
-                            {
-                                GameObject unitObject = Instantiate(unitsList.getUnitPrefab(template, faction, gM.boardScript),Vector3.zero, Quaternion.identity) as GameObject;
-                                unitPrefabs.Add(unitObject);
-                                Unit unitScript = unitObject.GetComponent<Unit>();
-                                unitScript.matchWeapon("UI");
-                                unitScript.useTemplate(template);
-                                unitPrefabScripts.Add(unitScript);
-                            }
-
-                            //Assign scores to each unit
-
-                            //Get all unit related tasks
-                            List<AITask> tasksToComplete = uAI.generateTasks(true, unitPrefabScripts);
-                            tasksToComplete.RemoveAll(item => item.objective.isBuilding);
-                            if (tile == null) Debug.LogError("Invalid tile");
-                            List<PossibleAssignment> pAList = uAI.getPossibleAssignmentsFromCustomLists(tasksToComplete, unitPrefabScripts, tile);
-                            //Debug.Log("PA: "+pAList.Count);
-                            List<PossibleAssignment> executionList = uAI.createAssignmentsFromCustomList(pAList);
-                            bool builtUnit = false;
-                            Unit unitBuilt = null;
-                            finished = true;
-                            //yield break;
-                            //Debug.Log("Units buildable: "+executionList.Count);
-                            /*foreach(PossibleAssignment assignment in executionList)
-                            {
-                                Debug.Log(assignment.assignmentScore + " for " + (Unit)assignment.possibleTaskDoer + " to do task "+assignment.aiTask.taskType +" for objective " +
-                                    assignment.aiTask.objective);
-                            }*/
-                            foreach(PossibleAssignment assignment in executionList)
-                            {
-
-                                if (assignment.assignmentScore != -9999999)
-                                {
-                                    unitBuilt = gM.boardScript.buildUnit(((Unit)(assignment.possibleTaskDoer)).gameObject, player, building.tile.mapX, building.tile.mapY, false);
-                                    //Debug.Log(unitBuilt);
-                                    builtUnit = true;
-                                    //unitBuilt.useTemplate(unitsList.templateDictionary[((Unit)(assignment.possibleTaskDoer)).name]);
-                                    break;
-                                }
-                            }
-                            if (builtUnit && unitBuilt != null) { 
-                                player.metal -= unitBuilt.getMTCost();
-                                player.people -= unitBuilt.getPPLCost();
-                                unitBuilt.grayScale();
-                            }
-                            else
-                            {
-                                Debug.Log("Failed to build unit!");
-                                Debug.Log(unitBuilt);
-                            }
-
-                            foreach(GameObject unitObject in unitPrefabs)
-                            {
-                                Destroy(unitObject);
-                            }
-
-                            finished = true;
-                            //Debug.Log("Waiting 10 secs");
-                            //yield return new WaitForSeconds(10f);
-                            //Debug.Log("Finished 10 secs");
+                            unitType = "Infantry";
+                            yield break;
+                            break;
+                        case "Factory":
+                            unitType = "Vehicles";
                             break;
                     }
+                    List<UnitTemplate> unitTemplates = new List<UnitTemplate>(unitsList.unitTypes[faction][unitType]);
+                    if (gM.playerDictionary[gM.humanSide].hasLab())
+                    {
+                        unitTemplates.AddRange(unitsList.unitTypes[faction]["Advanced "+unitType]);
+                    }
+                    List<GameObject> unitPrefabs = new List<GameObject>();
+                    List<Controllable> unitPrefabScripts = new List<Controllable>();
+                    foreach(UnitTemplate template in unitTemplates)
+                    {
+                        GameObject unitObject = Instantiate(unitsList.getUnitPrefab(template, faction, gM.boardScript),Vector3.zero, Quaternion.identity) as GameObject;
+                        unitPrefabs.Add(unitObject);
+                        Unit unitScript = unitObject.GetComponent<Unit>();
+                        unitScript.matchWeapon("UI");
+                        unitScript.useTemplate(template);
+                        unitPrefabScripts.Add(unitScript);
+                    }
+
+                    //Assign scores to each unit
+
+                    //Get all unit related tasks
+                    List<AITask> tasksToComplete = uAI.generateTasks(true, unitPrefabScripts);
+
+                    tasksToComplete.RemoveAll(item => item.objective.isBuilding);
+                    if (tile == null) Debug.LogError("Invalid tile");
+                    List<PossibleAssignment> pAList = uAI.getPossibleAssignmentsFromCustomLists(tasksToComplete, unitPrefabScripts, tile);
+                    //yield break;
+                    //Debug.Log("PA: "+pAList.Count);
+                    List<PossibleAssignment> executionList = uAI.createAssignmentsFromCustomList(pAList);
+                    bool builtUnit = false;
+                    Unit unitBuilt = null;
+                    finished = true;
+                    //yield break;
+                    //Debug.Log("Units buildable: "+executionList.Count);
+                    /*foreach(PossibleAssignment assignment in executionList)
+                    {
+                        Debug.Log(assignment.assignmentScore + " for " + (Unit)assignment.possibleTaskDoer + " to do task "+assignment.aiTask.taskType +" for objective " +
+                            assignment.aiTask.objective);
+                    }*/
+                    foreach(PossibleAssignment assignment in executionList)
+                    {
+
+                        if (assignment.assignmentScore != -9999999)
+                        {
+                            unitBuilt = gM.boardScript.buildUnit(((Unit)(assignment.possibleTaskDoer)).gameObject, player, building.tile.mapX, building.tile.mapY, false);
+                            //Debug.Log(unitBuilt);
+                            builtUnit = true;
+                            //unitBuilt.useTemplate(unitsList.templateDictionary[((Unit)(assignment.possibleTaskDoer)).name]);
+                            break;
+                        }
+                    }
+                    if (builtUnit && unitBuilt != null) { 
+                        player.metal -= unitBuilt.getMTCost();
+                        player.people -= unitBuilt.getPPLCost();
+                        unitBuilt.grayScale();
+                    }
+                    else
+                    {
+                        Debug.Log("Failed to build unit!");
+                        Debug.Log(unitBuilt);
+                    }
+
+                    foreach(GameObject unitObject in unitPrefabs)
+                    {
+                        Destroy(unitObject);
+                    }
+
+                    finished = true;
+                    //Debug.Log("Waiting 10 secs");
+                    //yield return new WaitForSeconds(10f);
+                    //Debug.Log("Finished 10 secs");
+                            
+                    
                     break;
             }
         }
@@ -302,6 +314,44 @@ public class Controllable : MonoBehaviour
                         }
                     }
                     break;
+                case "Deploy Units":
+                    foreach(string deployeeType in unit.dronesDict.Keys)
+                    {
+                        if (unit.canDeploySpecificCustom(deployeeType) && unit.getCurrentAP() > 0)
+                        {
+                            List<Vector4> deployeeData = unit.dronesDict[deployeeType];
+                            switch(deployeeData[2].x)
+                            {
+                                case 0:
+                                    //Retreat and deploy
+                                    //Debug.Log("Retreat And Deploy - Adjacent");
+                                    //Tile retreatTile = findRetreatTile();
+                                    //Debug.Log("Found retreat tile");
+                                    //yield return StartCoroutine(gM.moveAsFarAsPossible(unit, unit.getTile(), retreatTile, false));
+                                    yield return StartCoroutine(unit.deployDronesCustom(new Dictionary<string, List<Tile>>() { { deployeeType, unit.getTile().getAdjacent() } }));
+
+                                    //finished = true;
+                                    break;
+                                case 1:
+                                    //This is the launcher
+                                    //Debug.Log("Retreat And Deploy - Launch");
+                                    //retreatTile = findRetreatTile();
+                                    //Debug.Log("Found retreat tile");
+                                    //yield return StartCoroutine(gM.moveAsFarAsPossible(unit, unit.getTile(), retreatTile, false));
+                                    List<Weapon> launchers = unit.findLaunchers(deployeeType);
+                                    Weapon launcher = launchers[0];
+                                    yield return StartCoroutine(unit.deployDronesCustom(new Dictionary<string, List<Tile>>() { { deployeeType, new List<Tile>() {gM.findClosestEmptyTileWithinRange(
+                                        unit.getTile(), false, launcher.minRange, launcher.maxRange) } } }));
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            
+                        }
+                        
+                    }
+                    break;
                 case "Capture Enemy Building":
                 case "Capture Neutral Building":
                     yield return StartCoroutine(gM.moveAsFarAsPossible(unit, unit.getTile(), assignedTask.objective.tile, false));
@@ -413,7 +463,7 @@ public class Controllable : MonoBehaviour
                                 if (enemy.flying && !unit.canTargetAir(unit.getAllDamageActiveWeapons())) return false;
                                 if (enemy.isSubmerged && !unit.canTargetSub(unit.getAllDamageActiveWeapons())) return false;
                                 return true;
-                                
+
                             }
                             else if (buildUnit && gM.getInRangePathAH(unit, buildTile, task.objective.tile, unit.getAllDamageActiveWeapons(), true, true) != null)
                             {
@@ -452,12 +502,13 @@ public class Controllable : MonoBehaviour
                         return true;
                     }
                     return false;
-                case "Deploy Units": 
+                case "Deploy Units":
                     //Only the unit that is deploying the drone is task suitable
-                    if (unit.canDeploy() && unit == task.objective)
+                    if ((buildUnit && unit == task.objective) ||  (!buildUnit && unit.canDeploy() && unit == task.objective && unit.getCurrentAP() > 0))
                     {
                         return true;
                     }
+                    //Debug.Log(unit + " can't deploy!");
                     return false;
 
                 case "Heal Unit":
@@ -516,10 +567,10 @@ public class Controllable : MonoBehaviour
     public Tile findRetreatTile()
     {
         Debug.Log("Beggining fRT");
-        Dictionary<Tile, float> influenceDict = assignedTask.gM.getInfluenceDictionary(tile);
+        Dictionary<Tile, float> influenceDict = ((Unit)this).gM.influenceDict[team];
         //Remove all tiles that have a unit on them
         List<Tile> tiles = new List<Tile>(influenceDict.Keys.ToList<Tile>());
-        tiles.RemoveAll(item => item.getUnit() != null);
+        tiles.RemoveAll(item => item.getUnit() != null || (item.getBuilding() != null && item.getBuilding().makesUnits));
         float max = 0;
         Tile maxTile = tile;
         foreach(Tile t in tiles)

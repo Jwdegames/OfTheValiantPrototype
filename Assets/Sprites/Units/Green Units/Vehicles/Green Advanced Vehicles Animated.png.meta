@@ -157,7 +157,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -169,7 +169,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -181,7 +181,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -193,7 +193,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -207,12 +207,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_0
       rect:
         serializedVersion: 2
-        x: 66
-        y: 1251
-        width: 108
-        height: 88
+        x: 57
+        y: 1242
+        width: 126
+        height: 106
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -228,12 +228,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_1
       rect:
         serializedVersion: 2
-        x: 194
-        y: 1251
-        width: 108
-        height: 88
+        x: 185
+        y: 1242
+        width: 126
+        height: 106
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -249,12 +249,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_2
       rect:
         serializedVersion: 2
-        x: 322
-        y: 1251
-        width: 108
-        height: 88
+        x: 313
+        y: 1242
+        width: 126
+        height: 106
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -270,12 +270,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_3
       rect:
         serializedVersion: 2
-        x: 449
-        y: 1251
-        width: 108
-        height: 88
+        x: 440
+        y: 1242
+        width: 126
+        height: 106
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -291,12 +291,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_4
       rect:
         serializedVersion: 2
-        x: 578
-        y: 1251
-        width: 108
-        height: 88
+        x: 569
+        y: 1242
+        width: 126
+        height: 106
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -312,12 +312,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_5
       rect:
         serializedVersion: 2
-        x: 66
-        y: 1102
-        width: 96
-        height: 83
+        x: 57
+        y: 1093
+        width: 114
+        height: 101
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -333,12 +333,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_6
       rect:
         serializedVersion: 2
-        x: 194
-        y: 1102
-        width: 96
-        height: 83
+        x: 185
+        y: 1093
+        width: 114
+        height: 101
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -354,12 +354,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_7
       rect:
         serializedVersion: 2
-        x: 322
-        y: 1102
-        width: 96
-        height: 83
+        x: 313
+        y: 1093
+        width: 114
+        height: 101
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -375,12 +375,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_8
       rect:
         serializedVersion: 2
-        x: 449
-        y: 1102
-        width: 96
-        height: 83
+        x: 440
+        y: 1093
+        width: 114
+        height: 101
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -396,12 +396,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_9
       rect:
         serializedVersion: 2
-        x: 578
-        y: 1102
-        width: 96
-        height: 83
+        x: 569
+        y: 1093
+        width: 114
+        height: 101
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -417,12 +417,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_10
       rect:
         serializedVersion: 2
-        x: 66
-        y: 951
-        width: 98
-        height: 109
+        x: 57
+        y: 942
+        width: 116
+        height: 127
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -438,12 +438,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_11
       rect:
         serializedVersion: 2
-        x: 194
-        y: 951
-        width: 98
-        height: 109
+        x: 185
+        y: 942
+        width: 116
+        height: 127
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -459,12 +459,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_12
       rect:
         serializedVersion: 2
-        x: 322
-        y: 951
-        width: 98
-        height: 109
+        x: 313
+        y: 942
+        width: 116
+        height: 127
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -480,12 +480,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_13
       rect:
         serializedVersion: 2
-        x: 449
-        y: 951
-        width: 98
-        height: 109
+        x: 440
+        y: 942
+        width: 116
+        height: 127
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -501,12 +501,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_14
       rect:
         serializedVersion: 2
-        x: 578
-        y: 951
-        width: 98
-        height: 109
+        x: 569
+        y: 942
+        width: 116
+        height: 127
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -522,12 +522,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_15
       rect:
         serializedVersion: 2
-        x: 88
-        y: 802
-        width: 100
-        height: 56
+        x: 79
+        y: 793
+        width: 118
+        height: 74
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -543,12 +543,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_16
       rect:
         serializedVersion: 2
-        x: 216
-        y: 802
-        width: 100
-        height: 56
+        x: 207
+        y: 793
+        width: 118
+        height: 74
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -564,12 +564,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_17
       rect:
         serializedVersion: 2
-        x: 344
-        y: 802
-        width: 100
-        height: 56
+        x: 335
+        y: 793
+        width: 118
+        height: 74
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -585,12 +585,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_18
       rect:
         serializedVersion: 2
-        x: 472
-        y: 802
-        width: 100
-        height: 56
+        x: 463
+        y: 793
+        width: 118
+        height: 74
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -606,12 +606,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_19
       rect:
         serializedVersion: 2
-        x: 600
-        y: 802
-        width: 100
-        height: 56
+        x: 591
+        y: 793
+        width: 118
+        height: 74
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -627,12 +627,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_20
       rect:
         serializedVersion: 2
-        x: 82
-        y: 501
-        width: 77
-        height: 93
+        x: 73
+        y: 492
+        width: 95
+        height: 111
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -648,12 +648,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_21
       rect:
         serializedVersion: 2
-        x: 210
-        y: 501
-        width: 76
-        height: 93
+        x: 201
+        y: 492
+        width: 95
+        height: 111
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -669,12 +669,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_22
       rect:
         serializedVersion: 2
-        x: 338
-        y: 501
-        width: 77
-        height: 93
+        x: 329
+        y: 492
+        width: 95
+        height: 111
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -690,12 +690,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_23
       rect:
         serializedVersion: 2
-        x: 466
-        y: 501
-        width: 76
-        height: 93
+        x: 457
+        y: 492
+        width: 95
+        height: 111
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -711,12 +711,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_24
       rect:
         serializedVersion: 2
-        x: 594
-        y: 501
-        width: 76
-        height: 93
+        x: 585
+        y: 492
+        width: 95
+        height: 111
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -732,12 +732,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_25
       rect:
         serializedVersion: 2
-        x: 81
-        y: 351
-        width: 77
-        height: 87
+        x: 72
+        y: 342
+        width: 95
+        height: 105
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -753,12 +753,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_26
       rect:
         serializedVersion: 2
-        x: 210
-        y: 351
-        width: 77
-        height: 87
+        x: 201
+        y: 342
+        width: 95
+        height: 105
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -774,12 +774,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_27
       rect:
         serializedVersion: 2
-        x: 337
-        y: 351
-        width: 77
-        height: 87
+        x: 328
+        y: 342
+        width: 95
+        height: 105
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -795,12 +795,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_28
       rect:
         serializedVersion: 2
-        x: 465
-        y: 351
-        width: 77
-        height: 87
+        x: 456
+        y: 342
+        width: 95
+        height: 105
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -816,12 +816,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_29
       rect:
         serializedVersion: 2
-        x: 593
-        y: 351
-        width: 77
-        height: 87
+        x: 584
+        y: 342
+        width: 95
+        height: 105
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -837,12 +837,12 @@ TextureImporter:
       name: Green Advanced Vehicles Animated_30
       rect:
         serializedVersion: 2
-        x: 721
-        y: 351
-        width: 77
-        height: 87
+        x: 712
+        y: 342
+        width: 95
+        height: 105
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

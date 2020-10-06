@@ -244,6 +244,20 @@ MonoBehaviour:
   deployUnits: {fileID: 21300000, guid: a678c8931d0a65144bdd4a8c61922871, type: 3}
   deployDrones: {fileID: 21300000, guid: 19750f2ab9f8cca4caa68fbce98e8aae, type: 3}
   toggleJetpack: {fileID: 21300000, guid: 53fe14e5a404c3b41a215d6e3221969b, type: 3}
+  launchSlime: {fileID: 21300000, guid: e62aac378ee76264d87d7b2b7141075f, type: 3}
+  cRally: {fileID: 21300000, guid: ba52c22c262426a468aa28d6bbff7716, type: 3}
+  cBolster: {fileID: 21300000, guid: d026ca4ca54dec24eb23cb295cc5415e, type: 3}
+  cFocus: {fileID: 21300000, guid: 454de7ea52f11a947af903d98582994b, type: 3}
+  cResetAlly: {fileID: 21300000, guid: 0944d4f0e565b3444a653541db129b34, type: 3}
+  cPressure: {fileID: 21300000, guid: b75bc6d451a35f842946ecfc846a3810, type: 3}
+  cCaution: {fileID: 21300000, guid: 2d70fd83230ab4a4a86e8743ba6dcd83, type: 3}
+  cInspire: {fileID: 21300000, guid: 6fef0b56c694a4b4c9d770cf1fe9a68c, type: 3}
+  cEnergize: {fileID: 21300000, guid: cebf4a52cf76c7645a6e98faa5241d96, type: 3}
+  cAnger: {fileID: 21300000, guid: 77bcbf9754824494da87cb090be09654, type: 3}
+  cConfuse: {fileID: 21300000, guid: 1605554e8248a6e478e8292e490160b1, type: 3}
+  cDebuff: {fileID: 21300000, guid: 602bc1855c7ba35458d939e97d4c6b02, type: 3}
+  cIntimidate: {fileID: 21300000, guid: d816fd36dcf41a7489381a8f5b55ad80, type: 3}
+  apCost: 0
   unit: {fileID: 0}
   image: {fileID: 0}
   buttonImage: {fileID: 0}

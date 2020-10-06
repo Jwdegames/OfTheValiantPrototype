@@ -178,7 +178,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -190,7 +190,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -202,7 +202,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -214,7 +214,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -228,12 +228,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_0
       rect:
         serializedVersion: 2
-        x: 44
-        y: 1051
-        width: 96
-        height: 94
+        x: 35
+        y: 1042
+        width: 114
+        height: 112
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -249,12 +249,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_1
       rect:
         serializedVersion: 2
-        x: 172
-        y: 1051
-        width: 96
-        height: 94
+        x: 163
+        y: 1042
+        width: 114
+        height: 112
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -270,12 +270,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_2
       rect:
         serializedVersion: 2
-        x: 300
-        y: 1051
-        width: 96
-        height: 94
+        x: 291
+        y: 1042
+        width: 114
+        height: 112
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -291,12 +291,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_3
       rect:
         serializedVersion: 2
-        x: 427
-        y: 1051
-        width: 96
-        height: 94
+        x: 418
+        y: 1042
+        width: 114
+        height: 112
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -312,12 +312,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_4
       rect:
         serializedVersion: 2
-        x: 556
-        y: 1051
-        width: 96
-        height: 94
+        x: 547
+        y: 1042
+        width: 114
+        height: 112
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -333,12 +333,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_5
       rect:
         serializedVersion: 2
-        x: 44
-        y: 902
-        width: 106
-        height: 68
+        x: 35
+        y: 893
+        width: 124
+        height: 86
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -354,12 +354,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_6
       rect:
         serializedVersion: 2
-        x: 172
-        y: 902
-        width: 106
-        height: 68
+        x: 163
+        y: 893
+        width: 124
+        height: 86
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -375,12 +375,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_7
       rect:
         serializedVersion: 2
-        x: 300
-        y: 901
-        width: 106
-        height: 68
+        x: 291
+        y: 893
+        width: 124
+        height: 86
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -396,12 +396,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_8
       rect:
         serializedVersion: 2
-        x: 428
-        y: 901
-        width: 106
-        height: 68
+        x: 419
+        y: 893
+        width: 124
+        height: 86
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -417,12 +417,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_9
       rect:
         serializedVersion: 2
-        x: 555
-        y: 901
-        width: 106
-        height: 68
+        x: 546
+        y: 893
+        width: 124
+        height: 86
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -438,12 +438,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_10
       rect:
         serializedVersion: 2
-        x: 684
-        y: 901
-        width: 106
-        height: 68
+        x: 675
+        y: 893
+        width: 124
+        height: 86
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -459,12 +459,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_11
       rect:
         serializedVersion: 2
-        x: 30
-        y: 751
-        width: 76
-        height: 65
+        x: 21
+        y: 742
+        width: 94
+        height: 83
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -480,12 +480,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_12
       rect:
         serializedVersion: 2
-        x: 158
-        y: 751
-        width: 76
-        height: 65
+        x: 149
+        y: 742
+        width: 94
+        height: 83
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -501,12 +501,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_13
       rect:
         serializedVersion: 2
-        x: 286
-        y: 751
-        width: 76
-        height: 65
+        x: 277
+        y: 742
+        width: 94
+        height: 83
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -522,12 +522,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_14
       rect:
         serializedVersion: 2
-        x: 414
-        y: 751
-        width: 76
-        height: 65
+        x: 405
+        y: 742
+        width: 94
+        height: 83
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -543,12 +543,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_15
       rect:
         serializedVersion: 2
-        x: 542
-        y: 751
-        width: 76
-        height: 65
+        x: 533
+        y: 742
+        width: 94
+        height: 83
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -564,12 +564,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_16
       rect:
         serializedVersion: 2
-        x: 670
-        y: 751
-        width: 76
-        height: 65
+        x: 661
+        y: 742
+        width: 94
+        height: 83
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -585,12 +585,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_17
       rect:
         serializedVersion: 2
-        x: 798
-        y: 751
-        width: 76
-        height: 65
+        x: 789
+        y: 742
+        width: 94
+        height: 83
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -606,12 +606,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_18
       rect:
         serializedVersion: 2
-        x: 926
-        y: 751
-        width: 76
-        height: 65
+        x: 917
+        y: 742
+        width: 94
+        height: 83
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -627,12 +627,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_19
       rect:
         serializedVersion: 2
-        x: 1054
-        y: 751
-        width: 76
-        height: 65
+        x: 1045
+        y: 742
+        width: 94
+        height: 83
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -648,12 +648,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_20
       rect:
         serializedVersion: 2
-        x: 56
-        y: 601
-        width: 100
-        height: 56
+        x: 47
+        y: 592
+        width: 118
+        height: 74
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -669,12 +669,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_21
       rect:
         serializedVersion: 2
-        x: 184
-        y: 601
-        width: 100
-        height: 56
+        x: 175
+        y: 592
+        width: 118
+        height: 74
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -690,12 +690,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_22
       rect:
         serializedVersion: 2
-        x: 312
-        y: 601
-        width: 100
-        height: 56
+        x: 303
+        y: 592
+        width: 118
+        height: 74
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -711,12 +711,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_23
       rect:
         serializedVersion: 2
-        x: 440
-        y: 601
-        width: 100
-        height: 56
+        x: 431
+        y: 592
+        width: 118
+        height: 74
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -732,12 +732,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_24
       rect:
         serializedVersion: 2
-        x: 568
-        y: 601
-        width: 100
-        height: 56
+        x: 559
+        y: 592
+        width: 118
+        height: 74
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -753,12 +753,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_25
       rect:
         serializedVersion: 2
-        x: 696
-        y: 601
-        width: 100
-        height: 56
+        x: 687
+        y: 592
+        width: 118
+        height: 74
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -774,12 +774,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_26
       rect:
         serializedVersion: 2
-        x: 54
-        y: 459
-        width: 76
-        height: 64
+        x: 45
+        y: 449
+        width: 94
+        height: 82
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -795,12 +795,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_27
       rect:
         serializedVersion: 2
-        x: 182
-        y: 459
-        width: 76
-        height: 64
+        x: 173
+        y: 449
+        width: 94
+        height: 82
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -816,12 +816,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_28
       rect:
         serializedVersion: 2
-        x: 310
-        y: 458
-        width: 76
-        height: 64
+        x: 301
+        y: 449
+        width: 94
+        height: 82
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -837,12 +837,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_29
       rect:
         serializedVersion: 2
-        x: 438
-        y: 458
-        width: 76
-        height: 64
+        x: 429
+        y: 449
+        width: 94
+        height: 82
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -858,12 +858,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_30
       rect:
         serializedVersion: 2
-        x: 566
-        y: 458
-        width: 76
-        height: 64
+        x: 557
+        y: 449
+        width: 94
+        height: 82
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -879,12 +879,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_31
       rect:
         serializedVersion: 2
-        x: 694
-        y: 458
-        width: 76
-        height: 64
+        x: 685
+        y: 449
+        width: 94
+        height: 82
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -900,12 +900,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_32
       rect:
         serializedVersion: 2
-        x: 52
-        y: 251
-        width: 106
-        height: 101
+        x: 43
+        y: 241
+        width: 124
+        height: 119
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -921,12 +921,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_33
       rect:
         serializedVersion: 2
-        x: 180
-        y: 251
-        width: 106
-        height: 101
+        x: 171
+        y: 241
+        width: 124
+        height: 119
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -942,12 +942,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_34
       rect:
         serializedVersion: 2
-        x: 308
-        y: 250
-        width: 106
-        height: 101
+        x: 299
+        y: 241
+        width: 124
+        height: 119
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -963,12 +963,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_35
       rect:
         serializedVersion: 2
-        x: 436
-        y: 250
-        width: 106
-        height: 101
+        x: 427
+        y: 241
+        width: 124
+        height: 119
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -984,12 +984,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_36
       rect:
         serializedVersion: 2
-        x: 563
-        y: 250
-        width: 106
-        height: 101
+        x: 554
+        y: 241
+        width: 124
+        height: 119
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1005,12 +1005,12 @@ TextureImporter:
       name: Red Advanced Vehicles Animated_37
       rect:
         serializedVersion: 2
-        x: 692
-        y: 250
-        width: 106
-        height: 101
+        x: 683
+        y: 241
+        width: 124
+        height: 119
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
