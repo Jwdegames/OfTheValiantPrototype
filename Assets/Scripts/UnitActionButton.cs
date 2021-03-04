@@ -59,11 +59,20 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
     public Text tooltipText;
     public Image tooltipArrow;
 
+    public UnitInfoTooltip infoTooltip;
+    //public Vector2 infoTooltipActivatorPos = new Vector2(8.849998f, 2.025301f);
+
     // Use this for initialization
     void Awake()
     {
         image = imageObject.GetComponent<Image>();
         buttonImage = GetComponent<Image>();
+        //Vector3 posVector = new Vector3(infoTooltipActivatorPos.x, infoTooltipActivatorPos.y, transform.position.z);
+        //infoTooltipActivator = Instantiate(infoTooltipPrefab, posVector, Quaternion.identity) as GameObject;
+        //infoTooltipActivator.transform.SetParent(transform);
+        //infoTooltipActivator.GetComponent<RectTransform>().anchoredPosition = infoTooltipActivatorPos;
+        //infoTooltip = infoTooltipActivator.GetComponent<UnitInfoTooltip>();
+        //infoTooltip.transform.SetParent(null);
         //Debug.Log(image);
         //Debug.Log(imageObject);
         //Debug.Log("Getting image data");
@@ -85,123 +94,169 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
             case "Move":
                 image.sprite = move;
                 apCost = 0;
+                updateInfoTooltip("Move unit to a desired tile");
                 break;
             case "Attack":
                 image.sprite = attack;
                 apCost = 1;
+                updateInfoTooltip("Attack an enemy unit with the main weapons");
                 break;
             case "Fortify":
                 image.sprite = fortify;
                 //apCost = unit.getAP();
+                updateInfoTooltip("Use up all AP and reduce the damage taken");
                 break;
             case "Sentry":
                 image.sprite = sentry;
                 //apCost = unit.getAP();
+                updateInfoTooltip("Use up all AP and attack enemies first instead of counterattacking");
                 break;
             case "Repair":
                 image.sprite = repair;
                 apCost = 1;
+                updateInfoTooltip("Repair an ally");
                 break;
             case "Heal":
                 image.sprite = heal;
                 apCost = 1;
+                updateInfoTooltip("Heal an ally");
                 break;
             case "Capture":
                 image.sprite = capture;
                 //apCost = unit.getAP();
+                updateInfoTooltip("Capture a building");
                 break;
             case "Deploy Drones":
                 image.sprite = deployDrones;
                 apCost = 1;
+                updateInfoTooltip("Deploy friendly drones");
                 break;
             case "Load Units":
                 image.sprite = loadUnits;
                 apCost = 1;
+                updateInfoTooltip("Load allied units up");
                 break;
             case "Unload Units":
                 image.sprite = deployUnits;
                 apCost = 1;
+                updateInfoTooltip("Unload allied units");
                 break;
             case "Fire Turret 1":
                 image.sprite = fireTurret1;
                 apCost = 1;
+                updateInfoTooltip("Attack an enemy with Turret 1");
                 break;
             case "Fire Turret 2":
                 image.sprite = fireTurret2;
+                updateInfoTooltip("Attack an enemy with Turret 2");
                 apCost = 1;
                 break;
             case "Fire Turret 3":
                 image.sprite = fireTurret3;
+                updateInfoTooltip("Attack an enemy with Turret 3");
                 apCost = 1;
                 break;
             case "Fire Turret 4":
                 image.sprite = fireTurret4;
+                updateInfoTooltip("Attack an enemy with Turret 4");
                 apCost = 1;
                 break;
             case "Fire Turret 5":
                 image.sprite = fireTurret5;
+                updateInfoTooltip("Attack an enemy with Turret 5");
                 apCost = 1;
                 break;
             case "Toggle Jetpack":
                 image.sprite = toggleJetpack;
                 apCost = 1;
+                updateInfoTooltip("Use a jetpack toggle point and toggle the jetpack on or off");
                 break;
             case "Launch Slime":
                 image.sprite = launchSlime;
                 apCost = 1;
+                updateInfoTooltip("Launch a slime at a tile");
                 break;
             case "Rally":
                 image.sprite = cRally;
+                updateInfoTooltip("Boost allied units' attack and MP within 2 tiles for 3 turns");
                 break;
             case "Bolster":
                 image.sprite = cBolster;
+                updateInfoTooltip("Boost an allied unit's attack and MP for 3 turns");
                 break;
             case "Focus":
                 image.sprite = cFocus;
+                updateInfoTooltip("Boost an allied unit's attack greatly for 3 turns");
                 break;
             case "Reset Ally":
                 image.sprite = cResetAlly;
+                updateInfoTooltip("Reset an allied unit's AP");
                 break;
             case "Pressure":
                 image.sprite = cPressure;
+                updateInfoTooltip("Boost an allied unit's speed greatly for 3 turns");
                 break;
             case "Caution":
                 image.sprite = cCaution;
+                updateInfoTooltip("Make an ally take less damage at the cost of MP for 3 turns");
                 break;
             case "Inspire":
                 image.sprite = cInspire;
+                updateInfoTooltip("Boost an allied unit's speed, defense, and attack for 3 turns");
                 break;
             case "Energize":
                 image.sprite = cEnergize;
+                updateInfoTooltip("Reset an allied unit's MP");
                 break;
             case "Anger":
                 image.sprite = cAnger;
+                updateInfoTooltip("Decrease an enemy unit's defense at the cost of increasing their attack for 3 turns.");
                 break;
             case "Confuse":
                 image.sprite = cConfuse;
+                updateInfoTooltip("Make an enemy unit do random things for 3 turns");
                 break;
             case "Debuff":
                 image.sprite = cDebuff;
+                updateInfoTooltip("Decrease an enemy unit's attack, defense, and speed for 3 turns");
                 break;
             case "Intimidate":
                 image.sprite = cIntimidate;
+                updateInfoTooltip("Decrease the attack of all enemies within 2 tiles for 3 turns");
                 break;
             default:
                 image.sprite = move;
+                updateInfoTooltip("Move unit to a desired tile");
                 break;
+        }
+    }
+
+    public void updateInfoTooltip(string text)
+    {
+        if (infoTooltip != null)
+        {
+            infoTooltip.setInfoToolTipText(text);
         }
     }
 
     public void getMoveables()
     {
         //unit.resetCurrentMP();
-        tile.movesLeft = unit.getCurrentMP();
-        canMoveTo(tile, tile, tile, tile.movesLeft, true);
+        List<Tile> moveTiles = gM.getMoveTiles(tile);
+        //moveTiles.RemoveAll(tempTile => tempTile.getUnit());
+        foreach(Tile tile in moveTiles)
+        {
+            tile.makeMoveable();
+        }
+        //canMoveTo(tile, tile, tile, tile.movesLeft, true);
+
 
 
     }
 
-    public void canMoveTo(Tile origin, Tile start, Tile dest, float moves, bool first)
+    //WARNING, if moves is too high, this function will do infinite recursion!!!!!
+    //Use djakstra's algorithm instead to prevent recursion
+    /*public void canMoveTo(Tile origin, Tile start, Tile dest, float moves, bool first)
     {
 
         if (dest == null)
@@ -237,7 +292,7 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
                 }
             }
         }
-    }
+    }*/
 
     public void getAttackables()
     {
@@ -471,13 +526,26 @@ public class UnitActionButton : MonoBehaviour, IPointerClickHandler
                 gM.selectedTile.deleteSelector();
                 break;
             case "Rally":
-                unit.doCommand("Rally");
+            case "Bolster":
+            case "Focus":
+            case "Reset Ally":
+            case "Pressure":
+            case "Caution":
+            case "Inspire":
+            case "Energize":
+            case "Anger":
+            case "Confuse":
+            case "Debuff":
+            case "Intimidate":
+                //print("Unit Rally");
+                unit.doCommandAsPlayer(type);
                 break;
             default:
                 break;
         }
 
     }
+
 
     public void applyImageScale()
     {

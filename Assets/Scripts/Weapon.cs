@@ -115,10 +115,14 @@ public class Weapon
          Debug.Log(roundsFired);
          Debug.Log(damage * roundsFired);
          Debug.Log("Non-HP Ratio Dmg:" + (damage * roundsFired * multiplier));*/
-        float baseDamage = damage * roundsFired * multiplier * attacker.getHPRatio();
+        float baseDamage = ((damage * roundsFired * multiplier * attacker.getHPRatio() * (1 + attacker.attackBonus.x / 100.0f)) + attacker.attackBonus.y) * (1 + attacker.attackBonus.z / 100.0f);
         //Debug.Log("Base damage is " + baseDamage);
         //Reduce the amount of damage due to the guard bonus
-        if (defender.getGuard()) baseDamage *= (1 - defender.guardCover);
+        if (defender.getGuard())
+        {
+            baseDamage = (baseDamage * (1 - defender.guardCover) * (1- defender.cautionBonus.x / 100.0f) - defender.cautionBonus.y) * (1 - defender.cautionBonus.z / 100.0f);
+        }
+        baseDamage = (baseDamage * (1 - defender.defenseBonus.x / 100.0f) - defender.defenseBonus.y) * (1 - defender.defenseBonus.z/100.0f); 
         //Debug.Log(baseDamage);
         if (extraAttributes != null)
         {

@@ -96,11 +96,11 @@ public class WeaponsList
         temp.Add("Poisons", 3);
         temp.Add("Makes Poison Gas", 5);
         weaponList.Add(new Weapon("Gas Mortar", "A long range anti-light weapon that can deal damage to multiple units at once and creates poison gas.", "", 2, 4, 1, 0, 1, 1, 0,
-            72, 0, 0, 0, "Light", false, true, false, false, false, true, true, temp));
+            72, 0, 0, 0, "Light", false, true, false, false, false, false, true, temp));
 
         temp = new Dictionary<string, float>();
-        temp.Add("Give Damage Buff-3", 3);
-        temp.Add("Give Resistance Buff-3", 3);
+        temp.Add("StrengthE-3", 3);
+        temp.Add("DefenseE-3", 3);
         weaponList.Add(new Weapon("Syringe", "Used for healing and inreases a unit's damage output. Additionally it gives a unit damage resistance.", "", 0, 1, 0, 0, 1, 0, 0, 0.40f,
             0, "Light", false, false, true, false, false, true, true, temp));
 
@@ -166,7 +166,7 @@ public class WeaponsList
         temp.Add("Poisons", 3);
         temp.Add("Makes Poison Gas", 5);
         weaponList.Add(new Weapon("Gas Mortar MK 2", "A long range anti-light weapon that can deal damage to multiple units at once and creates poison gas.", "", 2, 4, 1, 0, 1, 1, 0,
-            97.2f, 0, 0, 0, "Light", false, true, false, false, false, true, true, temp));
+            97.2f, 0, 0, 0, "Light", false, true, false, false, false, false, true, temp));
 
         //34
         weaponList.Add(new Weapon("Flak Gun", "A great anti-light armor gun that has takes apart light units from a medium distance.", "", 2, 3, 0, 0, 9, 2, 0, 10, 0, 0, 0,
@@ -182,7 +182,7 @@ public class WeaponsList
         temp.Add("Poisons", 3);
         temp.Add("Makes Poison Gas", 5);
         weaponList.Add(new Weapon("Gas Mortar MK 3", "A long range anti-light weapon that can deal extreme damage to multiple units at once and creates poison gas.", "", 2, 4, 1, 0, 1, 1, 0,
-            136.08f, 0, 0, 0, "Light", false, true, false, false, false, true, true, temp));
+            136.08f, 0, 0, 0, "Light", false, true, false, false, false, false, true, temp));
 
         
         temp = new Dictionary<string, float>();
@@ -233,7 +233,12 @@ public class WeaponsList
         weaponList.Add(new Weapon("Duality Artillery Cannon", "A long range anti-heavy weapon that can deal damage to multiple units at once. Specialized for the Assault Auto Duality Tank", "", 4, 7, 1, 0, 1, 154, 0, 0, 0,
             "Heavy", false, true, false, false, false, false, true, null));
 
-        
+        temp = new Dictionary<string, float>();
+        temp.Add("StrengthE-2",1);
+        weaponList.Add(new Weapon("Pinpointer", "A device that greatly boosts the attack power for 1 turn of an allied unit.", "", 1, 7, 0, 0, 1, 0, 0, 0f, 0,
+    "Light", false, false, true, true, false, true, true, temp));
+
+
     }
 
     public Weapon getWeaponCopy(int index)

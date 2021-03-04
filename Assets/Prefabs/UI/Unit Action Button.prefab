@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
@@ -271,6 +271,12 @@ MonoBehaviour:
   tooltipBox: {fileID: 1183843089373925758}
   tooltipText: {fileID: 5023863223717912822}
   tooltipArrow: {fileID: 2292562146463712507}
+  infoTooltipPrefab: {fileID: 6070078176702565881, guid: 44fbd98b17d576343928e04da3cbb73c,
+    type: 3}
+  infoTooltipBox: {fileID: 0}
+  infoTooltipText: {fileID: 0}
+  infoTooltipArrow: {fileID: 0}
+  infoTooltipActivatorPos: {x: 8.849998, y: 2.025301}
 --- !u!60 &3776683490095786179
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -407,8 +413,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0, y: 0}
-  m_SizeDelta: {x: 10, y: 10}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1900884429444790266
 Canvas:

@@ -8,14 +8,18 @@ public class UnitActionMenu : MonoBehaviour
 {
     //prefab for unit action button
     public GameObject uab;
+    //prefab for unit info tooltip
+    public GameObject uit;
     public GameObject unitObject;
     public Unit unit;
     public Tile tile;
     public GameObject tempButtonObject;
     public UnitActionButton tempButton;
+    public GameObject tempInfoTooltipObject;
+    public UnitInfoTooltip tempInfoTooltip;
     public UIManager ui;
     public GameManager gM;
-    public float buttonSizeX = 0.5f, buttonSizeY = 0.5f, xScale = 0.75f, yScale = 0.75f, xMenuOffset = 15f, xButtonOffset = 3f, yButtonScale = 6f;
+    public float buttonSizeX = 0.5f, buttonSizeY = 0.5f, xScale = 5f, yScale = 0.75f, xMenuOffset = 15f, xButtonOffset = 9f, xButtonStartOffset = -1f, yButtonScale = 6f, tooltipXOffset = 0.5f, tooltipYOffset = 0.5f, tooltipSizeX = 0.5f, tooltipSizeY = 0.5f;
     // Use this for initialization
     void Start()
     {
@@ -48,7 +52,7 @@ public class UnitActionMenu : MonoBehaviour
     //Make all of our buttons
     public void makeButtons()
     {
-        
+        Debug.Log("Make Buttons");
         int count = unit.getPossibleActions().Count;
         if (count > 1)
         {
@@ -62,12 +66,14 @@ public class UnitActionMenu : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             //if (i == 2) break;
+            Vector3 pos;
             if (count == 1)
             {
                 tempButtonObject = Instantiate(uab) as GameObject;
 
                 tempButton = tempButtonObject.GetComponent<UnitActionButton>();
                 //Debug.Log("Setting uab type");
+                pos = tempButton.transform.position;
                 tempButton.setType(unit.getPossibleActions()[i]);
                 tempButton.setSize(buttonSizeX, buttonSizeY);
                 tempButton.ui = ui;
@@ -79,19 +85,19 @@ public class UnitActionMenu : MonoBehaviour
             }
             else
             {
-                Vector3 pos;
+
                 float centerRow = Mathf.Floor((count - 1) / 2f) / 2f;
                 float currentRow = Mathf.Floor(i / 2) * 1f;
                 float yDist = (centerRow - currentRow) * yButtonScale;
                 //Debug.Log(currentRow + " vs " + centerRow);
                 if (i % 2 == 1)
                 {
-                    pos = new Vector3(transform.position.x + xButtonOffset, transform.position.y + yDist, 0);
+                    pos = new Vector3(transform.position.x + xButtonOffset + xButtonStartOffset, transform.position.y + yDist, 0);
                 }
                 else
                 {
                     float xDist = (i % 2 == 0) ? -125f : 125f;
-                    pos = new Vector3(transform.position.x - xButtonOffset, transform.position.y + yDist, 0);
+                    pos = new Vector3(transform.position.x - xButtonOffset + xButtonStartOffset, transform.position.y + yDist, 0);
                 }
                 
                 tempButtonObject = Instantiate(uab, pos, Quaternion.identity) as GameObject;
@@ -109,8 +115,18 @@ public class UnitActionMenu : MonoBehaviour
                 //Debug.Log(i+":Position for " + unit.getPossibleActions()[i]+ " is " + pos + " vs " + transform.position);
                 //Debug.Log("Buttong positon: " + tempButtonObject.transform.position);
             }
+            tempInfoTooltipObject = Instantiate(uit, new Vector3(pos.x + tooltipXOffset, pos.y + tooltipYOffset, 0),Quaternion.identity);
+            tempInfoTooltip = tempInfoTooltipObject.GetComponent<UnitInfoTooltip>();
+            tempInfoTooltip.setSize(tooltipSizeX,tooltipSizeY);
+            tempInfoTooltipObject.transform.SetParent(transform);
+            tempButton.infoTooltip = tempInfoTooltip;
+            //Set the type again to update the tooltip info
+            tempButton.setType(tempButton.type);
+
             string currentAction = unit.getPossibleActions()[i];
-            if (currentAction == "Move" && !tile.couldMoveToAnyAdjacent()) tempButton.disable();
+            List<Tile> moveTiles = gM.getMoveTiles(tile);
+            moveTiles.RemoveAll(tempTile => tempTile.getUnit());
+            if (currentAction == "Move" && (moveTiles == null || moveTiles.Count == 0)) tempButton.disable();
             if (currentAction != "Move")
             {
                 if (currentAction == "Attack")

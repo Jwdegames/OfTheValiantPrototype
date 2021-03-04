@@ -9,9 +9,9 @@ using System;
 public class UnitTemplate
 {
     
-    public float hp = 10f, sizeMultiplier, ap, mp, currentHP, currentAP, currentMP;
+    public float hp = 10f, sizeMultiplier, ap, currentHP, currentAP;
 
-    public int pplCost, mtCost;
+    public int pplCost, mtCost, mp, currentMP;
 
     public string name, description, side, armor, movementType;
 
@@ -70,7 +70,7 @@ public class UnitTemplate
     public List<Weapon> weapons, turrets;
 
     public Dictionary<string, float> extraAttributes;
-    public UnitTemplate(float h, float s, float a, float m, float cHP, float cAP, float cMP, int pplC, int mtC, string n, string desc, string si, string arm, string mT,
+    public UnitTemplate(float h, float s, float a, int m, float cHP, float cAP, int cMP, int pplC, int mtC, string n, string desc, string si, string arm, string mT,
         List<string> pA, Weapon w, Weapon w2, Weapon w3, List<Weapon> ws, List<Weapon> ts, Dictionary<string, float> eA) {
         hp = h;
         sizeMultiplier = s;
@@ -96,7 +96,7 @@ public class UnitTemplate
     }
 
     //Version for deploying drones
-    public UnitTemplate(float h, float s, float a, float m, float cHP, float cAP, float cMP, int pplC, int mtC, string n, string desc, string si, string arm, string mT,
+    public UnitTemplate(float h, float s, float a, int m, float cHP, float cAP, int cMP, int pplC, int mtC, string n, string desc, string si, string arm, string mT,
         bool dDs, bool dsAR, string dT, List<string> dTs, int mDAT, int mDAA, int cD, int tDs, int mDepAT, int mDepAA, int cDep, int tDep, Dictionary<string, List<Vector4>> droneD,
         List<string> pA, Weapon w, Weapon w2, Weapon w3, List<Weapon> ws, List<Weapon> ts, Dictionary<string, float> eA)
     {
@@ -137,7 +137,7 @@ public class UnitTemplate
     }
 
     //Template for loading/unloading Units
-    public UnitTemplate(float h, float s, float a, float m, float cHP, float cAP, float cMP, int pplC, int mtC, string n, string desc, string si, string arm, string mT, bool tU,
+    public UnitTemplate(float h, float s, float a, int m, float cHP, float cAP, int cMP, int pplC, int mtC, string n, string desc, string si, string arm, string mT, bool tU,
         string lT, string ulT, List<string> includes, List<string> excludes, int maxC, int curC,
         List<string> pA, Weapon w, Weapon w2, Weapon w3, List<Weapon> ws, List<Weapon> ts, Dictionary<string, float> eA)
     {
@@ -174,7 +174,7 @@ public class UnitTemplate
     }
 
     //For handling death effects
-    public UnitTemplate(float h, float s, float a, float m, float cHP, float cAP, float cMP, int pplC, int mtC, string n, string desc, string si, string arm, string mT, bool dDOD,
+    public UnitTemplate(float h, float s, float a, int m, float cHP, float cAP, int cMP, int pplC, int mtC, string n, string desc, string si, string arm, string mT, bool dDOD,
         float dOD, int dODAOE, int dODAOEType, string dAEType, bool lPGOD, int pGODAOE, int pGODAOEType, Dictionary<string, Vector3> uMODDict,
         List<string> pA, Weapon w, Weapon w2, Weapon w3, List<Weapon> ws, List<Weapon> ts, Dictionary<string, float> eA)
     {

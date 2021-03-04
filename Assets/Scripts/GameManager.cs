@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
     public List<List<string>> teams;
     public string levelType;
     public int levelNum;
+    public int numDijakstraCalcs = 0;
 
 
     public bool doULAnimations = true;
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
 
     //Influence Map as a dictionary, where the int is the team number
     public Dictionary<int, Dictionary<Tile, float>> influenceDict;
+    public Dictionary<Unit, Dictionary<string, List<Tile>>> influenceTypeDataDict;
     //Awake is always called before any Start functions
     void Awake()
     {
@@ -86,6 +88,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        AbilityList.initDefaultAbilites();
         camScript = camera.GetComponent<GameCamera>();
         boardScript = board.GetComponent<BoardManager>();
         boardScript.setCamera(camScript);
@@ -100,7 +103,8 @@ public class GameManager : MonoBehaviour
         levelType = "bonus";
         levelNum = 1;
         endTurnButton = endTurnButtonObject.GetComponent<Button>();
-        initInfluenceDict();
+        influenceTypeDataDict = new Dictionary<Unit, Dictionary<string, List<Tile>>>();
+        initInfluenceDict(influenceTypeDataDict);
     }
 
     // Update is called once per frame
@@ -170,22 +174,15 @@ public class GameManager : MonoBehaviour
         destroyEverything();
         day = 1;
         boardScript.makeGridLevel(levelType, levelNum);
-        initInfluenceDict();
+        influenceTypeDataDict = new Dictionary<Unit, Dictionary<string, List<Tile>>>();
+        initInfluenceDict(influenceTypeDataDict);
 
     }
 
-    public Dictionary<int, Dictionary<Tile, float>> initInfluenceDict()
+    public Dictionary<int, Dictionary<Tile, float>> initInfluenceDict(Dictionary<Unit,Dictionary<string,List<Tile>>> iTD)
     {
-        if (dCalc == null)
-        {
-            dCalc = new DijakstraCalculator(this, boardScript.tileList[0], null);
-        }
-        else
-        {
-            dCalc.setValues(boardScript.tileList[0], null);
-            dCalc.reset();
-        }
-        influenceDict = dCalc.initInfluenceDict();
+        dCalc = new DijakstraCalculator(this, boardScript.tileList[0], null);
+        influenceDict = dCalc.initInfluenceDict(iTD);
         return influenceDict;
     }
 
@@ -207,6 +204,10 @@ public class GameManager : MonoBehaviour
         else
         {
             //Handle Resetting all unit move points and action points
+            if (unitDictionary == null)
+            {
+                Debug.LogError("Null unit dictionary!");
+            }
             foreach (Unit unit in unitDictionary[currentPlayer])
             {
                 unit.whiteScale();
@@ -230,6 +231,7 @@ public class GameManager : MonoBehaviour
         foreach (Unit unit in unitDictionary[currentPlayer])
         {
             unit.startTurn();
+            unit.attackableTiles = new List<Tile>();
             unit.finished = false;
         }
 
@@ -294,7 +296,7 @@ public class GameManager : MonoBehaviour
             dCalc.setValues(unit.getTile(), null);
             dCalc.reset();
         }
-        return dCalc.applyUnitEffectToInfluenceDict(influenceDict, unit, add);
+        return dCalc.applyUnitEffectToInfluenceDict(influenceDict, influenceTypeDataDict,unit, add);
     }
 
     public Dictionary<int, Dictionary<Tile, float>> applyBuildingEffectToInfluenceDict(Building building, bool add)
@@ -349,12 +351,13 @@ public class GameManager : MonoBehaviour
             dCalc.setValues(start, dest);
             dCalc.reset();
         }
-        path = dCalc.findPath(true, false);
+        path = dCalc.findPath(unit, true, false);
         //Debug.Log(path);
         //moving = true;
         //finishedMoving = true;
-        unit.move((float)Math.Round(getPathDistance(unit, path),3));
-        path[path.Count-1].unitToArrive = unit.gameObject;
+        unit.move(getPathDistance(unit, path));
+        path[path.Count-1].unitToArrive = unit;
+        dest.unitToArrive = unit;
         this.unit = unit;
         if (path == null)
         {
@@ -365,6 +368,7 @@ public class GameManager : MonoBehaviour
             yield return StartCoroutine(MoveOverSecondsPath(unit, path, 1 / 3f));
         }
         start.unitHP = 0;
+        unit.checkIfActionPossible();
 
         //Debug.Log("Moving unit!");
         
@@ -377,6 +381,7 @@ public class GameManager : MonoBehaviour
         uiScript.disableInBattleButtons();
         animationInProgress = true;
         yield return StartCoroutine(moveUnit(unit, start, dest));
+        //Debug.Log("Finished Movement");
         uiScript.enableInBattleButtons();
         animationInProgress = false;
     }
@@ -485,9 +490,9 @@ public class GameManager : MonoBehaviour
 
         }
         path.RemoveRange(i + 1, path.Count - (i + 1));*/
-        unit.move((float)Math.Round(getPathDistance(unit, path), 3));
+        unit.move(getPathDistance(unit, path));
         start.unitHP = 0;
-        path[path.Count-1].unitToArrive = unit.gameObject;
+        path[path.Count-1].unitToArrive = unit;
         //printPath(path);
         this.unit = unit;
         if (path == null)
@@ -565,7 +570,7 @@ public class GameManager : MonoBehaviour
             dCalc.reset();
         }
         path = dCalc.findInRangePath(unit, attackerWeapons, false, false);
-        printPath(path);
+        //printPath(path);
         //Debug.Log(path);
         /*int i = 1;
         for (i = 1; i < path.Count - 1; i++)
@@ -583,9 +588,9 @@ public class GameManager : MonoBehaviour
 
         }
         path.RemoveRange(i + 1, path.Count - (i + 1));*/
-        unit.move((float)Math.Round(getPathDistance(unit, path), 3));
+        unit.move(getPathDistance(unit, path));
         start.unitHP = 0;
-        path[path.Count - 1].unitToArrive = unit.gameObject;
+        path[path.Count - 1].unitToArrive = unit;
         //printPath(path);
         this.unit = unit;
         if (path == null)
@@ -618,8 +623,9 @@ public class GameManager : MonoBehaviour
             dCalc.setValues(start, dest);
             dCalc.reset();
         }
-        path = dCalc.getAsFarAsPossiblePath();
+        path = dCalc.getAsFarAsPossiblePath(unit);
         float pathDist = getPathDistance(unit, path);
+        //printPath(path);
         //Stop if we can't actually move
         if (pathDist > unit.getCurrentMP())
         {
@@ -628,9 +634,9 @@ public class GameManager : MonoBehaviour
             Debug.Log("Cancelling!");
             yield break;
         }
-        unit.move((float)Math.Round(getPathDistance(unit, path), 3));
+        unit.move(getPathDistance(unit, path));
         start.unitHP = 0;
-        path[path.Count-1].unitToArrive = unit.gameObject;
+        path[path.Count-1].unitToArrive = unit;
         this.unit = unit;
         if (path == null)
         {
@@ -671,11 +677,11 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public float getPathDistance(Unit unit, List<Tile> path)
+    public int getPathDistance(Unit unit, List<Tile> path)
     {
-        if (path == null) return 0f;
+        if (path == null) return 0;
         //Debug.Log("Null path");
-        float dist = 0f;
+        int dist = 0;
         for (int i = path.Count - 1; i > 0; i--)
         {
             dist += path[i-1].getMoveCost(unit,path[i]);
@@ -705,7 +711,7 @@ public class GameManager : MonoBehaviour
             dCalc.setValues(start, dCalc.getDest());
             dCalc.reset();
         }
-        return dCalc.findAllEnemyUnitsAttackable();
+        return dCalc.findAllEnemyUnitsAttackable(unit);
     }
 
     public List<Tile> getAttackableUnitsWithWeapons(Unit unit, Tile start, List<Weapon> weapons)
@@ -719,9 +725,19 @@ public class GameManager : MonoBehaviour
             dCalc.setValues(start, dCalc.getDest());
             dCalc.reset();
         }
-        return dCalc.findAllEnemyUnitsAttackableWithWeapons(weapons);
+        return dCalc.findAllEnemyUnitsAttackableWithWeapons(unit, weapons);
+
     }
 
+    public List<Tile> findAllTilesAttackableWithWeapons(Unit unit, Tile start, List<Weapon> weapons)
+    {
+
+        dCalc = new DijakstraCalculator(this, start, null);
+
+
+        return dCalc.findAllTilesAttackableWithWeapons(unit, weapons);
+
+    }
     public List<Tile> getMoveTiles(Tile start)
     {
         if (dCalc == null)
@@ -767,6 +783,7 @@ public class GameManager : MonoBehaviour
     //For hand weapons only
     public bool canAttackEnemy(Unit attacker, Tile start, Unit defender, Tile end)
     {
+        if (attacker == null || defender == null) return false;
         if (dCalc == null)
         {
             dCalc = new DijakstraCalculator(this, start, end);
@@ -848,6 +865,19 @@ public class GameManager : MonoBehaviour
             dCalc.reset();
         }
         return dCalc.canAttackEnemyExactlyWithWeapons(attacker, weapons, defender);
+    }
+
+    // Determines if the attacker can attack enemy units without moving
+    public bool canAttackEnemiesWithoutMoving(Unit attacker)
+    {
+        List<Tile> attackTiles = getAttackTilesWithWeapons(attacker, attacker.getTile(), attacker.getAllDamageActiveWeapons());
+        return (attackTiles.Count != 0);
+    }
+
+    public bool canHealAlliesWithoutMoving(Unit healer)
+    {
+        List<Tile> attackTiles = getHealTiles(healer, healer.getTile(), healer.getAllHealRepairActiveWeapons());
+        return (attackTiles.Count != 0);
     }
 
     //Healing variants
@@ -1051,11 +1081,11 @@ public class GameManager : MonoBehaviour
             WeaponObject cwObject = unit.getCWObject();
             if (cwObject != null)
             {
-                cwObject.transform.localPosition = new Vector3(cwObject.transform.localPosition.x, cwObject.transform.localPosition.y, cwObject.transform.localPosition.z + 5.5f);
+                cwObject.transform.localPosition = new Vector3(cwObject.transform.localPosition.x, cwObject.transform.localPosition.y, cwObject.transform.localPosition.z + 7.5f);
                 cwObject = unit.cw2Script;
                 if (cwObject != null)
                 {
-                    cwObject.transform.localPosition = new Vector3(cwObject.transform.localPosition.x, cwObject.transform.localPosition.y, cwObject.transform.localPosition.z + 3.5f);
+                    cwObject.transform.localPosition = new Vector3(cwObject.transform.localPosition.x, cwObject.transform.localPosition.y, cwObject.transform.localPosition.z + 5.5f);
                 }
 
             }
@@ -1077,11 +1107,11 @@ public class GameManager : MonoBehaviour
             WeaponObject cwObject = unit.getCWObject();
             if (cwObject != null)
             {
-                cwObject.transform.localPosition = new Vector3(cwObject.transform.localPosition.x, cwObject.transform.localPosition.y, cwObject.transform.localPosition.z - 5.5f);
+                cwObject.transform.localPosition = new Vector3(cwObject.transform.localPosition.x, cwObject.transform.localPosition.y, cwObject.transform.localPosition.z - 7.5f);
                 cwObject = unit.cw2Script;
                 if (cwObject != null)
                 {
-                    cwObject.transform.localPosition = new Vector3(cwObject.transform.localPosition.x, cwObject.transform.localPosition.y, cwObject.transform.localPosition.z - 3.5f);
+                    cwObject.transform.localPosition = new Vector3(cwObject.transform.localPosition.x, cwObject.transform.localPosition.y, cwObject.transform.localPosition.z - 5.5f);
                 }
                 
             }
@@ -1098,17 +1128,8 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator MoveOverSecondsPath(Unit unit, List<Tile> ends, float seconds)
     {
-
-        if (dCalc == null)
-        {
-            dCalc = new DijakstraCalculator(this, ends[0], null);
-        }
-        else
-        {
-            dCalc.setValues(ends[0], null);
-            dCalc.reset();
-        }
-        dCalc.applyUnitEffectToInfluenceDict(influenceDict, unit, false);
+        DijakstraCalculator dCalc = new DijakstraCalculator(this, ends[0], null);
+        dCalc.applyUnitEffectToInfluenceDict(influenceDict, influenceTypeDataDict, unit, false);
         GameObject objectToMove = unit.gameObject;
         
         for (int i = 1; i < ends.Count; i++)
@@ -1143,7 +1164,7 @@ public class GameManager : MonoBehaviour
         unit.checkIfActionPossible();
         dCalc.setValues(ends[ends.Count - 1], null);
         dCalc.reset();
-        dCalc.applyUnitEffectToInfluenceDict(influenceDict, unit, true);
+        dCalc.applyUnitEffectToInfluenceDict(influenceDict, influenceTypeDataDict, unit, true);
 
     }
 
@@ -1317,14 +1338,15 @@ public class GameManager : MonoBehaviour
             Debug.Log(healedHP);
             if (!weaponAnimated)
             {
-                if (healedHP > 0)
+                //Remove equal sign to prevent animation or effects
+                if (healedHP >= 0)
                 {
                     yield return StartCoroutine(healee.healHP(healedHP));
                 }
             }
             else
             {
-                if (healedHP > 0)
+                if (healedHP >= 0)
                 {
                     yield return StartCoroutine(healer.doHealAnimation(healee.getTile(),attackerWeapons));
                 }
@@ -1451,6 +1473,71 @@ public class GameManager : MonoBehaviour
         return toAttack;
     }
 
+    public IEnumerator waitForHPChanges(List<Unit> units)
+    {
+        bool stop = false;
+        while (!stop)
+        {
+            stop = true;
+            for (int i = 0; i < units.Count; i++)
+            {
+                Unit unitTA = units[i];
+                if (unitTA != null)
+                {
+                    if (unitTA.hpChanging)
+                    {
+                        stop = false;
+                    }
+                }
+            }
+            yield return new WaitForSeconds(0.000001f);
+        }
+    }
+
+    //Method to wait for a list of task coroutines to finish
+    public IEnumerator waitForTasks(List<Task> tasks)
+    {
+        foreach (Task task in tasks)
+        {
+            while (task.Running)
+            {
+                yield return new WaitForSeconds(1e-5f);
+            }
+        }
+        //Debug.Log("Finished Tasks");
+    }
+
+    //Method to wait for a one task coroutine to finish
+    public IEnumerator waitForTasks(Task task)
+    {
+
+        while (task.Running)
+        {
+            yield return new WaitForSeconds(1e-5f);
+        }
+        
+        //Debug.Log("Finished Task");
+    }
+
+    public IEnumerator doTasksAsPlayer(List<Task> tasks)
+    {
+        disableButtons();
+        animationInProgress = true;
+        yield return StartCoroutine(waitForTasks(tasks));
+        enableButtons();
+        animationInProgress = false;
+    }
+
+
+    public IEnumerator aOEAttackEnemyAsPlayer(Unit attacker, Tile start, Tile target, List<Weapon> weapons)
+    {
+        uiScript.disableInBattleButtons();
+        animationInProgress = true;
+        yield return StartCoroutine(doAOEAttack(attacker, start, target, weapons));
+        uiScript.enableInBattleButtons();
+        animationInProgress = false;
+    }
+
     //Does an AOE attack
     public IEnumerator doAOEAttack(Unit unit, Tile start, Tile target, List<Weapon> weapons)
     {
@@ -1485,18 +1572,25 @@ public class GameManager : MonoBehaviour
                             {
                                 yield return StartCoroutine(unit.weaponDictionary[weapon].performAOEAnimation(target));
                             }
-                            defender.loseHP(attackerDMG);
+                            yield return defender.loseHP(attackerDMG);
                             toAttack.Remove(target);
 
+
+                            List<Unit> unitsToAttack = new List<Unit>();
                             //Now attack all aoe'd tiles
                             foreach (Tile tile in toAttack)
                             {
                                 if (tile.getUnit() == null) continue;
                                 defender = tile.getUnitScript();
                                 float dmg = calculateDamage(unit, defender, true, false, new List<Weapon>() { weapon });
+                                unitsToAttack.Add(defender);
+                                //NOTICE: We need to be able to wait until everything is done but not yield every single one of these coroutines
                                 StartCoroutine(defender.loseHP(dmg));
-
                             }
+
+                            yield return waitForHPChanges(unitsToAttack);
+
+                           
                         }
 
                     }
@@ -1511,22 +1605,26 @@ public class GameManager : MonoBehaviour
                         {
                             yield return StartCoroutine(unit.weaponDictionary[weapon].performAOEAnimation(target));
                         }
-                        StartCoroutine(defender.loseHP(attackerDMG));
+                        yield return StartCoroutine(defender.loseHP(attackerDMG));
                         toAttack.Remove(target);
 
+                        List<Unit> unitsToAttack = new List<Unit>();
                         //Now attack all aoe'd tiles
                         foreach (Tile tile in toAttack)
                         {
                             if (tile.getUnit() == null) continue;
                             defender = tile.getUnitScript();
+                            unitsToAttack.Add(defender);
                             if (defender.flying && !weapon.canTargetAir) continue;
                             if (defender.isSubmerged && !weapon.canTargetSub) continue;
-                            Debug.Log(tile.getPos());
+                            //Debug.Log(tile.getPos());
                             float dmg = calculateDamage(unit, defender, true, false, new List<Weapon>() { weapon });
-                            Debug.Log(dmg);
+                            //Debug.Log(dmg);
                             StartCoroutine((defender.loseHP(dmg)));
 
                         }
+
+                        yield return waitForHPChanges(unitsToAttack);
 
                         if (defender != null && canAttackEnemy(defender, target, unit, start))
                         {
@@ -1536,6 +1634,7 @@ public class GameManager : MonoBehaviour
                             //StartCoroutine(unit.loseHP(defenderDMG));
                         }
 
+                       
                     }
                 }
                 else
@@ -1547,14 +1646,17 @@ public class GameManager : MonoBehaviour
                     }
                     toAttack.Remove(target);
                     //Now attack all aoe'd tiles
+                    List<Unit> unitsToAttack = new List<Unit>();
                     foreach (Tile tile in toAttack)
                     {
                         if (tile.getUnit() == null) continue;
                         Unit defender = tile.getUnitScript();
+                        unitsToAttack.Add(defender);
                         float dmg = calculateDamage(unit, defender, true, false, new List<Weapon>() { weapon });
                         StartCoroutine(defender.loseHP(dmg));
 
                     }
+                    yield return waitForHPChanges(unitsToAttack);
                 }
                 weapon.currentAttacks++;
 
@@ -1563,6 +1665,15 @@ public class GameManager : MonoBehaviour
         }
         unit.checkIfActionPossible();
 
+    }
+
+    public IEnumerator aOEHealAllyAsPlayer(Unit unit, Tile start, Tile target, List<Weapon> weapons)
+    {
+        uiScript.disableInBattleButtons();
+        animationInProgress = true;
+        yield return StartCoroutine(doAOEHeal(unit, start, target, weapons));
+        uiScript.enableInBattleButtons();
+        animationInProgress = false;
     }
 
 
@@ -1691,6 +1802,7 @@ public class GameManager : MonoBehaviour
         uiScript.disableInBattleButtons();
         animationInProgress = true;
         yield return StartCoroutine(healAlly(healer, healee, weapons));
+        Debug.Log("Finished heal");
         uiScript.enableInBattleButtons();
         animationInProgress = false;
     }
@@ -1723,6 +1835,34 @@ public class GameManager : MonoBehaviour
         finishedMoving = true;
         Debug.Log("finishedMoving");
 
+    }
+
+    //Method for getting all allied units
+    public List<Unit> getAlliedUnits(int team)
+    {
+        List<Unit> alliedUnits = new List<Unit>();
+        foreach(string side in sides)
+        {
+            if (getTeam(side) == team)
+            {
+                alliedUnits.AddRange(unitDictionary[side]);
+            }
+        }
+        return alliedUnits;
+    }
+
+    //Method for getting all enemy units
+    public List<Unit> getEnemyUnits(int team)
+    {
+        List<Unit> enemyUnits = new List<Unit>();
+        foreach (string side in sides)
+        {
+            if (getTeam(side) != team)
+            {
+                enemyUnits.AddRange(unitDictionary[side]);
+            }
+        }
+        return enemyUnits;
     }
 
     public int getTeam(string side)

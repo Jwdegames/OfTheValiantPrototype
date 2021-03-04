@@ -12,10 +12,10 @@ using UnityEngine.UI;
 public class Unit : Controllable
 {
     [SerializeField]
-    private float hp = 10f, sizeMultiplier, ap, mp, currentHP, currentAP, currentMP, xWeapon1Scale = 1, yWeapon1Scale = 1, xWeapon2Scale = 1, yWeapon2Scale = 1;
+    private float hp = 10f, sizeMultiplier, ap, currentHP, currentAP, xWeapon1Scale = 1, yWeapon1Scale = 1, xWeapon2Scale = 1, yWeapon2Scale = 1;
 
     [SerializeField]
-    private int level, vision, xSize, ySize, pplCost, mtlCost;
+    private int level, vision, xSize, ySize, pplCost, mtlCost, mp, currentMP;
 
     [SerializeField]
     private string name, description, armor, tempArmor = null, movementType;
@@ -169,6 +169,19 @@ public class Unit : Controllable
     public int poisonGasOnDeathAOE = 0;
     public int poisonGasOnDeathAOEType = 0;
 
+    // Influence Dictionary Variables
+    public float influencedValue = 0;
+    public string unitName = "";
+
+    //Effect Variables as Vector 4's, x is % added before, y is discrete number, z is % added after, and w is the type 
+    //If w = 1, then switch to discrete added before for x, y is % added after, and z is discrete number
+    public Vector4 moveBonus = new Vector4(0, 0, 0, 0);
+    public Vector4 cautionBonus = new Vector4(0, 0, 0, 0);
+    public Vector4 attackBonus = new Vector4(0, 0, 0, 0);
+    public Vector4 defenseBonus = new Vector4(0, 0, 0, 0);
+    public Vector4 apBonus = new Vector4(0, 0, 0, 0);
+   
+
     //For Vector
     //X - Spawn Type  
     //Y - Number of Units Spawned
@@ -183,6 +196,7 @@ public class Unit : Controllable
     //1 - Do slime animation
     public Dictionary<string, Vector3> unitsMadeOnDeathDict = new Dictionary<string, Vector3>();
 
+    public bool hpChanging = false;
     // Use this for initialization
     void Awake()
     {
@@ -259,7 +273,7 @@ public class Unit : Controllable
         team = getTeam();
     }
 
-    public float getMP()
+    public int getMP()
     {
         return mp;
     }
@@ -270,19 +284,19 @@ public class Unit : Controllable
     }
 
 
-    public float getCurrentMP()
+    public int getCurrentMP()
     {
         return currentMP;
     }
 
-    public void setCurrentMP(float m)
+    public void setCurrentMP(int m)
     {
         currentMP = m;
     }
 
-    public void move(float m)
+    public void move(int m)
     {
-        currentMP = (float)Math.Round(currentMP - m,3);
+        currentMP -= m;
     }
 
     public Vector3 getPos()
@@ -553,11 +567,17 @@ public class Unit : Controllable
     //Must use StartCoroutine to run
     public IEnumerator loseHP(float h)
     {
+        hpChanging = true;
+        bool needToChange = true;
         if (h > 0)
         {
             currentHP -= h;
             //Debug.Log("Unit "+name+" at "+tile.getPos()+ "is losing " + h + " hp!");
-            if (currentHP <= 0) yield return StartCoroutine(die());
+            if (currentHP <= 0)
+            {
+                yield return StartCoroutine(die());
+                needToChange = false;
+            }
             else
             {
                 //Debug.Log("Losing "+h+" hp!");
@@ -575,6 +595,8 @@ public class Unit : Controllable
                 //yield return null;
             }
         }
+        if (needToChange)
+        hpChanging = false;
     }
 
     public IEnumerator healHP(float h)
@@ -823,6 +845,20 @@ public class Unit : Controllable
         return 0;
     }
 
+    public void handleMasterEffect(string effect, float val)
+    {
+        MasterEffectList mEList = new MasterEffectList();
+        MasterEffect masterEffect = mEList.findMasterEffect(effect);
+        if (masterEffect != null)
+        {
+            foreach (string subEffect in masterEffect.subEffects.Keys)
+            {
+                Vector4 subEffectData = masterEffect.subEffects[subEffect];
+                addEffect(subEffect, subEffectData.x, subEffectData.y != 0);
+            } 
+        }
+    }
+
     public void addEffect(string effect, float val, bool overrideCurrent)
     {
         if (extraAttributes != null)
@@ -830,17 +866,91 @@ public class Unit : Controllable
             if (!extraAttributes.ContainsKey(effect))
             {
                 extraAttributes.Add(effect, val);
+                handleEEffect(effect, val);
+                handleMasterEffect(effect, val);
             }
             else if (overrideCurrent == true)
             {
                 extraAttributes[effect] = val;
+                //handleEEffect(effect, val);
+                handleMasterEffect(effect, val);
             }
         }
         else
         {
             extraAttributes = new Dictionary<string, float>();
             extraAttributes.Add(effect, val);
+            handleEEffect(effect, val);
+            handleMasterEffect(effect, val);
         }
+    }
+
+    //E-Effects are effects that are temporary and affect a public unit stat
+    public void handleEEffect(string effect, float val)
+    {
+        if (!effect.Contains("E-")) return;
+        string[] effectParts = effect.Split(new string[]{"-"},StringSplitOptions.None);
+        int effectStrength = Convert.ToInt32(effectParts[1]);
+        int bonus = 0;
+        switch (effectParts[0].Substring(0,effectParts[0].Length-1))
+        {
+            case "Strength":
+                bonus = 5 + (int)(((float)effectStrength)/2 * (2 * 5 + (effectStrength - 1) * 5));
+                attackBonus += new Vector4(bonus, 0, 0, 0) * (val == 0 ? -1:1);
+                break;
+            case "Weakness":
+                bonus = 5 + (int)(((float)effectStrength) / 2 * (2 * 5 + (effectStrength - 1) * 5));
+                attackBonus -= new Vector4(bonus, 0, 0, 0) * (val == 0 ? -1 : 1);
+                break;
+            case "Movement":
+                bonus = 10 + (int)(((float)effectStrength) / 2 * (2 * 10 + (effectStrength - 1) * 10));
+                moveBonus += new Vector4(bonus, 0, 0, 0) * (val == 0 ? -1 : 1);
+                updateEMove();
+                break;
+            case "Slowness":
+                bonus = 10 + (int)(((float)effectStrength) / 2 * (2 * 10 + (effectStrength - 1) * 10));
+                moveBonus -= new Vector4(bonus, 0, 0, 0) * (val == 0 ? -1 : 1);
+                updateEMove();
+                break;
+            case "Defense":
+                bonus = 10 + (int)(((float)effectStrength) / 2 * (2 * 2 + (effectStrength - 1) * 2));
+                defenseBonus += new Vector4(bonus, 0, 0, 0) * (val == 0 ? -1 : 1); ;
+                break;
+            case "Fragility":
+                bonus = 10 + (int)(((float)effectStrength) / 2 * (2 * 2 + (effectStrength - 1) * 2));
+                defenseBonus -= new Vector4(bonus, 0, 0, 0) * (val == 0 ? -1 : 1); ;
+                break;
+            case "Action":
+                bonus = 50 + (int)(((float)effectStrength) / 2 * (2 * 50 + (effectStrength - 1) * 50));
+                apBonus += new Vector4(bonus, 0, 0, 0) * (val == 0 ? -1 : 1);
+                updateEAP();
+                break;
+            case "Laziness":
+                bonus = 50 + (int)(((float)effectStrength) / 2 * (2 * 50 + (effectStrength - 1) * 50));
+                apBonus -= new Vector4(bonus, 0, 0, 0) * (val == 0 ? -1 : 1);
+                updateEAP();
+                break;
+            case "Caution":
+                bonus = 7 + (int)(((float)effectStrength) / 2 * (2 * 1 + (effectStrength - 1) * 1)) + effectStrength;
+                cautionBonus += new Vector4(bonus, 0, 0, 0) * (val == 0 ? -1 : 1);
+                break;
+            case "Imprudence":
+                bonus = 7 + (int)(((float)effectStrength) / 2 * (2 * 1 + (effectStrength - 1) * 1)) + effectStrength;
+                cautionBonus -= new Vector4(bonus, 0, 0, 0) * (val == 0 ? -1 : 1);
+                break;
+        }
+    }
+
+    public void updateEMove()
+    {
+        if (moveBonus != Vector4.zero) 
+        currentMP = (int)((currentMP * (1 + (moveBonus.x) / 100.0f) + moveBonus.y) * (1 + moveBonus.z / 100.0f));
+    } 
+
+    public void updateEAP()
+    {
+        if (apBonus != Vector4.zero)
+            currentAP = (currentAP * (1 + apBonus.x / 100.0f) + apBonus.y) * (1 + apBonus.z / 100.0f);
     }
 
     public IEnumerator makeEffectsFromWeapon(Weapon weapon, Tile target)
@@ -861,6 +971,21 @@ public class Unit : Controllable
             if (weapon.extraAttributes.ContainsKey("Makes Poison Gas"))
             {
                 yield return StartCoroutine(target.addEffect("Poison Gas", weapon.extraAttributes["Makes Poison Gas"],true));
+            }
+            
+            //Handle other attributes
+            foreach (string attribute in weapon.extraAttributes.Keys)
+            {
+                //Debug.Log(attribute);
+                if (attribute.Contains("E-"))
+                {
+                    if (target.getUnit() != null)
+                    {
+                        Unit effectee = target.getUnitScript();
+                        effectee.addEffect(attribute, weapon.extraAttributes[attribute], true);
+                        //Debug.Log("Adding temporary effect");
+                    }
+                }
             }
         }
         yield return null;
@@ -995,6 +1120,7 @@ public class Unit : Controllable
     public IEnumerator doAttackAnimation(Tile target, List<Weapon> weaponsToUse)
     {
         //Debug.Log("Attack animation requested for "+this);
+        
         for (int i = 0; i < weaponsToUse.Count; i++)
         {
             //Technically can also be a primary or secondary weapon
@@ -1003,16 +1129,21 @@ public class Unit : Controllable
             if (turret == null) continue;
             if (target != null && gM.canAttackEnemyWithWeapon(this, tile, target.getUnitScript(), target, turret))
             {
+                if (!weaponDictionary.ContainsKey(turret))
+                {
+                    Debug.LogError("Attempted to fire weapon " + turret + " from" +this+" at "+ target+ " but no weapon object");
+                    
+                }
                 if (turret.aoe > 0)
                 {
                     //Debug.Log("AOE detected");
-                    yield return StartCoroutine(weaponDictionary[weaponsToUse[i]].performAOEAnimation(target));
+                    yield return StartCoroutine(weaponDictionary[turret].performAOEAnimation(target));
                     //Debug.Log("AOE detected");
                     yield return StartCoroutine(dealAOEDamage(turret, target));
                 }
                 else
                 {
-                    yield return StartCoroutine(weaponDictionary[weaponsToUse[i]].performWeaponAnimation(false, target.getUnitScript()));
+                    yield return StartCoroutine(weaponDictionary[turret].performWeaponAnimation(false, target.getUnitScript()));
                     yield return StartCoroutine(dealDamage(turret, target));
                 }
             }
@@ -1059,7 +1190,7 @@ public class Unit : Controllable
     }
 
     //Helper method to clean up space in match weapon method
-    public void genWeaponMatch(Weapon weapon, Sprite weaponSprite, GameObject weaponObject, Vector3 weaponPos, Vector2 weaponScale, Vector3 weaponPos2, string type, string type2)
+    public void genWeaponMatch(Weapon weapon, Sprite weaponSprite, GameObject weaponObject, Vector3 weaponPos, Vector2 weaponScale, Vector3 rotationVector, Vector3 weaponPos2, string type, string type2)
     {
         switch(type)
         {
@@ -1075,13 +1206,14 @@ public class Unit : Controllable
                 cwScript.xSize = weaponScale.x;
                 cwScript.ySize = weaponScale.y;
                 cwScript.useWeapon(weapon, this);
+                cwObject.transform.localEulerAngles = rotationVector;
                 weaponDictionary.Add(weapon, cwScript);
                 break;
             //THERE SHOULD BE A PRIMARY WEAPON BEFORE A SECONDARY WEAPON IS ADDED
             case "Secondary":
                 if (weapons.Count == 0)
                 {
-                    genWeaponMatch(weapon, weaponSprite, weaponObject, weaponPos, weaponScale, weaponPos2, "Primary", type2);
+                    genWeaponMatch(weapon, weaponSprite, weaponObject, weaponPos, weaponScale, rotationVector, weaponPos2, "Primary", type2);
                     break;
                 }
                 weapons.Insert(1,weapon);
@@ -1095,6 +1227,7 @@ public class Unit : Controllable
                 cw2Script.xSize = weaponScale.x;
                 cw2Script.ySize = weaponScale.y;
                 cw2Script.useWeapon(weapon, this);
+                cw2Object.transform.localEulerAngles = rotationVector;
                 weaponDictionary.Add(weapon, cw2Script);
                 //Debug.Log(weaponDictionary[weapon]);
                 break;
@@ -1114,6 +1247,7 @@ public class Unit : Controllable
                 turretScript.xSize = weaponScale.x;
                 turretScript.ySize = weaponScale.y;
                 turretScript.useWeapon(turrets[turrets.Count - 1], this);
+                turretObject.transform.localEulerAngles = rotationVector;
                 weaponDictionary.Add(turrets[turrets.Count - 1], turretScript);
                 break;
         }
@@ -1131,186 +1265,190 @@ public class Unit : Controllable
         {
             case "Trooper":
             case "Jet Trooper":
-                genWeaponMatch(weaponsList.getWeaponCopy(0), ui.uiWeaponSprites[0], gM.weaponPrefabs[0], new Vector3(0, -1 / 8f, -1), new Vector2(1.6f, 1.6f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(0), ui.uiWeaponSprites[0], gM.weaponPrefabs[0], new Vector3(0, -1 / 8f, -1), new Vector2(1.6f, 1.6f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Rocketeer":
             case "Jet Rocketeer":
-                genWeaponMatch(weaponsList.getWeaponCopy(1), ui.uiWeaponSprites[1], gM.weaponPrefabs[1], new Vector3(0, -1 / 8f, -1), new Vector2(0.6f, 1.25f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(1), ui.uiWeaponSprites[1], gM.weaponPrefabs[1], new Vector3(0, -1 / 8f, -1), new Vector2(0.6f, 1.25f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Sniper":
-                genWeaponMatch(weaponsList.getWeaponCopy(2), ui.uiWeaponSprites[2], gM.weaponPrefabs[2], new Vector3(0, -1 / 8f, -1), new Vector2(1f, 1.6f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(2), ui.uiWeaponSprites[2], gM.weaponPrefabs[2], new Vector3(0, -1 / 8f, -1), new Vector2(1f, 1.6f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Mortarman":
-                genWeaponMatch(weaponsList.getWeaponCopy(3), ui.uiWeaponSprites[3], gM.weaponPrefabs[3], new Vector3(1 / 8, -1 / 8f, -1), new Vector2(1.6f, 1.25f), new Vector3(), "Primary", null);
-                cwObject.transform.localEulerAngles = new Vector3(0, 0, 30);
+                genWeaponMatch(weaponsList.getWeaponCopy(3), ui.uiWeaponSprites[3], gM.weaponPrefabs[3], new Vector3(1 / 8, -1 / 8f, -1), new Vector2(1.6f, 1.25f), new Vector3(0, 0, 30), new Vector3(), "Primary", null);
+                //cwObject.transform.localEulerAngles = new Vector3(0, 0, 30);
                 break;
             case "Shielded Trooper":
             case "S-Jet Trooper":
-                genWeaponMatch(weaponsList.getWeaponCopy(4), ui.uiWeaponSprites[4], gM.weaponPrefabs[4], new Vector3(0, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(5), ui.uiWeaponSprites[5], gM.weaponPrefabs[5], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(1.25f, 1.6f), new Vector3(), "Secondary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(4), ui.uiWeaponSprites[4], gM.weaponPrefabs[4], new Vector3(0, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(5), ui.uiWeaponSprites[5], gM.weaponPrefabs[5], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(1.25f, 1.6f), new Vector3(), new Vector3(), "Secondary", null);
                 break;
             case "Gattler":
-                genWeaponMatch(weaponsList.getWeaponCopy(6), ui.uiWeaponSprites[6], gM.weaponPrefabs[6], new Vector3(0, -1 / 8f, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(6), ui.uiWeaponSprites[6], gM.weaponPrefabs[6], new Vector3(0, -1 / 8f, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Shielded Rocketeer":
-                genWeaponMatch(weaponsList.getWeaponCopy(1), ui.uiWeaponSprites[1], gM.weaponPrefabs[1], new Vector3(0, -1 / 8f, -1), new Vector2(0.6f, 1.25f), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(5), ui.uiWeaponSprites[5], gM.weaponPrefabs[5], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(1.25f, 1.6f), new Vector3(), "Secondary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(1), ui.uiWeaponSprites[1], gM.weaponPrefabs[1], new Vector3(0, -1 / 8f, -1), new Vector2(0.6f, 1.25f), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(5), ui.uiWeaponSprites[5], gM.weaponPrefabs[5], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(1.25f, 1.6f), new Vector3(), new Vector3(), "Secondary", null);
                 break;
             case "Field Medic":
-                genWeaponMatch(weaponsList.getWeaponCopy(4), ui.uiWeaponSprites[4], gM.weaponPrefabs[4], new Vector3(2f/8, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(7), ui.uiWeaponSprites[7], gM.weaponPrefabs[7], new Vector3(- 2 / 8f, -2 / 8f, -1), new Vector2(0.45f, 0.45f), new Vector3(), "Secondary", null);
-                cw2Object.transform.localEulerAngles = new Vector3(0, 0, -60);
+                genWeaponMatch(weaponsList.getWeaponCopy(4), ui.uiWeaponSprites[4], gM.weaponPrefabs[4], new Vector3(2f/8, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(7), ui.uiWeaponSprites[7], gM.weaponPrefabs[7], new Vector3(- 2 / 8f, -2 / 8f, -1), new Vector2(0.45f, 0.45f), new Vector3(0, 0, -60), new Vector3(), "Secondary", null);
+                //cw2Object.transform.localEulerAngles = new Vector3(0, 0, -60);
                 break;
             case "Field Engineer":
-                genWeaponMatch(weaponsList.getWeaponCopy(4), ui.uiWeaponSprites[4], gM.weaponPrefabs[4], new Vector3(2f / 8, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(8), ui.uiWeaponSprites[8], gM.weaponPrefabs[8], new Vector3(-2 / 8f, -2 / 8f, -1), new Vector2(1f, 1f), new Vector3(), "Secondary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(4), ui.uiWeaponSprites[4], gM.weaponPrefabs[4], new Vector3(2f / 8, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(8), ui.uiWeaponSprites[8], gM.weaponPrefabs[8], new Vector3(-2 / 8f, -2 / 8f, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Secondary", null);
                 break;
             case "Droid Trooper":
             case "Jet Droid":
-                genWeaponMatch(weaponsList.getWeaponCopy(9), ui.uiWeaponSprites[9], gM.weaponPrefabs[9], new Vector3(0f, -1 / 8f, -1), new Vector2(1.6f, 1.6f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(9), ui.uiWeaponSprites[9], gM.weaponPrefabs[9], new Vector3(0f, -1 / 8f, -1), new Vector2(1.6f, 1.6f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Shielded Droid":
-                genWeaponMatch(weaponsList.getWeaponCopy(10), ui.uiWeaponSprites[10], gM.weaponPrefabs[10], new Vector3(0f, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(5), ui.uiWeaponSprites[5], gM.weaponPrefabs[5], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(1.25f, 1.6f), new Vector3(), "Secondary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(10), ui.uiWeaponSprites[10], gM.weaponPrefabs[10], new Vector3(0f, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(5), ui.uiWeaponSprites[5], gM.weaponPrefabs[5], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(1.25f, 1.6f), new Vector3(), new Vector3(), "Secondary", null);
                 break;
             case "S-Droid Rocketeer":
-                genWeaponMatch(weaponsList.getWeaponCopy(11), ui.uiWeaponSprites[11], gM.weaponPrefabs[11], new Vector3(0f, -1 / 8f, -1), new Vector2(0.6f, 1.25f), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(5), ui.uiWeaponSprites[5], gM.weaponPrefabs[5], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(1.25f, 1.6f), new Vector3(), "Secondary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(11), ui.uiWeaponSprites[11], gM.weaponPrefabs[11], new Vector3(0f, -1 / 8f, -1), new Vector2(0.6f, 1.25f), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(5), ui.uiWeaponSprites[5], gM.weaponPrefabs[5], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(1.25f, 1.6f), new Vector3(), new Vector3(), "Secondary", null);
                 break;
             case "Droid Gattler":
-                genWeaponMatch(weaponsList.getWeaponCopy(12), ui.uiWeaponSprites[12], gM.weaponPrefabs[12], new Vector3(0f, -1 / 8f, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(12), ui.uiWeaponSprites[12], gM.weaponPrefabs[12], new Vector3(0f, -1 / 8f, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Jet Droid Rocketeer":
-                genWeaponMatch(weaponsList.getWeaponCopy(11), ui.uiWeaponSprites[11], gM.weaponPrefabs[11], new Vector3(0f, -1 / 8f, -1), new Vector2(0.6f, 1.25f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(11), ui.uiWeaponSprites[11], gM.weaponPrefabs[11], new Vector3(0f, -1 / 8f, -1), new Vector2(0.6f, 1.25f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Drone":
-                genWeaponMatch(weaponsList.getWeaponCopy(13), ui.uiWeaponSprites[13], gM.weaponPrefabs[13], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(13), ui.uiWeaponSprites[13], gM.weaponPrefabs[13], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Tank":
-                genWeaponMatch(weaponsList.getWeaponCopy(14), ui.uiWeaponSprites[14], gM.weaponPrefabs[14], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(14), ui.uiWeaponSprites[14], gM.weaponPrefabs[14], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Heavy Tank":
-                genWeaponMatch(weaponsList.getWeaponCopy(15), ui.uiWeaponSprites[15], gM.weaponPrefabs[15], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(15), ui.uiWeaponSprites[15], gM.weaponPrefabs[15], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Assault Transporter":
-                genWeaponMatch(weaponsList.getWeaponCopy(16), ui.uiWeaponSprites[16], gM.weaponPrefabs[16], new Vector3(-0.072f, 0.297f, - 1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(16), ui.uiWeaponSprites[16], gM.weaponPrefabs[16], new Vector3(-0.072f, 0.297f, - 1), new Vector2(0.55f, 0.55f), new Vector3(), new Vector3(), "Turret", null);
                 break;
             case "Rocket Truck":
-                genWeaponMatch(weaponsList.getWeaponCopy(17), ui.uiWeaponSprites[17], gM.weaponPrefabs[17], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(17), ui.uiWeaponSprites[17], gM.weaponPrefabs[17], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Artillery Truck":
-                genWeaponMatch(weaponsList.getWeaponCopy(18), ui.uiWeaponSprites[18], gM.weaponPrefabs[18], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(18), ui.uiWeaponSprites[18], gM.weaponPrefabs[18], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Assault Tank":
-                genWeaponMatch(weaponsList.getWeaponCopy(14), ui.uiWeaponSprites[14], gM.weaponPrefabs[14], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(16), ui.uiWeaponSprites[16], gM.weaponPrefabs[16], new Vector3(-0.05f, 0.37918f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(14), ui.uiWeaponSprites[14], gM.weaponPrefabs[14], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(16), ui.uiWeaponSprites[16], gM.weaponPrefabs[16], new Vector3(-0.05f, 0.37918f, -1), new Vector2(0.55f, 0.55f), new Vector3(), new Vector3(), "Turret", null);
                 break;
             case "Assault Heavy Tank":
-                genWeaponMatch(weaponsList.getWeaponCopy(15), ui.uiWeaponSprites[15], gM.weaponPrefabs[15], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(16), ui.uiWeaponSprites[16], gM.weaponPrefabs[16], new Vector3(-0.046f, 0.403f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(16), ui.uiWeaponSprites[16], gM.weaponPrefabs[16], new Vector3(-0.045f, 0.275f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(15), ui.uiWeaponSprites[15], gM.weaponPrefabs[15], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(16), ui.uiWeaponSprites[16], gM.weaponPrefabs[16], new Vector3(-0.046f, 0.403f, -1), new Vector2(0.55f, 0.55f), new Vector3(), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(16), ui.uiWeaponSprites[16], gM.weaponPrefabs[16], new Vector3(-0.045f, 0.275f, -1), new Vector2(0.55f, 0.55f), new Vector3(), new Vector3(), "Turret", null);
                 break;
             case "Masked Trooper":
             case "Mutant Trooper":
-                genWeaponMatch(weaponsList.getWeaponCopy(19), ui.uiWeaponSprites[19], gM.weaponPrefabs[19], new Vector3(0f, -1 / 8f, -1), new Vector2(1.6f, 1.6f), new Vector3(), "Primary", null);
+            case "Vita Commander":
+                genWeaponMatch(weaponsList.getWeaponCopy(19), ui.uiWeaponSprites[19], gM.weaponPrefabs[19], new Vector3(0f, -1 / 8f, -1), new Vector2(1.6f, 1.6f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Grenadier":
-                genWeaponMatch(weaponsList.getWeaponCopy(20), ui.uiWeaponSprites[20], gM.weaponPrefabs[20], new Vector3(0.8f, 0.8f, -1), new Vector2(1.6f, 1.6f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(20), ui.uiWeaponSprites[20], gM.weaponPrefabs[20], new Vector3(-1/8f, -1/8f, -1), new Vector2(0.9f, 0.9f), new Vector3(), new Vector3(), "Primary", null);
 
                 break;
             case "MG Mortarman":
-                genWeaponMatch(weaponsList.getWeaponCopy(21), ui.uiWeaponSprites[21], gM.weaponPrefabs[21], new Vector3(1/8f, -1 / 8f, -1), new Vector2(1.92f, 1.5f), new Vector3(), "Primary", null);
-                cwObject.transform.localEulerAngles = new Vector3(0, 0, 30);
+                genWeaponMatch(weaponsList.getWeaponCopy(21), ui.uiWeaponSprites[21], gM.weaponPrefabs[21], new Vector3(1/8f, -1 / 8f, -1), new Vector2(1.92f, 1.5f), new Vector3(0, 0, 30), new Vector3(), "Primary", null);
+                //cwObject.transform.localEulerAngles = new Vector3(0, 0, 30);
                 break;
             case "Scientist":
-                genWeaponMatch(weaponsList.getWeaponCopy(22), ui.uiWeaponSprites[22], gM.weaponPrefabs[22], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(0.8f, 0.8f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(22), ui.uiWeaponSprites[22], gM.weaponPrefabs[22], new Vector3(2 / 8f, -1 / 8f, -1), new Vector2(0.8f, 0.8f), new Vector3(), new Vector3(), "Primary", null);
 
                 break;
             case "Screamer":
-                genWeaponMatch(weaponsList.getWeaponCopy(23), ui.uiWeaponSprites[23], gM.weaponPrefabs[23], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(23), ui.uiWeaponSprites[23], gM.weaponPrefabs[23], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Brewer":
-                genWeaponMatch(weaponsList.getWeaponCopy(24), ui.uiWeaponSprites[24], gM.weaponPrefabs[24], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(24), ui.uiWeaponSprites[24], gM.weaponPrefabs[24], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Eyesore": 
-                genWeaponMatch(weaponsList.getWeaponCopy(25), ui.uiWeaponSprites[25], gM.weaponPrefabs[25], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(25), ui.uiWeaponSprites[25], gM.weaponPrefabs[25], new Vector3(0f, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Slime":
-                genWeaponMatch(weaponsList.getWeaponCopy(26), ui.uiWeaponSprites[26], gM.weaponPrefabs[26], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(26), ui.uiWeaponSprites[26], gM.weaponPrefabs[26], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Small Slime":
-                genWeaponMatch(weaponsList.getWeaponCopy(27), ui.uiWeaponSprites[26], gM.weaponPrefabs[26], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(27), ui.uiWeaponSprites[26], gM.weaponPrefabs[26], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Mini Slime":
-                genWeaponMatch(weaponsList.getWeaponCopy(28), ui.uiWeaponSprites[26], gM.weaponPrefabs[26], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(28), ui.uiWeaponSprites[26], gM.weaponPrefabs[26], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Eyebat":
-                genWeaponMatch(weaponsList.getWeaponCopy(29), ui.uiWeaponSprites[25], gM.weaponPrefabs[27], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(29), ui.uiWeaponSprites[25], gM.weaponPrefabs[27], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Rosebat":
-                genWeaponMatch(weaponsList.getWeaponCopy(30), ui.uiWeaponSprites[25], gM.weaponPrefabs[28], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(30), ui.uiWeaponSprites[25], gM.weaponPrefabs[28], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Focibat":
-                genWeaponMatch(weaponsList.getWeaponCopy(31), ui.uiWeaponSprites[28], gM.weaponPrefabs[29], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(31), ui.uiWeaponSprites[28], gM.weaponPrefabs[29], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Weak Foci":
-                genWeaponMatch(weaponsList.getWeaponCopy(32), ui.uiWeaponSprites[29], gM.weaponPrefabs[30], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(32), ui.uiWeaponSprites[29], gM.weaponPrefabs[30], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Mortar Truck":
-                genWeaponMatch(weaponsList.getWeaponCopy(33), ui.uiWeaponSprites[33], gM.weaponPrefabs[31], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(33), ui.uiWeaponSprites[33], gM.weaponPrefabs[31], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Flak Truck":
-                genWeaponMatch(weaponsList.getWeaponCopy(34), ui.uiWeaponSprites[34], gM.weaponPrefabs[32], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(34), ui.uiWeaponSprites[34], gM.weaponPrefabs[32], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Venom Tank":
-                genWeaponMatch(weaponsList.getWeaponCopy(35), ui.uiWeaponSprites[35], gM.weaponPrefabs[33], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(35), ui.uiWeaponSprites[35], gM.weaponPrefabs[33], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Mortar Tank":
-                genWeaponMatch(weaponsList.getWeaponCopy(36), ui.uiWeaponSprites[33], gM.weaponPrefabs[34], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(36), ui.uiWeaponSprites[33], gM.weaponPrefabs[34], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "P Flak Tank":
-                genWeaponMatch(weaponsList.getWeaponCopy(37), ui.uiWeaponSprites[36], gM.weaponPrefabs[35], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(37), ui.uiWeaponSprites[36], gM.weaponPrefabs[35], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "DP Rocket Tank":
-                genWeaponMatch(weaponsList.getWeaponCopy(38), ui.uiWeaponSprites[37], gM.weaponPrefabs[36], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(38), ui.uiWeaponSprites[37], gM.weaponPrefabs[36], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Brewer Truck":
-                genWeaponMatch(weaponsList.getWeaponCopy(39), ui.uiWeaponSprites[38], gM.weaponPrefabs[37], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(39), ui.uiWeaponSprites[38], gM.weaponPrefabs[37], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Slime Launcher Truck":
-                genWeaponMatch(weaponsList.getWeaponCopy(40), ui.uiWeaponSprites[39], gM.weaponPrefabs[38], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(40), ui.uiWeaponSprites[39], gM.weaponPrefabs[38], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Duality Tank":
-                genWeaponMatch(weaponsList.getWeaponCopy(41), ui.uiWeaponSprites[14], gM.weaponPrefabs[39], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(42), ui.uiWeaponSprites[17], gM.weaponPrefabs[40], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Secondary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(41), ui.uiWeaponSprites[14], gM.weaponPrefabs[39], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(42), ui.uiWeaponSprites[17], gM.weaponPrefabs[40], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Secondary", null);
                 break;
             case "Automated Tank":
-                genWeaponMatch(weaponsList.getWeaponCopy(43), ui.uiWeaponSprites[40], gM.weaponPrefabs[41], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(43), ui.uiWeaponSprites[40], gM.weaponPrefabs[41], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
                 break;
             case "Assault Automated Tank":
-                genWeaponMatch(weaponsList.getWeaponCopy(43), ui.uiWeaponSprites[40], gM.weaponPrefabs[41], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.045f, 0.275f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.046f, 0.403f, - 1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(43), ui.uiWeaponSprites[40], gM.weaponPrefabs[41], new Vector3(0, 0, -1), new Vector2(1, 1), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.045f, 0.275f, -1), new Vector2(0.55f, 0.55f), new Vector3(), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.046f, 0.403f, - 1), new Vector2(0.55f, 0.55f), new Vector3(), new Vector3(), "Turret", null);
                 break;
             case "Assault Auto Transporter":
-                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.09f, 0.297f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.34f, 0.4f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(0.17f, 0.19f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(0.17f, 0.4f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.34f, 0.19f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.09f, 0.297f, -1), new Vector2(0.55f, 0.55f), new Vector3(), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.34f, 0.4f, -1), new Vector2(0.55f, 0.55f), new Vector3(), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(0.17f, 0.19f, -1), new Vector2(0.55f, 0.55f), new Vector3(), new Vector3(), "Turret", null);
+                //genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(0.17f, 0.4f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                //genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.34f, 0.19f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
                 break;
             case "Assault Auto Artillery":
-                genWeaponMatch(weaponsList.getWeaponCopy(18), ui.uiWeaponSprites[18], gM.weaponPrefabs[18], new Vector3(0, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.217f, 0.139f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(18), ui.uiWeaponSprites[18], gM.weaponPrefabs[18], new Vector3(0, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.217f, 0.139f, -1), new Vector2(0.55f, 0.55f), new Vector3(), new Vector3(), "Turret", null);
                 break;
             case "Assault Auto Duality Tank":
-                genWeaponMatch(weaponsList.getWeaponCopy(45), ui.uiWeaponSprites[40], gM.weaponPrefabs[43], new Vector3(0, 0, -1), new Vector2(1f, 1f), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(46), ui.uiWeaponSprites[18], gM.weaponPrefabs[44], new Vector3(0, 0, -1), new Vector2(1f, 1f), new Vector3(), "Secondary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.16f, 0.358f, -1), new Vector2(0.55f, 0.55f), new Vector3(), "Turret", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(45), ui.uiWeaponSprites[40], gM.weaponPrefabs[43], new Vector3(0, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(46), ui.uiWeaponSprites[18], gM.weaponPrefabs[44], new Vector3(0, 0, -1), new Vector2(1f, 1f), new Vector3(), new Vector3(), "Secondary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(44), ui.uiWeaponSprites[41], gM.weaponPrefabs[42], new Vector3(-0.16f, 0.358f, -1), new Vector2(0.55f, 0.55f), new Vector3(), new Vector3(), "Turret", null);
                 break;
             case "Asher":
-                genWeaponMatch(weaponsList.getWeaponCopy(10), ui.uiWeaponSprites[10], gM.weaponPrefabs[10], new Vector3(-0f / 8, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), "Primary", null);
-                genWeaponMatch(weaponsList.getWeaponCopy(10), ui.uiWeaponSprites[10], gM.weaponPrefabs[10], new Vector3(2f / 8, -3 / 16f, -1), new Vector2(1.25f, 1.25f), new Vector3(), "Secondary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(10), ui.uiWeaponSprites[10], gM.weaponPrefabs[10], new Vector3(-0f / 8, -1 / 8f, -1), new Vector2(1.25f, 1.25f), new Vector3(), new Vector3(), "Primary", null);
+                genWeaponMatch(weaponsList.getWeaponCopy(10), ui.uiWeaponSprites[10], gM.weaponPrefabs[10], new Vector3(2f / 8, -3 / 16f, -1), new Vector2(1.25f, 1.25f), new Vector3(), new Vector3(), "Secondary", null);
+                break;
+            case "Vesta":
+                genWeaponMatch(weaponsList.getWeaponCopy(47), ui.uiWeaponSprites[42], gM.weaponPrefabs[45], new Vector3(2f / 8, -1 / 8f, -1), new Vector2(0.75f, 0.75f), new Vector3(0, 0, -30), new Vector3(), "Primary", null);
                 break;
 
 
@@ -1607,6 +1745,7 @@ public class Unit : Controllable
                 {
                     extraAttributes.Remove("Poisoned");
                 }
+                
             }
             if (extraAttributes.ContainsKey("Self Heal"))
             {
@@ -1617,6 +1756,26 @@ public class Unit : Controllable
                 foreach(Unit transportee in loadedUnits)
                 {
                     StartCoroutine(transportee.healHP(extraAttributes["Heals Transported Units"] * transportee.hp));
+                }
+            }
+            //Handle e effects
+            List<string> keys = new List<string>(extraAttributes.Keys);
+            foreach(string key in keys)
+            {
+                if (key.Contains("E-"))
+                {
+                    float val = extraAttributes[key];
+                    val--;
+                    //Remove effect if effect < 0
+                    if (val <= 0)
+                    {
+                        extraAttributes.Remove(key);
+                        handleEEffect(key, 0);
+                    }
+                    else
+                    {
+                        extraAttributes[key] = val;
+                    }
                 }
             }
         }
@@ -1676,7 +1835,8 @@ public class Unit : Controllable
                 droneData[3] = new Vector4(droneData[3].x, 0, droneData[3].z, 0);
             }
         }
-        
+        updateEMove();
+        updateEAP();
         boostedHP = true;
         didInitialCheck = true;
     }
@@ -2351,16 +2511,278 @@ public class Unit : Controllable
     }
 
     //Handle Commands
-
-    //Rally Command
-    public void doCommand(string command)
+    //Gets tiles for requested command
+    public List<Tile> callCommandTiles(string command, bool isPlayer)
     {
+        List<Tile> commandTiles = new List<Tile>();
         switch(command)
         {
             case "Rally":
-                StartCoroutine(doRally());
+                //doCommand automatically handles tiles
+                return null;
+            case "Bolster":
+            case "Focus":
+            case "Reset Ally":
+            case "Pressure":
+            case "Caution":
+            case "Inspire":
+            case "Energize":
+
+                //Get all allied units
+                List<Unit> alliedUnits = gM.getAlliedUnits(getTeam());
+                //Set all allied units tiles to be commandable if the current player is active
+                if (isPlayer)
+                {
+                    foreach (Unit ally in alliedUnits)
+                    {
+                        Tile allyTile = ally.getTile();
+                        commandTiles.Add(allyTile);
+                        allyTile.makeCommandable(command, this);
+                    }
+                }
                 break;
         }
+        //If a command is not needed, then doCommand can automatically get the tiles
+        return commandTiles;
+        //yield break;
+    }
+
+    //Handles getting adjacent or specific tiles required for commands, and then executes the command
+    public void sendCommandTiles(string command, Tile originTile, bool isPlayer)
+    {
+        switch(command)
+        {
+            //For 1 tile commands
+            case "Bolster":
+            case "Focus":
+            case "Reset Ally":
+            case "Pressure":
+            case "Caution":
+            case "Inspire":
+            case "Energize":
+                StartCoroutine(doCommand(command, new List<Tile>() { originTile }, isPlayer));
+                break;
+        }
+    }
+
+    // Gets a list of tiles that would be affected by a command
+    public List<Tile> getAffectedCommandTiles(string command, Tile originTile)
+    {
+        switch (command)
+        {
+            //For 1 tile commands
+            case "Bolster":
+            case "Focus":
+            case "Reset Ally":
+            case "Pressure":
+            case "Caution":
+            case "Inspire":
+            case "Energize":
+            case "Anger":
+            case "Debuff":
+            case "Confuse":
+                return new List<Tile>() { originTile };
+
+        }
+        return null;
+    }
+
+    //Tiles should be selected before doing this for AI
+    public IEnumerator doCommand(string command, List<Tile> tilesToEffect, bool isPlayer)
+    {
+        //print("Doing command");
+        if (isPlayer)
+        {
+            gM.disableButtons();
+            gM.animationInProgress = true;
+        }
+        switch(command)
+        {
+            case "Rally":
+                if (gM.selectedTile != null)
+                gM.selectedTile.deleteSelector();
+                yield return StartCoroutine(doRally());
+                break;
+            case "Bolster":
+            case "Focus":
+            case "Pressure":
+            case "Caution":
+            case "Inspire":
+            case "Anger":
+            case "Debuff":
+            case "Confuse":
+                string givenEffect = "";
+                int effectOffset = 0;
+                switch(command)
+                {
+                    case "Bolster":
+                        givenEffect = "Bolstered";
+                        break;
+                    case "Focus":
+                        givenEffect = "Focused";
+                        effectOffset = 2;
+                        break;
+                    case "Reset Ally":
+                        givenEffect = "Resetting";
+                        effectOffset = 3;
+                        break;
+                    case "Pressure":
+                        givenEffect = "Pressured";
+                        effectOffset = 4;
+                        break;
+                    case "Caution":
+                        givenEffect = "Cautioned";
+                        effectOffset = 5;
+                        break;
+                    case "Inspire":
+                        givenEffect = "Inspired";
+                        effectOffset = 6;
+                        break;
+                    case "Anger":
+                        givenEffect = "Angered";
+                        effectOffset = 8;
+                        break;
+                    case "Confuse":
+                        givenEffect = "Confused";
+                        effectOffset = 9;
+                        break;
+                    case "Debuff":
+                        givenEffect = "Debuffed";
+                        effectOffset = 10;
+                        break;
+
+                }
+
+                yield return StartCoroutine(this.showEffect(ui.attributeSprites[11 + effectOffset], command));
+                //Get the tile to affect 
+                Unit unit = tilesToEffect[0].getUnitScript();
+                unit.addEffect(givenEffect, 3, true);
+                yield return StartCoroutine(unit.showEffect(ui.attributeSprites[11 + effectOffset], givenEffect));
+                useAP(1);
+                break;
+
+            case "Reset Ally":
+                yield return StartCoroutine(this.showEffect(ui.attributeSprites[14], command));
+                //Get the tile to affect 
+                unit = tilesToEffect[0].getUnitScript();
+                //To be lenient, doesn't remove extra AP
+                if (unit.getCurrentAP() < unit.getAP())
+                {
+                    unit.setCurrentAP(unit.getAP());
+                }
+                yield return StartCoroutine(unit.showEffect(ui.attributeSprites[14], "Resetting"));
+                useAP(1);
+                break;
+            case "Energize":
+                yield return StartCoroutine(this.showEffect(ui.attributeSprites[18], command));
+                //Get the tile to affect 
+                unit = tilesToEffect[0].getUnitScript();
+                //To be lenient, doesn't remove extra AP
+                if (unit.getCurrentMP() < unit.getMP())
+                {
+                    unit.setCurrentMP(unit.getMP());
+                }
+                yield return StartCoroutine(unit.showEffect(ui.attributeSprites[18], "Energized"));
+                useAP(1);
+                break;
+        }
+        if (isPlayer)
+        {
+            gM.animationInProgress = false;
+            gM.enableButtons();
+        }
+    }
+
+    // Determines if a Unit has offensive capabilities
+    public bool hasOffensiveAbilities()
+    {
+        foreach (string command in StatsManager.offensiveCommands)
+        {
+            foreach(string action in possibleActions)
+            {
+                if (command.Contains(action))
+                {
+                    return true;
+                }
+            }
+
+        }
+        // For later games, may want to create loop for abilities too
+        return false;
+    }
+
+    // Determines if a Unit has boosting capabilities
+    public bool hasBoostingAbilities()
+    {
+        foreach (string command in StatsManager.boostCommands)
+        {
+            foreach (string action in possibleActions)
+            {
+                if (command.Contains(action))
+                {
+                    return true;
+                }
+            }
+
+        }
+        // For later games, may want to create loop for abilities too
+        return false;
+    }
+
+    // Gets offensive abilities
+    public List<string> getOffensiveAbilities()
+    {
+        List<string> offensiveAbilities = new List<string>();
+        foreach (string command in StatsManager.offensiveCommands)
+        {
+            foreach (string action in possibleActions)
+            {
+                if (command.Contains(action))
+                {
+                    offensiveAbilities.Add(action);
+                }
+            }
+
+        }
+        return offensiveAbilities;
+    }
+
+    // Gets offensive abilities
+    public List<string> getBoostingAbilities()
+    {
+        List<string> boostingAbilities = new List<string>();
+        foreach (string command in StatsManager.boostCommands)
+        {
+            foreach (string action in possibleActions)
+            {
+                if (command.Contains(action))
+                {
+                    boostingAbilities.Add(action);
+                }
+            }
+
+        }
+        return boostingAbilities;
+    }
+
+
+    public void doCommandAsPlayer(string command)
+    {
+        //print("Do");
+        StartCoroutine(handleCommandAsPlayer(command));
+    }
+
+    public IEnumerator handleCommandAsPlayer(string command)
+    {
+
+        List<Tile> commandTiles = callCommandTiles(command, true);
+        //If  commandTiles received is null, that means the command itself handles the tiles
+        if (commandTiles == null)
+        {
+            yield return StartCoroutine(doCommand(command, null, true));
+        }
+  
+        yield break;
     }
 
     //Give all allies extra attack power and movement
@@ -2368,18 +2790,40 @@ public class Unit : Controllable
     {
         int team = getTeam();
         yield return StartCoroutine(this.showEffect(ui.attributeSprites[10], "Rally"));
+        List<Task> effectTasks = new List<Task>();
         foreach (string tSide in gM.teams[team])
         {
-            
-            foreach(Unit unit in gM.unitDictionary[tSide])
+            //Get the tiles within 2 range
+            List<Tile> effectTiles = gM.getTilesInAbsoluteRange(tile, 0, 2);
+            effectTiles.RemoveAll(tile => tile.getUnit() == null || tile.getUnitScript().team != team);
+            List<Unit> effectUnits = new List<Unit>();
+            foreach (Tile eT in effectTiles)
             {
-                unit.addEffect("StrengthE-1", 3, true);
-                
-                unit.addEffect("MovementE-3", 3, true);
-                StartCoroutine(unit.showEffect(ui.attributeSprites[10], "Rallied"));
+                effectUnits.Add(eT.getUnitScript());
+            }
+            foreach(Unit unit in effectUnits)
+            {
+                unit.addEffect("Rallied", 3, true);
+                Task tempEffectTask = new Task(unit.showEffect(ui.attributeSprites[10], "Rallied"));
+                effectTasks.Add(tempEffectTask);
             }
         }
+
+        yield return StartCoroutine(waitForCoroutines(effectTasks));
+        useAP(1);
         yield break;
+    }
+
+    //Method to wait for a list of coroutines to finish
+    public IEnumerator waitForCoroutines(List<Task> tasks)
+    {
+        foreach (Task task in tasks)
+        {
+            while (task.Running)
+            {
+                yield return new WaitForSeconds(1e-5f);
+            }
+        }
     }
 
     public void setPPLCost(int c)
@@ -2486,7 +2930,7 @@ public class Unit : Controllable
         currentMP = unitData.currentMP;
         pplCost = unitData.pplCost;
         mtlCost = unitData.mtCost;
-        name = unitData.name;
+        unitName = name = unitData.name;
         description = unitData.description;
         side = unitData.side;
         armor = unitData.armor;
@@ -2554,6 +2998,23 @@ public class Unit : Controllable
         {
             List <Weapon> attackWeapons = getAllDamageActiveWeapons();
             foreach(Weapon weapon in attackWeapons)
+            {
+                if (weapon.currentAttacks < weapon.maxAttacksPerTurn)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //Determines if this unit can heal with any of its weapons this turn
+    public bool canHealThisTurn()
+    {
+        if (currentAP > 0)
+        {
+            List<Weapon> attackWeapons = getAllHealRepairActiveWeapons();
+            foreach (Weapon weapon in attackWeapons)
             {
                 if (weapon.currentAttacks < weapon.maxAttacksPerTurn)
                 {

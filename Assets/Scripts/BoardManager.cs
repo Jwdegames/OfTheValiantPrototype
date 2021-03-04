@@ -94,6 +94,10 @@ public class BoardManager : MonoBehaviour
 
             }
         }
+        foreach (Tile tile in tileList)
+        {
+            tile.setAdjacent();
+        }
     }
 
     public void makeGridLevel(string type, int num)
@@ -120,21 +124,39 @@ public class BoardManager : MonoBehaviour
                         gM.teams.Add(new List<string>() { "Green" });
                         gM.resetAllDictionaries();
 
-                        //makeUnit("Droid Trooper", gM.playerDictionary["Red"], 1, 3);
-                        //makeUnit("Shielded Droid", gM.playerDictionary["Red"], 2, 4);
-                        //makeUnit("Droid Gattler", gM.playerDictionary["Red"], 2, 3);
-                        //makeUnit("S-Jet Trooper", gM.playerDictionary["Red"], 1, 4);
+                        makeUnit("Droid Trooper", gM.playerDictionary["Red"], 1, 3);
+                        makeUnit("Shielded Droid", gM.playerDictionary["Red"], 2, 4);
+                        makeUnit("Droid Gattler", gM.playerDictionary["Red"], 2, 3);
+                        makeUnit("S-Jet Trooper", gM.playerDictionary["Red"], 1, 4);
+                        makeUnit("S-Jet Trooper", gM.playerDictionary["Red"], 0, 3);
 
-                        makeUnit("Asher", gM.playerDictionary["Red"], 19, 2);
-                        makeUnit("Drone", gM.playerDictionary["Red"], 17, 2);
-                        makeUnit("Assault Auto Duality Tank", gM.playerDictionary["Red"], 17, 3);
-                        makeUnit("Drone Deployer Truck", gM.playerDictionary["Red"], 17, 4);
-                        makeUnit("Assault Auto Artillery", gM.playerDictionary["Red"], 16, 3);
+                        makeUnit("Rocket Truck", gM.playerDictionary["Red"], 4, 6);
+                        makeUnit("Assault Transporter", gM.playerDictionary["Red"], 4, 7);
+                        makeUnit("Assault Automated Tank", gM.playerDictionary["Red"], 5, 8);
+                        makeUnit("Duality Tank", gM.playerDictionary["Red"], 5, 7);
+                        makeUnit("Duality Tank", gM.playerDictionary["Red"], 6, 7);
 
-                        makeUnit("Slime Launcher Truck", gM.playerDictionary["Green"], 22, 3);
-                        makeUnit("Masked Trooper", gM.playerDictionary["Green"], 22, 4);
-                        makeUnit("Grenadier", gM.playerDictionary["Green"], 23, 4);
-                        makeUnit("Eyesore", gM.playerDictionary["Green"], 21, 3);
+                        makeUnit("Asher", gM.playerDictionary["Red"], 1, 1);
+                        makeUnit("Vesta", gM.playerDictionary["Red"], 1, 2);
+
+                        makeUnit("Flak Truck", gM.playerDictionary["Green"], 20, 2);
+                        makeUnit("Masked Trooper", gM.playerDictionary["Green"], 20, 3);
+                        makeUnit("Grenadier", gM.playerDictionary["Green"], 19, 3);
+                        makeUnit("Eyesore", gM.playerDictionary["Green"], 19, 2);
+
+                        makeUnit("Flak Truck", gM.playerDictionary["Green"], 20, 8);
+                        makeUnit("Masked Trooper", gM.playerDictionary["Green"], 20, 7);
+                        makeUnit("Grenadier", gM.playerDictionary["Green"], 19, 7);
+                        makeUnit("Eyesore", gM.playerDictionary["Green"], 19, 8);
+
+                        makeUnit("Mutant Trooper", gM.playerDictionary["Green"], 17, 5);
+                        makeUnit("Venom Tank", gM.playerDictionary["Green"], 18, 5);
+                        makeUnit("Eyebat", gM.playerDictionary["Green"], 19, 5);
+               
+
+                        setBasicCommander(makeUnit("Vita Commander", gM.playerDictionary["Green"], 23, 3));
+                        setBasicCommander(makeUnit("Vita Commander", gM.playerDictionary["Green"], 23, 5));
+                        setBasicCommander(makeUnit("Vita Commander", gM.playerDictionary["Green"], 23, 7));
                         //makeUnit(1, 3, gM.playerDictionary["Green"], 24, 5);
 
                         makeBuilding(0,"House", gM.playerDictionary["Red"], 7, 2);
@@ -209,6 +231,12 @@ public class BoardManager : MonoBehaviour
         unit.applyScale();
         unit.matchWeapon("Build Unit");
         tile.unitHP = unit.getCurrentHP();
+    }
+
+    public void setBasicCommander(Unit unit)
+    {
+        unit.getPossibleActions().Add(StatsManager.getRandomString(StatsManager.basicAICommands));
+        unit.sentryAI = true;
     }
 
     /**

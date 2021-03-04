@@ -19,6 +19,7 @@ public class Tile : MonoBehaviour
     public int spriteNum = 1;
     [SerializeField]
     private GameObject unit;
+    private Unit unitScript;
     public GameObject movingUnit;
     
     private float xSize = 100;
@@ -27,9 +28,10 @@ public class Tile : MonoBehaviour
     private float yPos = 0;
     public string type = "Grassland";
     public string aqueousType = "Land";
-    public float moveCostLegged = 1.2f;
-    public float moveCostTracked = 1.5f;
-    public float moveCostWheeled = 1.2f;
+    // These are now ints to stop annoying floating point errors
+    public int moveCostLegged = 2;
+    public int moveCostTracked = 3;
+    public int moveCostWheeled = 4;
     public float coverBonus = 0f;
     public bool isOutlined = false;
     public bool isAOE;
@@ -44,7 +46,7 @@ public class Tile : MonoBehaviour
     private Building building;
 
     //Variables to prevent overlap via AI
-    public GameObject unitToArrive;
+    public Unit unitToArrive;
     public float unitHP;
     public float expectedDamage;
 
@@ -72,6 +74,10 @@ public class Tile : MonoBehaviour
     public GameObject poisonGas;
     public List<GameObject> tileObjects = new List<GameObject>();
 
+    //For abilities / commands
+    public Unit commandUnit;
+    public string currentCommand = "";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -83,6 +89,33 @@ public class Tile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+    }
+
+    //Allow for commands
+    //Stores the command to be used and the unit issuing the command to this tile
+    public void makeCommandable(string command, Unit cUnit)
+    {
+        if (isOutlined && outLineNum == 10 && currentCommand == command && commandUnit == cUnit)
+        {
+            return;
+        }
+        if (isOutlined && outLineNum != 1)
+        {
+            Destroy(selector);
+        }
+        currentCommand = command;
+        commandUnit = cUnit;
+        outLineNum = 10;
+        isOutlined = true;
+        selector = Instantiate(selectorPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z - 9), Quaternion.identity) as GameObject;
+        selector.GetComponent<UnitSelector>().setColor(Color.green);
+        //Use this to mandate a command be switched
+        switch (command)
+        {
+
+        }
+        gM.availableTiles.Add(this);
         
     }
 
@@ -377,6 +410,8 @@ public class Tile : MonoBehaviour
     //5 is heal, 6 is AOE heal
     //7 is load units
     //8 is unload units
+    //9 is deploy units
+    //10 is custom commands
 
     //Make the tile selected when we click on it
     private void OnMouseOver()
@@ -406,18 +441,19 @@ public class Tile : MonoBehaviour
             {
                 //Handle attacking unit
                 Tile start = board.getSelectedTile().GetComponent<Tile>();
-                
+                List<Task> tasks = new List<Task>();
                 if (start.getUnit() != null) {
-                        if (getUnit() != null)
+                    if (getUnit() != null)
+                    {
+                        string attackingSide = start.getUnitScript().getSide();
+                        string defendingSide = getUnitScript().getSide();
+                        if (attackingSide != defendingSide)
                         {
-                            string attackingSide = start.getUnitScript().getSide();
-                            string defendingSide = getUnitScript().getSide();
-                            if (attackingSide != defendingSide)
-                            {
-                                StartCoroutine(gM.attackEnemyAsPlayer(start.getUnitScript(), getUnitScript(), directWeapons));
-                            }
+                            tasks.Add(new Task(gM.attackEnemy(start.getUnitScript(), getUnitScript(), directWeapons)));
                         }
-                        StartCoroutine(gM.doAOEAttack(start.getUnitScript(), start, this, aoeWeapons));
+                    }
+                    tasks.Add(new Task(gM.doAOEAttack(start.getUnitScript(), start, this, aoeWeapons)));
+                    StartCoroutine(gM.doTasksAsPlayer(tasks));
                 }
                 actingUnit = null;
                 gM.clearAvailableTiles();
@@ -449,7 +485,7 @@ public class Tile : MonoBehaviour
                     //Debug.Log(healingWeapons[0]);
                     List<Weapon> directHealingWeapons = unit.getOnlyDirectWeapons(healingWeapons);
                     List<Weapon> aoeHealingWeapons = unit.getOnlyAOEWeapons(healingWeapons);
-
+                    List<Task> tasks = new List<Task>();
                         if (getUnit() != null)
                         {
                             string attackingSide = start.getUnitScript().getSide();
@@ -457,13 +493,13 @@ public class Tile : MonoBehaviour
                             if (attackingSide == defendingSide)
                             {
                                 //Debug.Log("Healing");
-                                StartCoroutine(gM.healAllyAsPlayer(start.getUnitScript(), getUnitScript(),  directHealingWeapons));
+                                tasks.Add(new Task(gM.healAlly(start.getUnitScript(), getUnitScript(),  directHealingWeapons)));
 
                             }
                         }
 
-                        StartCoroutine(gM.doAOEHeal(start.getUnitScript(), start, this, aoeHealingWeapons));
-
+                    tasks.Add(new Task(gM.doAOEHeal(start.getUnitScript(), start, this, aoeHealingWeapons)));
+                    StartCoroutine(gM.doTasksAsPlayer(tasks));
                     //Stop healing/repairing
                     unit.healing = false;
                     unit.repairing = false;
@@ -485,6 +521,12 @@ public class Tile : MonoBehaviour
             else if (isOutlined && outLineNum == 9)
             {
                 StartCoroutine(actingUnit.deployDronesCustom(new Dictionary<string, List<Tile>>() { { tempUnitType, new List<Tile>() { this } } }));
+                gM.clearAvailableTiles();
+            }
+            //Commands
+            else if (isOutlined && outLineNum == 10)
+            {
+                commandUnit.sendCommandTiles(currentCommand, this, true);
                 gM.clearAvailableTiles();
             }
             else if (isOutlined && outLineNum == 3)
@@ -664,12 +706,12 @@ public class Tile : MonoBehaviour
         {
             return false;
         }
-        if ((unit != null && dest.getUnit() != null) && (dest.getUnitScript().getTeam() != getUnitScript().getTeam() || dest.unitToArrive != null))
+        if ((unitScript != null && dest.getUnitScript() != null) && (dest.getUnitScript().getTeam() != getUnitScript().getTeam() || dest.unitToArrive != null))
         {
             return false;
         }
         //If we care about the unit on the destination tile, return false if there is any unit on the destination tile.
-        if ((on && dest.unit != null))
+        if ((on && dest.getUnitScript() != null))
         {
             return false;
         }
@@ -682,12 +724,12 @@ public class Tile : MonoBehaviour
         {
             return false;
         }
-        if ((u != null && dest.getUnit() != null) && (dest.getUnitScript().getTeam() != u.getTeam() || dest.unitToArrive != null))
+        if ((u != null && dest.getUnitScript() != null) && (dest.getUnitScript().getTeam() != u.getTeam() || dest.unitToArrive != null))
         {
             return false;
         }
         //If we care about the unit on the destination tile, return false if there is any unit on the destination tile.
-        if ((on && dest.unit != null))
+        if ((on && dest.unitScript != null))
         {
             return false;
         }
@@ -729,7 +771,7 @@ public class Tile : MonoBehaviour
             if (t == null) continue;
             //Debug.Log("Tile move cost is "+t.moveCost);
             //Debug.Log("Unit move cost is "+getUnitScript().getCurrentMP());
-            if (Math.Round(t.getMoveCost(getUnitScript()),3) <= Math.Round(getUnitScript().getCurrentMP(),3)) return true;
+            if (t.getMoveCost(getUnitScript()) <= getUnitScript().getCurrentMP()) return true;
         }
         return false;
     }
@@ -772,9 +814,9 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public float getMoveCost(Unit unit)
+    public int getMoveCost(Unit unit)
     {
-        if (unit == null) return 1f;
+        if (unit == null) return 1;
         else
         {
             switch (unit.getMovementType())
@@ -786,15 +828,15 @@ public class Tile : MonoBehaviour
                 case "Wheeled":
                     return moveCostWheeled;
                 default:
-                    return 1f;
+                    return 1;
             }
         }
     }
 
     //In the case of roads
-    public float getMoveCost(Unit unit, Tile dest)
+    public int getMoveCost(Unit unit, Tile dest)
     {
-        if (unit == null) return 1f;
+        if (unit == null) return 1;
         else
         {
             switch (unit.getMovementType())
@@ -806,7 +848,7 @@ public class Tile : MonoBehaviour
                 case "Wheeled":
                     return moveCostWheeled;
                 default:
-                    return 1f;
+                    return 1;
             }
         }
     }
@@ -893,6 +935,7 @@ public class Tile : MonoBehaviour
         renderer.sprite = sprites[num];
     }
 
+    //Store position in easily accessible variables
     public void preserve()
     {
         xPos = transform.position.x;
@@ -902,6 +945,10 @@ public class Tile : MonoBehaviour
     public void setUnit(GameObject u)
     {
         unit = u;
+        if (u != null)
+            unitScript = u.GetComponent<Unit>();
+        else
+            unitScript = null;
     }
 
     public GameObject getUnit()
@@ -911,17 +958,13 @@ public class Tile : MonoBehaviour
 
     public Unit getUnitScript()
     {
-        if (unit != null)
-        {
-            return unit.GetComponent<Unit>();
-        }
-        return null;
+        return unitScript;
     }
 
     public int getTeam()
     {
         //strings are treated like primitive objects -> therefore no equals method needed
-        if (unit == null) return -1;
+        if (unitScript == null) return -1;
         string side = getUnitScript().getSide();
         for (int i = 0; i < gM.teams.Count; i++)
         {
@@ -1024,7 +1067,7 @@ public class Tile : MonoBehaviour
     }
     public string getUnitSide()
     {
-        return unit.GetComponent<Unit>().getSide();
+        return unitScript.getSide();
     }
     override
     public string ToString()

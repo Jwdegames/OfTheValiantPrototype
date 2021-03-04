@@ -3,12 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 //using UnityEditorInternal;
 using UnityEngine;
+using System.Threading;
 
+// This handles running AIs after being called from the GameManager
+// This class is needed because AI classes themselves are not GameObjects, so they're unable to use coroutines
 public class AIManager : MonoBehaviour
 {
     //Dictionary to contain all units
     public Dictionary<string, List<Unit>> unitDictionary;
     public List<Unit> unitsUsed;
+    public List<Task> tasksToWaitFor = new List<Task>();
+    [SerializeField]
+    public List<Thread> threadsToWaitFor = new List<Thread>();
+    public int patcCompletedCount = 0;
+    public List<PAThreadedChecker> paTCs = new List<PAThreadedChecker>();
     public GameManager gM;
     public string currentSide = "";
     //Dictionary to tell which AI has what difficulty
@@ -18,6 +26,7 @@ public class AIManager : MonoBehaviour
     public IEnumerator currentCoroutine;
     public IEnumerator taskCoroutine;
     public IEnumerator currentLoopRequest;
+    public AITask currentTask;
     public Controllable currentTaskDoer;
     public bool needToRestart = false;
     int limitedActions = 100, actions = 0;
@@ -25,6 +34,10 @@ public class AIManager : MonoBehaviour
     bool limitActions = true;
     bool limitActionTime = true;
     bool completedAction = false;
+    public WaitForSeconds shortWaitTime = new WaitForSeconds(0.1f);
+    // 0 is not started, 1 is non-unit makers, 2 is unit Makers
+    public int currentMode = 0;
+    public int threadsFinished = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +49,72 @@ public class AIManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void initGetAssignmentScore(List<PossibleAssignment> assignments, AITask aiTask, Controllable asset, bool bU, Tile bT)
+    {
+
+        //Task tempTask = new Task(getAssignmentScore(assignments, aiTask, asset, bU, bT));
+        //Thread tempThread = new Thread(getAssignmentScore);
+        //tasksToWaitFor.Add(tempTask);
+        PAThreadedChecker paTC = new PAThreadedChecker(assignments, this, gM, aiTask, asset, bU, bT);
+        Thread tempThread = new Thread(paTC.checkPA);
+        tempThread.IsBackground = true;
+        tempThread.Start();
+        paTCs.Add(paTC);
+        threadsToWaitFor.Add(tempThread);
+    }
+
+    public bool checkForSuitability(TPReturnData tprData)
+    {
+
+        Vector4 suitabilityVector = tprData.subSuitability;
+        if (suitabilityVector.x > 0 || suitabilityVector.y > 0 || suitabilityVector.z > 0 || suitabilityVector.w > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public IEnumerator getAssignmentScore(List<PossibleAssignment> assignments, AITask aiTask, Controllable asset, bool bU, Tile bT)
+    {
+        
+        float duration = Time.realtimeSinceStartup;
+        TPReturnData tprd = asset.isTaskSuitable(gM, aiTask, bU, bT);
+        /*if (asset.isBuilding)
+        {
+            Building building = (Building)asset;
+            if (building.makesUnits)
+            {
+                Debug.Log("building on " + building.tile + " is allowed to make units? " + checkForSuitability(tprd));
+            }
+        }*/
+        if (checkForSuitability(tprd))
+        {
+            PossibleAssignment assignment = new PossibleAssignment(gM, aiTask, asset, bU, bT);
+            assignment.tprd = tprd;
+            assignment.initGetScore();
+            while (!assignment.scoreCalculated)
+            {
+                yield return shortWaitTime;
+            }
+            assignments.Add(assignment);
+            /*if (asset.isBuilding)
+            {
+                Building building = (Building)asset;
+                if (building.makesUnits)
+                {
+                    Debug.Log(assignment);
+                    Debug.Log(assignments.Count);
+                }
+            }*/
+        }
+        duration = Time.realtimeSinceStartup - duration;
+        if (duration > 0.5f)
+        {
+            Debug.Log("Notice: The following task took over 1 second: Task of " +aiTask.taskType +" for objective "+aiTask.objective +" given asset "+ asset);
+        }
+        yield break;
     }
 
     public IEnumerator performUtilityTask(PossibleAssignment order, UtilityAI aiM)
@@ -50,21 +129,49 @@ public class AIManager : MonoBehaviour
         return ai.createAssignments();
     }
 
+    public List<PossibleAssignment> getUtilityAssignments(UtilityAI ai)
+    {
+        return ai.getPossibleAssignments();
+    }
+
+    // When unit makers are needed to be done
+    public List<PossibleAssignment> getUnitMakerOrders(UtilityAI ai)
+    {
+        return ai.createAssignmentsFromCustomList(ai.getPossibleAssignmentsFromUnitMakers(ai.generateUnitMakerTasks(), ai.generateAllUnitMakers()));
+    }
+
+    public List<PossibleAssignment> getUnitMakerAssignments(UtilityAI ai)
+    {
+        return ai.getPossibleAssignmentsFromUnitMakers(ai.generateUnitMakerTasks(), ai.generateAllUnitMakers());
+    }
+
+    public List<PossibleAssignment> getCustomOrders(UtilityAI ai, List<PossibleAssignment> assignments)
+    {
+        float duration = Time.realtimeSinceStartup;
+        List<PossibleAssignment> orders = ai.createAssignmentsFromCustomList(assignments);
+        duration = Time.realtimeSinceStartup - duration;
+        Debug.Log("It took " + duration + "s to get all orders!");
+        return orders;
+    }
+
 
     //Method for handling loop requests
     public IEnumerator loopUtilityRequest(string side, UtilityAI ai)
     {
         actions++;
+        tasksToWaitFor = new List<Task>();
         //Debug.Log("Looping");
         if ((limitActions && actions <= limitedActions) || !limitActions)
         {
             needToRestart = false;
-            List<PossibleAssignment> orders = getUtilityOrders(ai);
+            List<PossibleAssignment> assignments = getUtilityAssignments(ai);
+            yield return StartCoroutine(waitForThreads(threadsToWaitFor));
+            List<PossibleAssignment> orders = getCustomOrders(ai, assignments);
             if (orders == null || orders.Count == 0) yield break;
             foreach (PossibleAssignment order in orders)
             {
                 //yield return new WaitForSeconds(1f);
-                //Debug.Log("Out of "+orders.Count+" orders, performing "+order.aiTask.taskType);
+                Debug.Log("Out of "+orders.Count+" orders, performing "+order.aiTask.taskType);
                 currentTaskDoer = order.possibleTaskDoer;
                 currentCoroutine = performUtilityTask(order, ai);
                 completedAction = false;
@@ -82,6 +189,44 @@ public class AIManager : MonoBehaviour
             if (needToRestart)
             {
                 currentLoopRequest = loopUtilityRequest(side, ai);
+                yield return StartCoroutine(currentLoopRequest);
+            }
+        }
+    }
+
+    public IEnumerator loopUnitMakerRequest(string side, UtilityAI ai)
+    {
+        actions++;
+        tasksToWaitFor = new List<Task>();
+        //Debug.Log("Looping");
+        if ((limitActions && actions <= limitedActions) || !limitActions)
+        {
+            needToRestart = false;
+            List<PossibleAssignment> assignments = getUnitMakerAssignments(ai);
+            yield return StartCoroutine(waitForThreads(threadsToWaitFor));
+            List<PossibleAssignment> orders = getCustomOrders(ai, assignments);
+            if (orders == null || orders.Count == 0) yield break;
+            foreach (PossibleAssignment order in orders)
+            {
+                //yield return new WaitForSeconds(1f);
+                Debug.Log("Out of "+orders.Count+" orders, performing "+order.aiTask.taskType);
+                currentTaskDoer = order.possibleTaskDoer;
+                currentCoroutine = performUtilityTask(order, ai);
+                completedAction = false;
+                StartCoroutine(clockActionTime());
+                yield return StartCoroutine(currentCoroutine);
+                StopCoroutine(clockActionTime());
+                completedAction = true;
+                if (needToRestart)
+                {
+                    break;
+                }
+
+            }
+
+            if (needToRestart)
+            {
+                currentLoopRequest = loopUnitMakerRequest(side, ai);
                 yield return StartCoroutine(currentLoopRequest);
             }
         }
@@ -110,6 +255,11 @@ public class AIManager : MonoBehaviour
     {
         actions = 0;
         actionTime = 0;
+        tasksToWaitFor = new List<Task>();
+        if (currentMode == 0)
+        {
+            currentMode = 1;
+        };
         //bool finished = true;
         //Prevent while loops from going in infinite loops
         Player aiPlayer = gM.playerDictionary[side];
@@ -122,40 +272,95 @@ public class AIManager : MonoBehaviour
                 actions++;
                 if (limitedActions >= actions)
                 {
-                        if (!ais.ContainsKey(aiPlayer))
+                    float duration = 0;
+                    if (!ais.ContainsKey(aiPlayer))
                     {
                         UtilityAI tempAI = new UtilityAI(this, gM, aiPlayer, aiPlayer.side, gM.getTeam(side));
                         ais.Add(aiPlayer, tempAI);
                     }
                     UtilityAI currentAI = ais[aiPlayer];
                     currentUtilityAI = currentAI;
-                    List<PossibleAssignment> orders = getUtilityOrders(currentAI);
-                    if (orders == null || orders.Count == 0)
+                    // First do all non unit makers
+                    if (currentMode == 1)
                     {
-                        gM.endTurn();
-                        yield break;
-                    }
-                    foreach (PossibleAssignment order in orders)
-                    {
-                        //yield return new WaitForSeconds(1f);
-                        currentTaskDoer = order.possibleTaskDoer;
-                        currentCoroutine = performUtilityTask(order, currentAI);
-                        completedAction = false;
-                        StartCoroutine(clockActionTime());
-                        yield return StartCoroutine(currentCoroutine);
-                        StopCoroutine(clockActionTime());
-                        completedAction = true;
-                        if (needToRestart)
+                        //duration = Time.realtimeSinceStartup;
+                        List<PossibleAssignment> assignments = getUtilityAssignments(currentAI);
+                        //duration = Time.realtimeSinceStartup - duration;
+                        //Debug.Log("Initializing took " + duration + " seconds");
+                        yield return StartCoroutine(waitForThreads(threadsToWaitFor));
+                        //Debug.Log("Finished getting assignments!");
+                        List<PossibleAssignment> orders = getCustomOrders(currentAI, assignments);
+
+                        if (orders == null || orders.Count == 0)
                         {
-                        break;
+                            gM.endTurn();
+                            yield break;
+                        }
+  
+                        foreach (PossibleAssignment order in orders)
+                        {
+                            //yield return new WaitForSeconds(1f);
+                            currentTaskDoer = order.possibleTaskDoer;
+                            currentCoroutine = performUtilityTask(order, currentAI);
+                            completedAction = false;
+                            StartCoroutine(clockActionTime());
+                            yield return StartCoroutine(currentCoroutine);
+                            StopCoroutine(clockActionTime());
+                            completedAction = true;
+                            if (needToRestart)
+                            {
+                                break;
+                            }
+
                         }
 
+                        if (needToRestart)
+                        {
+                            currentLoopRequest = loopUtilityRequest(side, currentAI);
+                            yield return StartCoroutine(currentLoopRequest);
+                        }
+                        currentMode = 2;
                     }
-
-                    if (needToRestart)
+                    threadsToWaitFor = new List<Thread>();
+                    paTCs = new List<PAThreadedChecker>();
+                    patcCompletedCount = 0;
+                    // Once all non - unit makers are done, begin unit making process
+                    if (currentMode == 2)
                     {
-                        currentLoopRequest = loopUtilityRequest(side, currentAI);
-                        yield return StartCoroutine(currentLoopRequest);
+                        List<PossibleAssignment> assignments = getUnitMakerAssignments(currentAI);
+                        yield return StartCoroutine(waitForThreads(threadsToWaitFor));
+                        //Debug.Log("Unit makers have " + assignments.Count + " assignments");
+                        List<PossibleAssignment> orders = getCustomOrders(currentAI, assignments);
+                        if (orders == null || orders.Count == 0)
+                        {
+                            Debug.Log("No unit makers available");
+                            gM.endTurn();
+                            yield break;
+                        }
+                        foreach (PossibleAssignment order in orders)
+                        {
+                            //yield return new WaitForSeconds(1f);
+                            currentTaskDoer = order.possibleTaskDoer;
+                            currentCoroutine = performUtilityTask(order, currentAI);
+                            completedAction = false;
+                            StartCoroutine(clockActionTime());
+                            yield return StartCoroutine(currentCoroutine);
+                            StopCoroutine(clockActionTime());
+                            completedAction = true;
+                            if (needToRestart)
+                            {
+                                break;
+                            }
+
+                        }
+
+                        if (needToRestart)
+                        {
+                            currentLoopRequest = loopUnitMakerRequest(side, currentAI);
+                            yield return StartCoroutine(currentLoopRequest);
+                        }
+                        currentMode = 0;
+
                     }
                 }
                 gM.endTurn();
@@ -305,6 +510,29 @@ public class AIManager : MonoBehaviour
         }
     }
 
+    public IEnumerator beginAttackSequenceAOE(Unit attacker, Tile attackTile, Tile defendTile, List<Weapon> weapons)
+    {
+        //First determine if we can begin attacking right now
+        //Debug.Log(attacker);
+        if (gM.getAttackTilesWithWeapons(attacker, attackTile, weapons).Contains(defendTile))
+        {
+            Debug.Log("We're in AOE range!");
+            yield return StartCoroutine(gM.doAOEAttack(attacker, attackTile, defendTile, weapons));
+        }
+        else
+        {
+
+            //Debug.Log("Attacker is "+ attacker);
+            //Debug.Log("Attack tile is " + attackTile.getPos());
+            //Debug.Log("Defend tile is " + defendTile.getPos());
+            //If we can't attack enemy, move to an adjacent tile and begin attack
+            yield return StartCoroutine(gM.moveInRange(attacker, attackTile, defendTile, weapons));
+            yield return StartCoroutine(gM.doAOEAttack(attacker, attackTile, defendTile, weapons));
+            //gM.moveInRange(attacker, attackTile, defendTile);
+            //gM.attackEnemy(attacker, defender);
+        }
+    }
+
     //Gets the enemy armor types of all enemy units in a dictionary
     public Dictionary<string, Dictionary<string, List<Unit>>> getEnemyArmorTypes(string AIside)
     {
@@ -414,6 +642,44 @@ public class AIManager : MonoBehaviour
         aiWeapons.Add("Medium", mediumWeapons);
         aiWeapons.Add("Heavy", heavyWeapons);
         return aiWeapons;
+    }
+
+    //Method to wait for a list of task coroutines to finish
+    public IEnumerator waitForTasks(List<Task> tasks)
+    {
+        float duration = Time.realtimeSinceStartup;
+        foreach (Task task in tasks)
+        {
+            while (task.Running)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
+        duration = Time.realtimeSinceStartup - duration;
+        Debug.Log("It took " + duration + "s to get all tasks done!");
+        //Debug.Log("Finished Tasks");
+    }
+
+    public IEnumerator waitForThreads(List<Thread> threads)
+    {
+        int i = 0;
+        int loopCount = 0;
+        foreach(Thread thread in threads)
+        {
+            loopCount = 0;
+            while (thread.IsAlive)
+            {
+                if (loopCount > 100)
+                {
+                    Debug.LogError(thread + "#"+i+" is taking too long for " +paTCs[i]);
+                }
+                yield return null;
+                yield return shortWaitTime;
+                loopCount++;
+            }
+            i++;
+        }
+        Debug.Log("Threads complete!");
     }
 
     //Get unit dictionary from game manager

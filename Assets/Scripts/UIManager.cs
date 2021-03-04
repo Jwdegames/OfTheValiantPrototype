@@ -55,6 +55,8 @@ public class UIManager : MonoBehaviour
     public Text unitTypeTXT;
     public Text unitStatsTXT;
     public Text unitAttributesTXT;
+    public ScrollRect unitAttributesScrollRect;
+    public GameObject unitAttributesScrollRectContent;
     public List<Image> unitAttributes;
 
     public Image buildingIMG;
@@ -227,6 +229,7 @@ public class UIManager : MonoBehaviour
             bpMiddleDiv.enabled = false;
             bpLowerDiv.enabled = false;
             expandedBP = true;
+            unitAttributesScrollRect.gameObject.SetActive(true);
             thingExpanded = "Tile";
 
             expandTileButtonText.text = "Contract";
@@ -304,6 +307,8 @@ public class UIManager : MonoBehaviour
                 updateBuildingInfo(bpBuilding);
                 bpMiddleDiv.enabled = true;
                 bpLowerDiv.enabled = true;
+                unitAttributesScrollRect.gameObject.SetActive(false);
+
 
                 expandTileButtonText.text = "Expand";
                 tileExtraTXT.text = "";
@@ -399,7 +404,8 @@ public class UIManager : MonoBehaviour
 
     public Vector3 getNextAttributePosition()
     {
-        return new Vector3(-80f + 30*(attributeIcons.Count%6), -12.6f + 30 * (attributeIcons.Count/6) , -1);
+        //Debug.Log(new Vector3(-80f + 25 * (attributeIcons.Count % 7), -12.6f - 30 * (attributeIcons.Count / 7), -1));
+        return new Vector3(15+25*(attributeIcons.Count%6), -15 - 30 * (attributeIcons.Count/6) , -1);
     }
 
     public string getWeaponCarriedSuffix(Weapon weapon)
@@ -459,7 +465,7 @@ public class UIManager : MonoBehaviour
     {
         GameObject tempAttribute = Instantiate(attributePrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         AttributeIcon tempAttributeScript = tempAttribute.GetComponent<AttributeIcon>();
-        tempAttribute.transform.SetParent(unitAttributesTXT.gameObject.transform);
+        tempAttribute.transform.SetParent(unitAttributesScrollRectContent.transform);
         tempAttribute.transform.localPosition = getNextAttributePosition();
 
         tempAttribute.transform.localScale = new Vector3(1, 1, 1);
@@ -484,8 +490,9 @@ public class UIManager : MonoBehaviour
             updateTileInfo(null);
             unitStatsTXT.text = unitTXT.text;
             unitTXT.text = "";
-
             expandedBP = true;
+            unitAttributesScrollRect.gameObject.SetActive(true);
+
             thingExpanded = "Unit";
 
             expandUnitButtonText.text = "Contract";
@@ -557,65 +564,44 @@ public class UIManager : MonoBehaviour
             //Make all the attributes
 
             //Make the armor attribute 
-            GameObject tempAttribute = Instantiate(attributePrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-            AttributeIcon tempAttributeScript = tempAttribute.GetComponent<AttributeIcon>();
-            tempAttribute.transform.SetParent(unitAttributesTXT.gameObject.transform);
-            tempAttribute.transform.localPosition = getNextAttributePosition();
-            tempAttribute.transform.localScale = new Vector3(1, 1, 1);
-            attributeIcons.Add(tempAttribute);
+            string temp2 = "", temp3 = "";
             switch (bpUnit.getArmor())
             {
                 case "Light":
                     temp = "This unit has light armor, meaning it will take twice as much damage from anti-light weapons and half as much damage from anti-heavy weapons.";
-                    tempAttributeScript.updateText("L");
-                    tempAttributeScript.updateToolTipTitle("Light Armor");
+                    temp2 ="L";
+                    temp3 = "Light Armor";
                     break;
                 case "Heavy":
                     temp = "This unit has heavy armor, meaning it will take twice as much damage from anti-heavy weapons and half as much damage from anti-light weapons.";
-                    tempAttributeScript.updateText("H");
-                    tempAttributeScript.updateToolTipTitle("Heavy Armor");
+                    temp2 = "H";
+                    temp3 = "Heavy Armor";
                     break;
                 case "Medium":
                     temp = "This unit has medium armor, meaning it has no defensive weaknesses or strengths.";
-                    tempAttributeScript.updateText("M");
-                    tempAttributeScript.updateToolTipTitle("Medium Armor");
+                    temp2 = "M";
+                    temp3 = "Medium Armor";
                     break;
                 case "Slime":
                     temp = "This unit is a slime, meaning it takes 20% less damage from all attacks.";
-                    tempAttributeScript.updateText("S");
-                    tempAttributeScript.updateToolTipTitle("Slime Armor");
+                    temp2 = "S";
+                    temp3 = "Slime Armor";
                     break;
 
             }
-            
-            tempAttributeScript.updateToolTipTXT(temp);
-            tempAttributeScript.updateToolTipDuration("Attribute Lifetime: Forever");
+            makeUnitAttribute(temp3, temp, "Attribute Lifetime: Forever", temp2, 0, "Unit");
+
 
             //Handle guard/sentry attributes
             if (bpUnit.getGuard())
             {
-                tempAttribute = Instantiate(attributePrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                tempAttributeScript = tempAttribute.GetComponent<AttributeIcon>();
-                tempAttribute.transform.SetParent(unitAttributesTXT.gameObject.transform);
-                tempAttribute.transform.localPosition = getNextAttributePosition();
-                tempAttribute.transform.localScale = new Vector3(1, 1, 1);
-                attributeIcons.Add(tempAttribute);
-                tempAttributeScript.updateToolTipTitle("Guard");
-                tempAttributeScript.updateToolTipTXT("This unit is currently fortified, meaning it takes"+bpUnit.guardCover*100+"% less damage");
-                tempAttributeScript.updateToolTipDuration("Attribute Lifetime: 1 Day");
+                temp = "This unit is currently fortified, meaning it takes "+bpUnit.guardCover*100+"% less damage";
+                makeUnitAttribute("Guard", temp, "Attribute Lifetime: 1 Day", "", 0, "Unit");
             }
             else if (bpUnit.getSentry())
             {
-                tempAttribute = Instantiate(attributePrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                tempAttributeScript = tempAttribute.GetComponent<AttributeIcon>();
-                tempAttribute.transform.SetParent(unitAttributesTXT.gameObject.transform);
-                tempAttribute.transform.localPosition = getNextAttributePosition();
-                tempAttribute.transform.localScale = new Vector3(1, 1, 1);
-                attributeIcons.Add(tempAttribute);
-                tempAttributeScript.updateToolTipTitle("Sentry");
-                tempAttributeScript.updateToolTipTXT("This unit is currently patrolling, meaning it attacks enemies before they attack this unit.");
-                tempAttributeScript.updateToolTipDuration("Attribute Lifetime: 1 Day");
-                tempAttributeScript.updateSprite(attributeSprites[1]);
+                temp = "This unit is currently patrolling, meaning it attacks enemies before they attack this unit.";
+                makeUnitAttribute("Sentry", temp, "Attribute Lifetime: 1 Day", "", 1, "Unit");
 
             }
             //Debug.Log(buUnit);
@@ -650,6 +636,72 @@ public class UIManager : MonoBehaviour
                     }
                     
                 }
+                //Handle commands
+                //if (attributeDict.ContainsKey("Rallied"))
+
+                //Handle E effects
+                foreach (string key in attributeDict.Keys)
+                {
+                    if (key.Contains("E-"))
+                    {
+                        string[] keyParts = key.Split(new string[] { "-" }, StringSplitOptions.None);
+                        int effectStrength = Convert.ToInt32(keyParts[1]);
+                        int eBonus = 0;
+                        switch(keyParts[0].Substring(0,keyParts[0].Length-1))
+                        {
+                            case "Strength":
+                                eBonus = 5 + (int)(((float)effectStrength) / 2 * (2 * 5 + (effectStrength - 1) * 5));
+                                temp = "This unit deals " + eBonus + "% more damage.";
+                                makeUnitAttribute("Strength "+effectStrength, temp, "Attribute Lifetime: "+attributeDict[key]+" Days", "▲D", 2, "Unit");
+                                break;
+                            case "Weakness":
+                                eBonus = 5 + (int)(((float)effectStrength) / 2 * (2 * 5 + (effectStrength - 1) * 5));
+                                temp = "This unit deals " + eBonus + "% less damage.";
+                                makeUnitAttribute("Weakness " + effectStrength, temp, "Attribute Lifetime: " + attributeDict[key] + " Days", "▼D", 2, "Unit");
+                                break;
+                            case "Movement":
+                                eBonus = 10 + (int)(((float)effectStrength) / 2 * (2 * 10 + (effectStrength - 1) * 10));
+                                temp = "This unit gets " + eBonus + "% more MP.";
+                                makeUnitAttribute("Speed " + effectStrength, temp, "Attribute Lifetime: " + attributeDict[key] + " Days", "▲M", 12, "Unit");
+                                break;
+                            case "Slowness":
+                                eBonus = 10 + (int)(((float)effectStrength) / 2 * (2 * 10 + (effectStrength - 1) * 10));
+                                temp = "This unit gets " + eBonus + "% less MP.";
+                                makeUnitAttribute("Slowness " + effectStrength, temp, "Attribute Lifetime: " + attributeDict[key] + " Days", "▼M", 12, "Unit");
+                                break;
+                            case "Defense":
+                                eBonus = 10 + (int)(((float)effectStrength) / 2 * (2 * 2 + (effectStrength - 1) * 2));
+                                temp = "This unit takes " + eBonus + "% less damage";
+                                makeUnitAttribute("Defense " + effectStrength, temp, "Attribute Lifetime: " + attributeDict[key] + " Days", "▲D", 0, "Unit");
+                                break;
+                            case "Fragility":
+                                eBonus = 10 + (int)(((float)effectStrength) / 2 * (2 * 2 + (effectStrength - 1) * 2));
+                                temp = "This unit takes " + eBonus + "% more damage";
+                                makeUnitAttribute("Fragility " + effectStrength, temp, "Attribute Lifetime: " + attributeDict[key] + " Days", "▼D", 0, "Unit");
+                                break;
+                            case "Action":
+                                eBonus = 100 + (int)(((float)effectStrength) / 2 * (2 * 100 + (effectStrength - 1) * 100));
+                                temp = "This unit gets " + eBonus + "% more AP.";
+                                makeUnitAttribute("Dexterity " + effectStrength, temp, "Attribute Lifetime: " + attributeDict[key] + " Days", "▲A", 3, "Unit");
+                                break;
+                            case "Laziness":
+                                eBonus = 100 + (int)(((float)effectStrength) / 2 * (2 * 100 + (effectStrength - 1) * 100));
+                                temp = "This unit gets " + eBonus + "% less AP.";
+                                makeUnitAttribute("Laziness " + effectStrength, temp, "Attribute Lifetime: " + attributeDict[key] + " Days", "▼A", 3, "Unit");
+                                break;
+                            case "Caution":
+                                eBonus = 7 + (int)(((float)effectStrength) / 2 * (2 * 1 + (effectStrength - 1) * 1)) + effectStrength;
+                                temp = "This unit takes " + eBonus + "% less damage when guarding.";
+                                makeUnitAttribute("Caution " + effectStrength, temp, "Attribute Lifetime: " + attributeDict[key] + " Days", "▲G", 0, "Unit");
+                                break;
+                            case "Imprudence":
+                                eBonus = 7 + (int)(((float)effectStrength) / 2 * (2 * 1 + (effectStrength - 1) * 1)) + effectStrength;
+                                temp = "This unit takes " + eBonus + "% more damage when guarding.";
+                                makeUnitAttribute("Imprudence " + effectStrength, temp, "Attribute Lifetime: " + attributeDict[key] + " Days", "▼G", 0, "Unit");
+                                break;
+                        }
+                    }
+                }
             }
             //Handle attributes not in the dictionary
             if (bpUnit.leavesPoisonGasOnDeath)
@@ -670,7 +722,6 @@ public class UIManager : MonoBehaviour
                 makeUnitAttribute("Jetpack", temp, "Attribute Lifetime: Forever", "", 7, "Unit");
             }
 
-
         }
         else
         {
@@ -678,6 +729,7 @@ public class UIManager : MonoBehaviour
             {
                 thingExpanded = "";
                 expandedBP = false;
+                unitAttributesScrollRect.gameObject.SetActive(false);
 
                 bpMiddleDiv.enabled = true;
                 tileExtraTXT.text = "";
@@ -870,7 +922,7 @@ public class UIManager : MonoBehaviour
 
                 tileExtraTXT.text = temp;
 
-                unitAttributesTXT.text = "This weapon has the following attributes:";
+                unitAttributesTXT.text = "Weapon attributes are shown below:";
 
                 //Destroy all previous attributes so we can make a new set
                 foreach (GameObject attribute in attributeIcons)
@@ -883,35 +935,28 @@ public class UIManager : MonoBehaviour
                 //Make all the attributes
 
                 //Make the armor attribute 
-                GameObject tempAttribute = Instantiate(attributePrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                AttributeIcon tempAttributeScript = tempAttribute.GetComponent<AttributeIcon>();
-                tempAttribute.transform.SetParent(unitAttributesTXT.gameObject.transform);
-                tempAttribute.transform.localPosition = getNextAttributePosition();
-                tempAttribute.transform.localScale = new Vector3(1, 1, 1);
-                attributeIcons.Add(tempAttribute);
+
+                string temp2 = "", temp3 = "";
                 switch (weapon.weaponType)
                 {
                     case "Light":
                         temp = "This weapon is anti-light, meaning it will deal twice as much damage to anti-light armor and half as much damage to anti-heavy armor.";
-                        tempAttributeScript.updateText("L");
-                        tempAttributeScript.updateToolTipTitle("Anti-Light");
+                        temp2 = "L";
+                        temp3 = "Anti-Light";
                         break;
                     case "Heavy":
                         temp = "This weapon is anti-heavy, meaning it will deal twice as much damage to anti-heavy armor and half as much damage to anti-light armor.";
-                        tempAttributeScript.updateText("H");
-                        tempAttributeScript.updateToolTipTitle("Anti-Heavy");
+                        temp2 = "H";
+                        temp3 = "Anti-Heavy";
                         break;
                     case "Medium":
                         temp = "This weapon is anti-medium, meaning it has no defensive weaknesses or strengths.";
-                        tempAttributeScript.updateText("M");
-                        tempAttributeScript.updateToolTipTitle("Anti-Medium");
+                        temp2 = "M";
+                        temp3 = "Anti-Medium";
                         break;
 
                 }
-                tempAttributeScript.updateToolTipTXT(temp);
-                tempAttributeScript.updateToolTipDuration("Attribute Lifetime: Forever");
-                tempAttributeScript.updateSprite(attributeSprites[2]);
-                offsetToolTip(tempAttributeScript);
+                makeUnitAttribute(temp3, temp, "Attribute Lifetime: Forever", temp2, 2, "Unit");
 
                 if (weapon.canTargetAir)
                 {
@@ -1256,6 +1301,7 @@ public class UIManager : MonoBehaviour
 
     public void enableInBattleButtons()
     {
+        //Debug.Log("Enabling");
         foreach (Button button in inBattleButtons)
         {
             button.interactable = true;

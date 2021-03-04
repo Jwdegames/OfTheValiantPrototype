@@ -291,8 +291,11 @@ public class WeaponObject : MonoBehaviour
             case "Duality Laser Tank Cannon":
                 usesExternalSprite = false;
                 uiSprite = ui.uiWeaponSprites[40];
-
-                //renderer.sprite = sprites[17];
+                break;
+            //renderer.sprite = sprites[17];
+            case "Controller":
+                usesExternalSprite = true;
+                uiSprite = ui.uiWeaponSprites[42];
                 break;
         }
         if (usesExternalSprite)
@@ -502,6 +505,31 @@ public class WeaponObject : MonoBehaviour
                     shotCount++;
 
                 }
+                break;
+            case "Medkit":
+            case "Wrench":
+                while (shotCount < 3)
+                {
+                    setTintColor(Color.white);
+                    yield return new WaitForSeconds(0.2f);
+                    setTintColor(new Color(0,0,0,0));
+                    yield return new WaitForSeconds(0.2f);
+                    shotCount++;
+                }
+                //The red cross sprite should be the ui sprite 9
+                yield return StartCoroutine(defender.showEffect(ui.attributeSprites[9], "Healing"));
+                break;
+            case "Pinpointer":
+                while (shotCount < 3)
+                {
+                    setTintColor(Color.white);
+                    yield return new WaitForSeconds(0.2f);
+                    setTintColor(new Color(0, 0, 0, 0));
+                    yield return new WaitForSeconds(0.2f);
+                    shotCount++;
+                }
+                //The focus sprite should be the ui sprite 13
+                yield return StartCoroutine(defender.showEffect(ui.attributeSprites[13], "Pinpointing"));
                 break;
             case "Minigun":
                 //Shoot 7 times
@@ -981,14 +1009,15 @@ public class WeaponObject : MonoBehaviour
             case "Gas Mortar":
             case "Gas Mortar MK 2":
             case "Gas Mortar MK 3":
+                yield return new WaitForSeconds(1 / 6f);
                 muzzleSprite.GetComponent<SpriteRenderer>().enabled = true;
                 muzzleSprite.GetComponent<Animator>().SetBool("Firing", true);
-                yield return new WaitForSeconds(1 / 6f);
+                yield return new WaitForSeconds(1/6f);
                 muzzleSprite.GetComponent<SpriteRenderer>().enabled = false;
                 muzzleSprite.GetComponent<Animator>().SetBool("Firing", false);
                 yield return StartCoroutine(makeExplosion(target.transform.position, explosionPrefab.transform.localScale * 4, -3));
                 List<Tile> tilesToPoison = gM.getAOETiles(u, u.getTile(), target, template).ToList();
-                tilesToPoison.RemoveAll(item => item.getUnit() != null);
+                //tilesToPoison.RemoveAll(item => item.getUnit() != null);
                 foreach (Tile t in tilesToPoison)
                 {
                     StartCoroutine(t.addEffect("Poison Gas", 5, true));
@@ -1131,14 +1160,15 @@ public class WeaponObject : MonoBehaviour
             }
 
             poisonGasCloud.transform.position = relEnd;
-            if (tiles[i].getUnit() != null)
+            /*if (tiles[i].getUnit() != null)
             {
                 StartCoroutine(tiles[i].getUnitScript().blinkTintColor(Color.green, 0.2f, 1));
             }
             else
             {
                 StartCoroutine(tiles[i].addEffect("Poison Gas", 5, true));
-            }
+            }*/
+            StartCoroutine(tiles[i].addEffect("Poison Gas", 5, true));
             poisonGasCloud.transform.parent = tiles[i].transform;
             //ends[i].setUnit(unit.gameObject);
         }

@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Security.Principal;
+using System.Linq;
 using UnityEngine;
 
-//Class for Utility AI
+//Class for Utility A
+[System.Serializable]
 public class AITask
 {
     public int priority;
